@@ -1,9 +1,17 @@
 package com.qshuoo.wschat.config;
 
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -38,5 +46,37 @@ public class BeanConfig {
         fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat);
         fastConvert.setFastJsonConfig(fastJsonConfig);
         return new HttpMessageConverters((HttpMessageConverter<?>) fastConvert);
+    }
+	
+	/**
+	 * 配置数据源
+	 * @return
+	 */
+	@Primary
+    @Bean(name = "firstDataSource")
+    @Qualifier("firstDataSource")
+    @ConfigurationProperties(prefix = "spring.datasource.first")
+    public DataSource firstDataSource() {
+		return DataSourceBuilder.create().build();
+    }
+	
+	/**
+	 * 注入 jdbc
+	 * @param dataSource
+	 * @return
+	 */
+	@Bean(name = "jdbcTemplate")
+    public JdbcTemplate jdbcTemplate(@Qualifier("firstDataSource") DataSource dataSource) {
+		return new JdbcTemplate(dataSource);
+    }
+
+	/**
+	 * 注入NamedJdbc
+	 * @param dataSource
+	 * @return
+	 */
+    @Bean(name = "firstNamedJdbcTemplate")
+    public NamedParameterJdbcTemplate firstNamedJdbcTemplate(@Qualifier("firstDataSource") DataSource dataSource) {
+    	return new NamedParameterJdbcTemplate(dataSource);
     }
 }
