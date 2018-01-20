@@ -26,7 +26,8 @@ $(document).ready(function() {
 				type : "post",
 				data : {account : account_val, password : password_val},
 				success : function(data) {
-					location.href = "/index";
+					console.log(data);
+					// location.href = "/login/check";
 				},
 				error : function(data) {
 					
