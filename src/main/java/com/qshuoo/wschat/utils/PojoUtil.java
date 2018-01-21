@@ -19,7 +19,7 @@ public class PojoUtil {
 	 * @throws Exception
 	 */
 	public static Object map2Object(Map<String, Object> map, Class<?> bean) throws Exception {
-		Object obj =bean.newInstance();
+		Object obj = bean.newInstance();
 		BeanUtils.populate(obj, map);
 		return obj;
 	}
