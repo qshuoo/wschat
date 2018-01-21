@@ -22,7 +22,7 @@
 	//判断当前浏览器是否支持WebSocket
 	function connection() {
 		if ('WebSocket' in window) {
-			websocket = new WebSocket("ws://127.0.0.1:8080/websocket/" + document.getElementById('from').value);
+			websocket = new WebSocket("ws://127.0.0.1:8088/websocket/" + document.getElementById('from').value);
 		} else {
 			alert('当前浏览器 Not support websocket')
 		}

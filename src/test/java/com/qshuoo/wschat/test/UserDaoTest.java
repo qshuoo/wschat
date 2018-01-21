@@ -8,7 +8,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.qshuoo.wschat.Application;
-import com.qshuoo.wschat.dao.UserDao;
+import com.qshuoo.wschat.dao.impl.UserDaoImpl;
 import com.qshuoo.wschat.pojo.User;
 
 /**
@@ -22,12 +22,7 @@ import com.qshuoo.wschat.pojo.User;
 public class UserDaoTest {
 	
 	@Autowired
-	private UserDao dao;
+	private UserDaoImpl dao;
 	
-	@Test
-	public void testGet() {
-		User user = dao.getUserById(99999);
-		System.out.println(user.getUname());
-	}
 
 }

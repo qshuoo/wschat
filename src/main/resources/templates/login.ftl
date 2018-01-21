@@ -56,7 +56,7 @@
 					<div class="form-group">
 						<div class="col-sm-offset-2 col-sm-10">
 							<a id="btn_login" class="btn btn-default">登录</a>
-							<span style="color:red;padding-left:5%;display:none;"><strong>用户名或密码错误</strong></span>
+							<span style="color:red;padding-left:5%;"><strong id="login_err_tip"></strong></span>
 						</div>
 					</div>
 				</form>

@@ -8,20 +8,29 @@ package com.qshuoo.wschat.utils;
 public class WSChatResult {
 	
 	private Integer code; // 结果码 1 成功 0 失败
+	private Object data; // 通过的数据
 	private String msg; // 信息
 	
-	private WSChatResult(Integer code, String msg) {
+	private WSChatResult(Integer code, Object data, String msg) {
 		this.code = code;
 		this.msg = msg;
+		this.data = data;
 	}
 	
-
 	/**
-	 * 成功
+	 * 成功 不返回数据
 	 * @return
 	 */
 	public static WSChatResult ok() {
-		return new WSChatResult(1, null);
+		return new WSChatResult(1, null, null);
+	}
+
+	/**
+	 * 成功 返回数据
+	 * @return
+	 */
+	public static WSChatResult ok(Object data) {
+		return new WSChatResult(1, data, null);
 	}
 	
 	/**
@@ -30,7 +39,7 @@ public class WSChatResult {
 	 * @return
 	 */
 	public static WSChatResult notOk(String msg) {
-		return new WSChatResult(0, msg);
+		return new WSChatResult(0, null, msg);
 	}
 	
 	/**
@@ -38,7 +47,7 @@ public class WSChatResult {
 	 * @return
 	 */
 	public static WSChatResult notOk() {
-		return new WSChatResult(0, null);
+		return new WSChatResult(0, null, null);
 	}
 	
 	public Integer getCode() {
@@ -57,4 +66,12 @@ public class WSChatResult {
 		this.msg = msg;
 	}
 
+	public Object getData() {
+		return data;
+	}
+
+	public void setData(Object data) {
+		this.data = data;
+	}
+	
 }

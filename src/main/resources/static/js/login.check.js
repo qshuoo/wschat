@@ -6,6 +6,7 @@ $(document).ready(function() {
 	$("#input_account,#input_password").focus(function() {
 		$($(this).next()).hide();
 		$($(this).parent()).removeClass("has-error");
+		$("#login_err_tip").html("");
 	});
 	
 	$("#input_account,#input_password").blur(function() {
@@ -26,11 +27,14 @@ $(document).ready(function() {
 				type : "post",
 				data : {account : account_val, password : password_val},
 				success : function(data) {
-					console.log(data);
-					// location.href = "/login/check";
+					if (data.code == 0) {
+						$("#login_err_tip").html(data.msg);
+					} else if (data.code == 1) {
+						location.href = "/index";
+					}
 				},
 				error : function(data) {
-					
+					// to do
 				}
 			});
 		}
