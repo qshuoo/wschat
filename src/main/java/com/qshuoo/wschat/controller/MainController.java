@@ -1,5 +1,7 @@
 package com.qshuoo.wschat.controller;
 
+import javax.websocket.server.PathParam;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -15,8 +17,8 @@ public class MainController {
 	 * 跳转主页
 	 * @return
 	 */
-	@RequestMapping("/index")
-	public String toIndex() {
+	@RequestMapping("/index/{account}")
+	public String toIndex(@PathParam("account") Integer account) {
 		return "index";
 	}
 

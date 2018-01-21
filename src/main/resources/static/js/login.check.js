@@ -27,14 +27,14 @@ $(document).ready(function() {
 				type : "post",
 				data : {account : account_val, password : password_val},
 				success : function(data) {
-					if (data.code == 0) {
+					if (data.code == 0) { // failuer
 						$("#login_err_tip").html(data.msg);
-					} else if (data.code == 1) {
-						location.href = "/index";
+					} else if (data.code == 1) { // success
+						location.href = "/index/" + data.data.uid;
 					}
 				},
 				error : function(data) {
-					// to do
+					// to do method
 				}
 			});
 		}
