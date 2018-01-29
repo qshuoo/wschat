@@ -1,0 +1,18 @@
+.badge {
+	background-color:red;
+	color:white;
+	margin-top:15px
+}
+
+.list-group-item {
+	height:70px;
+}
+
+textarea {
+	resize:none;
+	background-color:white;
+}
+
+.input_text_area {
+	border:none;
+}
