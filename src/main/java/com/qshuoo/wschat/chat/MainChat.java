@@ -13,7 +13,6 @@ import javax.websocket.server.ServerEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.alibaba.fastjson.JSON;
 import com.qshuoo.wschat.pojo.Message;
@@ -58,6 +57,7 @@ public class MainChat {
      */
     @OnMessage
     public void onMessage(String message) throws IOException {
+    	System.out.println(message);
     	Message msg = JSON.parseObject(message, Message.class);
     	Session session = ChatsPool.getSession(msg.getTo());
     	session.getBasicRemote().sendText(msg.getMsg());
