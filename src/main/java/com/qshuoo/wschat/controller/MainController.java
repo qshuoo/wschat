@@ -1,6 +1,5 @@
 package com.qshuoo.wschat.controller;
 
-import javax.websocket.server.PathParam;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

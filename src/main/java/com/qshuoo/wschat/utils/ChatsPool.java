@@ -44,5 +44,9 @@ public class ChatsPool {
 	public static void removeSession(Long key) {
 		chatsPool.remove(key);
 	}
+	
+	public static boolean containKey(Long key) {
+		return chatsPool.containsKey(key);
+	}
 
 }

@@ -16,12 +16,10 @@ public class MessageServiceImpl implements MessageService{
 	
 	@Override
 	public WSChatResult saveMessage(Message msg) throws Exception {
+		msg.setStatus(false);
+		msg.setGroup(false);
 		int row = dao.saveMessage(msg);
-		if (row != 1) {
-			return WSChatResult.notOk();
-		}
-		
-		return WSChatResult.ok();
+		return row == 1 ? WSChatResult.ok() : WSChatResult.notOk();
 	}
 
 }
