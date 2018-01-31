@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService{
 	private UserDao userDao;
 	
 	@Override
-	public WSChatResult checkLoginUser(Integer account, String password) throws Exception {
+	public WSChatResult checkLoginUser(Long account, String password) throws Exception {
 		List<Map<String, Object>> users = userDao.getUserById(account);
 		if (!CollectionUtils.isEmpty(users) && users.get(0).get("pwd").equals(password)) {
 			Object user = PojoUtil.map2Object(users.get(0), User.class);

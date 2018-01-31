@@ -35,6 +35,8 @@ $(document).ready(function() {
 				closeWebSocket();
 			}
 			
+			$("#convo").scrollTop($("#convo")[0].scrollHeight);
+			
 });
 
 // 将消息显示在网页上
@@ -50,23 +52,25 @@ function closeWebSocket() {
 
 //发送消息
 function send() {
-	$(".chat-thread").append("<li class='send-msg'>" + $('#msg').val() + "</li>");
+	// 聊天窗体显示消息
+	$(".chat-thread").append("<li class='send-msg'>" + $('#msg').val() + "</li>"); 
+	// 发送消息
 	var message = {
-		from : $('#from').val(),
-		to : $('#to').val(),
+		fromUid : $('#from').val(),
+		toUid : $('#to').val(),
 		msg : $('#msg').val()
 	}
 	websocket.send(JSON.stringify(message));
+	// 发送框清除文字
 	$('#msg').val("");
+	// 聊天窗体滚动条下滑
 	scrollSild();
+	// 发送窗体重新聚焦
+	$('#msg').focus();
 	
 }
 
-function scrollSild(){
-//	var div = document.getElementById("convo");
-//	div.scrollTop = div.scrollHeight - div.offsetHeight;
-//	div.scrollIntoView(); 
-//	$("#convo").scrollTop($("#convo")[0].scrollHeight);
-	$("#convo").scrollTop(100000);
+function scrollSild(){ 
+	$(".chat-thread").scrollTop($(".chat-thread")[0].scrollHeight);
 }
 

@@ -16,6 +16,6 @@ public interface UserService {
 	 * @return
 	 * @throws Exception 
 	 */
-	public WSChatResult checkLoginUser(Integer account, String password) throws Exception;
+	public WSChatResult checkLoginUser(Long account, String password) throws Exception;
 
 }

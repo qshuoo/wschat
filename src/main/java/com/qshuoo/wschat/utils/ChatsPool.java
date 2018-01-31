@@ -17,14 +17,14 @@ import org.springframework.stereotype.Component;
 public class ChatsPool {
 	
 	// 已与服务端建立连接的客户端
-	private static ConcurrentHashMap<Integer, Session> chatsPool = new ConcurrentHashMap<>();
+	private static ConcurrentHashMap<Long, Session> chatsPool = new ConcurrentHashMap<>();
 	
 	/**
 	 * 添加session至池中
 	 * @param key
 	 * @param session
 	 */
-	public static void addSession(Integer key, Session session) {
+	public static void addSession(Long key, Session session) {
 		chatsPool.put(key, session);
 	}
 	
@@ -33,7 +33,7 @@ public class ChatsPool {
 	 * @param key
 	 * @return
 	 */
-	public static Session getSession(Integer key) {
+	public static Session getSession(Long key) {
 		return chatsPool.get(key);
 	}
 	
@@ -41,7 +41,7 @@ public class ChatsPool {
 	 * 从池中移除session
 	 * @param key
 	 */
-	public static void removeSession(Integer key) {
+	public static void removeSession(Long key) {
 		chatsPool.remove(key);
 	}
 

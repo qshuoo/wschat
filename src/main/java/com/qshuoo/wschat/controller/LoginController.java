@@ -27,7 +27,7 @@ public class LoginController {
 	 */
 	@ResponseBody
 	@RequestMapping("/check")
-	public WSChatResult checkLogin(Integer account, String password) throws Exception {
+	public WSChatResult checkLogin(Long account, String password) throws Exception {
 		return service.checkLoginUser(account, password);
 	}
 

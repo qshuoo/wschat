@@ -36,7 +36,7 @@ public class MainChat {
      * @param session  可选的参数。session为与某个客户端的连接会话，需要通过它来给客户端发送数据
      */
     @OnOpen
-    public void onOpen(@PathParam("userAccount") Integer account, Session session){
+    public void onOpen(@PathParam("userAccount") Long account, Session session){
     	logger.info("user {} is connected", account);
         ChatsPool.addSession(account, session);
     }
@@ -45,7 +45,7 @@ public class MainChat {
      * 连接关闭调用的方法
      */
     @OnClose
-    public void onClose(@PathParam("userAccount") Integer account){
+    public void onClose(@PathParam("userAccount") Long account){
     	logger.info("user {} is close", account);
     	ChatsPool.removeSession(account);
     }
@@ -59,8 +59,10 @@ public class MainChat {
     public void onMessage(String message) throws IOException {
     	System.out.println(message);
     	Message msg = JSON.parseObject(message, Message.class);
-    	Session session = ChatsPool.getSession(msg.getTo());
+    	Session session = ChatsPool.getSession(msg.getToUid());
+    	// 用户在线  -> 发送消息,保存聊天记录
     	session.getBasicRemote().sendText(msg.getMsg());
+    	// 用户不再线 -> 保存聊天记录
     }
 
     /**

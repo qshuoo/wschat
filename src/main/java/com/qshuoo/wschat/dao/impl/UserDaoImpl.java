@@ -28,7 +28,7 @@ public class UserDaoImpl implements UserDao {
 	private JdbcTemplate jdbcTemplate;
 	
 	@Override
-	public List<Map<String, Object>> getUserById(Integer account) {
+	public List<Map<String, Object>> getUserById(Long account) {
 		String sql = "SELECT * FROM user WHERE uid = ?";
 		List<Map<String, Object>> users = jdbcTemplate.queryForList(sql, new Object[] {account});
 		return users;

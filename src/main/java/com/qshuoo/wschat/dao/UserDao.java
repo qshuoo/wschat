@@ -15,6 +15,6 @@ public interface UserDao {
 	 * 通过id查询用户
 	 * @return
 	 */
-	public List<Map<String, Object>> getUserById(Integer account);
+	public List<Map<String, Object>> getUserById(Long account);
 
 }
