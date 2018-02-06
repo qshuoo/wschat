@@ -1,5 +1,8 @@
 package com.qshuoo.wschat.dao.impl;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -21,6 +24,13 @@ public class MessageDaoImpl implements MessageDao {
 		String sql = SqlUtils.generateInsertSQL(msg, Message.class);
 		int row = jdbcTemplate.update(sql);
 		return row;
+	}
+
+	@Override
+	public List<Map<String, Object>> listMsgsByToUid(Long account) {
+		String sql = "SELECT * FROM message WHERE toUid = ?";
+		List<Map<String, Object>> msgs = jdbcTemplate.queryForList(sql, account);
+		return msgs;
 	}
 
 }

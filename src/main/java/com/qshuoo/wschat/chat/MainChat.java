@@ -33,7 +33,7 @@ public class MainChat {
 	
 	private static Logger logger = LoggerFactory.getLogger(MainChat.class);
 
-	// TODO @ServerEndpoint 暂时未找到支持 @Autowired的方法 
+	// TODO WebSocket @Autowired 注入Bean失败 暂时用ApplicationContext注入
 	private MessageService service = (MessageService) ApplicationContextRegister.getApplicationContext().getBean("MessageService");
 
     /**
@@ -41,8 +41,10 @@ public class MainChat {
      */
     @OnOpen
     public void onOpen(@PathParam("userAccount") Long account, Session session){
-    	logger.info("user {} is connected", account);
         ChatsPool.addSession(account, session);
+        logger.info("user {} is connected", account);
+        // TODO  读取离线消息  
+        // TODO  接收消息
     }
 
     /**
@@ -50,8 +52,8 @@ public class MainChat {
      */
     @OnClose
     public void onClose(@PathParam("userAccount") Long account){
-    	logger.info("user {} is close", account);
     	ChatsPool.removeSession(account);
+    	logger.info("user {} is close", account);
     }
 
     /**
@@ -63,9 +65,10 @@ public class MainChat {
     public void onMessage(String message) throws Exception {
     	// 解析消息
     	Message msg = JSON.parseObject(message, Message.class);
-    	if (ChatsPool.containKey(msg.getToUid())) { // 用户在线  -> 发送消息  -- TODO 保存聊天记录
+    	if (ChatsPool.containKey(msg.getToUid())) { // 用户在线  -> 发送消息  
     		Session session = ChatsPool.getSession(msg.getToUid());
     		session.getBasicRemote().sendText(msg.getMsg());
+    		// TODO 保存聊天记录
     	} else { // 用户不再线 -> 保存聊天记录
     		service.saveMessage(msg);
     	}

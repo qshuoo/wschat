@@ -17,10 +17,9 @@ public class ApplicationContextRegister implements ApplicationContextAware {
 	private static ApplicationContext APPLICATION_CONTEXT; // spring 上下文
 
 	/**
-	 * 设置spring上下文 
-	 * @param applicationContext spring上下文 
-	 * @throws
-	 * BeansException
+	 * 设置上下文 
+	 * @param applicationContext
+	 * @throws BeansException
 	 */
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -28,6 +27,10 @@ public class ApplicationContextRegister implements ApplicationContextAware {
 		APPLICATION_CONTEXT = applicationContext;
 	}
 
+	/**
+	 * 获取上下文
+	 * @return
+	 */
 	public static ApplicationContext getApplicationContext() {
 		return APPLICATION_CONTEXT;
 	}

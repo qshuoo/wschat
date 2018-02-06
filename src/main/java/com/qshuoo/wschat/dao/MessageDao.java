@@ -1,5 +1,8 @@
 package com.qshuoo.wschat.dao;
 
+import java.util.List;
+import java.util.Map;
+
 import com.qshuoo.wschat.pojo.Message;
 
 /**
@@ -16,5 +19,12 @@ public interface MessageDao {
 	 * @throws Exception 
 	 */
 	public int saveMessage(Message msg) throws Exception;
+	
+	/**
+	 * 根据toUid读取离线消息
+	 * @param account
+	 * @return
+	 */
+	public List<Map<String, Object>> listMsgsByToUid(Long account);
 
 }

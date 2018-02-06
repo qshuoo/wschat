@@ -17,4 +17,11 @@ public interface MessageService {
 	 * @throws Exception 
 	 */
 	public WSChatResult saveMessage(Message msg) throws Exception;
+	
+	/**
+	 * 读取离线消息
+	 * @param account
+	 * @return
+	 */
+	public WSChatResult getOffLineMsgs(Long account);
 }

@@ -20,7 +20,6 @@ public class MainController {
 	 */
 	@RequestMapping("/index/{account}")
 	public String toIndex(@PathVariable("account") String account, ModelMap map) {
-		System.out.println(account);
 		map.put("username", account);
 		return "index";
 	}

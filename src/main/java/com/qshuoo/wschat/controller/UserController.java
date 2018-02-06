@@ -15,7 +15,7 @@ import com.qshuoo.wschat.utils.WSChatResult;
  */
 @Controller
 @RequestMapping("/login")
-public class LoginController {
+public class UserController {
 	
 	@Autowired
 	private UserService service;
@@ -30,5 +30,17 @@ public class LoginController {
 	public WSChatResult checkLogin(Long account, String password) throws Exception {
 		return service.checkLoginUser(account, password);
 	}
+	
+	// TODO 注册
+	
+	// TODO 获取好友列表
+	
+	// TODO 获取群列表
+	
+	// TODO 搜索用户/群
+	
+	// TODO 添加好友/群
+	
+	// TODO 
 
 }
