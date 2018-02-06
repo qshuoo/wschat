@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.qshuoo.wschat.dao.MessageDao;
 import com.qshuoo.wschat.pojo.Message;
-import com.qshuoo.wschat.utils.sqlUtils;
+import com.qshuoo.wschat.utils.SqlUtils;
 
 @Repository
 public class MessageDaoImpl implements MessageDao {
@@ -18,7 +18,7 @@ public class MessageDaoImpl implements MessageDao {
 	
 	@Override
 	public int saveMessage(Message msg) throws Exception {
-		String sql = sqlUtils.generateInsertSQL(msg, Message.class);
+		String sql = SqlUtils.generateInsertSQL(msg, Message.class);
 		int row = jdbcTemplate.update(sql);
 		return row;
 	}

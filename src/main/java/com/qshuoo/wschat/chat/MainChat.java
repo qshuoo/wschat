@@ -11,10 +11,11 @@ import javax.websocket.server.ServerEndpoint;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
+import com.qshuoo.wschat.config.ApplicationContextRegister;
 import com.qshuoo.wschat.pojo.Message;
 import com.qshuoo.wschat.service.MessageService;
 import com.qshuoo.wschat.utils.ChatsPool;
@@ -26,13 +27,14 @@ import com.qshuoo.wschat.utils.ChatsPool;
  *
  */
 @Component
+@Lazy(true) // 需要在ApplicationContextRegister注册后加载
 @ServerEndpoint(value = "/websocket/{userAccount}")
 public class MainChat {
 	
 	private static Logger logger = LoggerFactory.getLogger(MainChat.class);
 
-	@Autowired
-	private MessageService service;
+	// TODO @ServerEndpoint 暂时未找到支持 @Autowired的方法 
+	private MessageService service = (MessageService) ApplicationContextRegister.getApplicationContext().getBean("MessageService");
 
     /**
      * 连接建立成功调用的方法
@@ -60,9 +62,8 @@ public class MainChat {
     @OnMessage
     public void onMessage(String message) throws Exception {
     	// 解析消息
-    	System.out.println(message);
     	Message msg = JSON.parseObject(message, Message.class);
-    	if (ChatsPool.containKey(msg.getToUid())) { // 用户在线  -> 发送消息,保存聊天记录
+    	if (ChatsPool.containKey(msg.getToUid())) { // 用户在线  -> 发送消息  -- TODO 保存聊天记录
     		Session session = ChatsPool.getSession(msg.getToUid());
     		session.getBasicRemote().sendText(msg.getMsg());
     	} else { // 用户不再线 -> 保存聊天记录

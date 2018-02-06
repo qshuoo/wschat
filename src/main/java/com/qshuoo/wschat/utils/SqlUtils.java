@@ -3,7 +3,7 @@ package com.qshuoo.wschat.utils;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-public class sqlUtils {
+public class SqlUtils {
 	
 	/**
 	 * 根据对象生成插入sql 只插入不为空的属性
@@ -16,7 +16,7 @@ public class sqlUtils {
 		StringBuilder sql = new StringBuilder("INSERT INTO ");
 		StringBuilder fieldBuilder = new StringBuilder("(");
 		StringBuilder valueBuilder = new StringBuilder("(");
-		sql.append(c.getSimpleName()).append(" ");
+		sql.append(c.getSimpleName().toLowerCase()).append(" "); // 类名转换小写
 		
 		Field[] fields = c.getDeclaredFields();
 		for (Field field : fields) { // append不为空属性

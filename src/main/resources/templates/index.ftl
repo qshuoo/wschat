@@ -27,7 +27,7 @@
 				<div class="col-md-12 column">
 					<h1>TO DO</h1>
 					<input id="from" value="${username}" style="display:none">
-					<input id="to" value="999999" style="display:none">
+					<input id="to" value="99999" style="display:none">
 				</div>
 				<!-- </div> -->
 				<div id="fucli" class="col-md-4 column">
