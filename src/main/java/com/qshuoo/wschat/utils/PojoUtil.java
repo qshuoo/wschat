@@ -23,5 +23,6 @@ public class PojoUtil {
 		BeanUtils.populate(obj, map);
 		return obj;
 	}
+	
 
 }

@@ -1,6 +1,8 @@
 package com.qshuoo.wschat.chat;
 
 
+import java.util.List;
+
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
@@ -19,6 +21,7 @@ import com.qshuoo.wschat.config.ApplicationContextRegister;
 import com.qshuoo.wschat.pojo.Message;
 import com.qshuoo.wschat.service.MessageService;
 import com.qshuoo.wschat.utils.ChatsPool;
+import com.qshuoo.wschat.utils.MsgUtils;
 
 
 /**
@@ -38,13 +41,23 @@ public class MainChat {
 
     /**
      * 连接建立成功调用的方法
+     * @throws Exception 
      */
     @OnOpen
-    public void onOpen(@PathParam("userAccount") Long account, Session session){
+    public void onOpen(@PathParam("userAccount") Long account, Session session) throws Exception{
         ChatsPool.addSession(account, session);
         logger.info("user {} is connected", account);
-        // TODO  读取离线消息  
+        // 读取离线消息  
+        List<String> result = service.getOffLineMsgs(account);
+        if (result == null) {
+        	return;
+        }
         // TODO  接收消息
+        for (String string : result) {
+			session.getBasicRemote().sendText(string);
+		}
+        
+        // TODO  更新离线消息为已读
     }
 
     /**
@@ -67,7 +80,7 @@ public class MainChat {
     	Message msg = JSON.parseObject(message, Message.class);
     	if (ChatsPool.containKey(msg.getToUid())) { // 用户在线  -> 发送消息  
     		Session session = ChatsPool.getSession(msg.getToUid());
-    		session.getBasicRemote().sendText(msg.getMsg());
+    		session.getBasicRemote().sendText(MsgUtils.getOnMsgs(msg));
     		// TODO 保存聊天记录
     	} else { // 用户不再线 -> 保存聊天记录
     		service.saveMessage(msg);

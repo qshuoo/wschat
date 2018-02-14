@@ -1,9 +1,8 @@
 package com.qshuoo.wschat.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import javax.naming.spi.DirStateFactory.Result;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +12,7 @@ import com.qshuoo.wschat.dao.MessageDao;
 import com.qshuoo.wschat.dao.impl.MessageDaoImpl;
 import com.qshuoo.wschat.pojo.Message;
 import com.qshuoo.wschat.service.MessageService;
+import com.qshuoo.wschat.utils.MsgUtils;
 import com.qshuoo.wschat.utils.WSChatResult;
 
 @Service("MessageService")
@@ -23,24 +23,25 @@ public class MessageServiceImpl implements MessageService{
 	
 	@Override
 	public WSChatResult saveMessage(Message msg) throws Exception {
-		msg.setStatus(false);
-		msg.setGroup(false);
+		msg.setStatus(false); // 默认未读
+		msg.setGroup(false); // TODO 暂不讨论 群组 
 		int row = dao.saveMessage(msg);
 		return row == 1 ? WSChatResult.ok() : WSChatResult.notOk();
 	}
 
 	@Override
-	public WSChatResult getOffLineMsgs(Long account) {
-		// TODO Auto-generated method stub
+	public List<String> getOffLineMsgs(Long account) throws Exception {
 		List<Map<String, Object>> msgs = dao.listMsgsByToUid(account);
-		for (Map<String, Object> map : msgs) {
-			
-		}
+		
+		// 无离线消息
 		if (CollectionUtils.isEmpty(msgs)) {
-			return WSChatResult.ok();
+			return null;
 		}
 		
-		return null;
+		// 返回离线消息
+		List<String> offMsgs = new ArrayList<String>();
+		msgs.forEach(map -> {offMsgs.add(MsgUtils.getOffMsgs(map));});
+		return offMsgs;
 	}
 
 }
