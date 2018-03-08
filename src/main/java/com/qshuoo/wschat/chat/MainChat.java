@@ -56,8 +56,6 @@ public class MainChat {
         for (String string : result) {
 			session.getBasicRemote().sendText(string);
 		}
-        
-        // TODO  更新离线消息为已读
     }
 
     /**
