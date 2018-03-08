@@ -49,7 +49,7 @@
 						<div class="col-sm-offset-2 col-sm-10">
 							<div class="checkbox">
 								<label><input type="checkbox" />Remember me</label>
-								<a style="float:right">没有账号 ？点此注册</a>
+								<a href="register.html" style="float:right">没有账号 ？点此注册</a>
 							</div>
 						</div>
 					</div>

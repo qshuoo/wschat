@@ -32,4 +32,13 @@ public class MainController {
 	public String toLogin() {
 		return "login";
 	}
+	
+	/**
+	 * 跳转注册
+	 * @return
+	 */
+	@RequestMapping("/register")
+	public String toRegister() {
+		return "register";
+	}
 }
