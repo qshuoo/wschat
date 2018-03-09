@@ -11,11 +11,13 @@ public interface UserService {
 	
 	/**
 	 * 登陆验证
-	 * @param account
-	 * @param password
+	 * @param account 账号
+	 * @param password 密码
 	 * @return
 	 * @throws Exception 
 	 */
 	public WSChatResult checkLoginUser(Long account, String password) throws Exception;
+	
+	public WSChatResult registerUser(String username, String password, String phone, String code);
 
 }

@@ -34,6 +34,12 @@ public class UserServiceImpl implements UserService{
 		}
 		return WSChatResult.notOk("用户名或密码错误");
 	}
+
+	@Override
+	public WSChatResult registerUser(String username, String password, String phone, String code) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 

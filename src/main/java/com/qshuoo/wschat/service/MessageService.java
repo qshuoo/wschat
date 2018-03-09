@@ -14,7 +14,7 @@ public interface MessageService {
 	
 	/**
 	 * 保存msg
-	 * @param msg
+	 * @param msg 消息
 	 * @return
 	 * @throws Exception 
 	 */
@@ -22,7 +22,7 @@ public interface MessageService {
 	
 	/**
 	 * 读取离线消息
-	 * @param account
+	 * @param account toUser账号
 	 * @return
 	 * @throws Exception 
 	 */

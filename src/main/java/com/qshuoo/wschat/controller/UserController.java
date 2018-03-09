@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.qshuoo.wschat.service.CodeService;
 import com.qshuoo.wschat.service.UserService;
 import com.qshuoo.wschat.utils.WSChatResult;
 
@@ -14,11 +15,13 @@ import com.qshuoo.wschat.utils.WSChatResult;
  *
  */
 @Controller
-@RequestMapping("/login")
 public class UserController {
 	
 	@Autowired
-	private UserService service;
+	private UserService userService;
+	
+	@Autowired
+	private CodeService codeService;
 	
 	/**
 	 * 验证用户名和密码
@@ -26,9 +29,21 @@ public class UserController {
 	 * @throws Exception 
 	 */
 	@ResponseBody
-	@RequestMapping("/check")
+	@RequestMapping("/login/check")
 	public WSChatResult checkLogin(Long account, String password) throws Exception {
-		return service.checkLoginUser(account, password);
+		return userService.checkLoginUser(account, password);
+	}
+	
+	/**
+	 * 发送验证码
+	 * @param codeReceiver 验证码接收方
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/register/code")
+	public WSChatResult sendCode(String codeReceiver) {
+		String code = codeService.sendCheckCode(codeReceiver);
+		return WSChatResult.ok(code);
 	}
 	
 	// TODO 注册

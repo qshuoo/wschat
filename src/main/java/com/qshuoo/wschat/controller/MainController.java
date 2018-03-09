@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  *
  */
 @Controller
+@RequestMapping("/wschat")
 public class MainController {
 	
 	/**
@@ -25,20 +26,11 @@ public class MainController {
 	}
 
 	/**
-	 * 跳转登陆
+	 * 跳转页面
 	 * @return
 	 */
-	@RequestMapping("/login")
-	public String toLogin() {
-		return "login";
-	}
-	
-	/**
-	 * 跳转注册
-	 * @return
-	 */
-	@RequestMapping("/register")
-	public String toRegister() {
-		return "register";
+	@RequestMapping("/{page}")
+	public String toLogin(@PathVariable("page") String page) {
+		return page;
 	}
 }
