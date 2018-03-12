@@ -42,8 +42,7 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping("/register/code")
 	public WSChatResult sendCode(String codeReceiver) {
-		String code = codeService.sendCheckCode(codeReceiver);
-		return WSChatResult.ok(code);
+		return codeService.sendCheckCode(codeReceiver);
 	}
 	
 	// TODO 注册

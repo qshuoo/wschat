@@ -28,20 +28,30 @@ $(document).ready(function() {
 	$("#input_phone").blur(function() {
 		// var pattern = /^1[34578][\d]{9}$/;
 		var pattern = /^1$/;  // 方便测试
-		if (!pattern.test($(this).val())) {
+		/*if (!pattern.test($(this).val())) {
 			$($(this).next()).show();
 			$($(this).parent()).addClass("has-error");
-		}
+		}*/
 	});
 	
 	// 点击发送验证码 
 	$("#btn_check").click(function() {
 		$("#input_username,#input_password,#input_password_confirm,#input_phone").blur();
 		if ($(".has-error").size() == 0) {
-			console.log("TO DO 发送验证码"); // 1 发送验证码
-			// 2 按钮1分钟内不可点击
-			calcReSendCode(60);
-			
+			$("#btn_check").text("发送中...");
+			// 1 发送验证码
+			$.ajax({
+				type:"POST",
+				url:"/register/code",
+				data:{codeReceiver:$("#input_phone").val()},
+				success:function(data) {
+					if (data.code == 1) {
+						calcReSendCode(60); // 2 按钮1分钟内不可点击
+					} else {
+						$("#err_code_msg").text(data.msg);
+					}
+				}
+			});
 		}
 	});
 	

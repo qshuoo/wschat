@@ -4,14 +4,20 @@ import java.text.DecimalFormat;
 import java.util.Random;
 
 import com.qshuoo.wschat.service.CodeService;
+import com.qshuoo.wschat.utils.WSChatResult;
 
 public abstract class BaseCodeServiceImpl implements CodeService{
 
 	@Override
-	public String sendCheckCode(String receiver) {
+	public WSChatResult sendCheckCode(String receiver) {
 		String code = generateCode();
-		sendCode(receiver, code);
-		return code;
+		try {
+			sendCode(receiver, code);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return WSChatResult.notOk("验证码发送失败，请检查网络连接");
+		}
+		return WSChatResult.ok();
 	}
 	
 	/**

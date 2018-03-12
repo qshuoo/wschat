@@ -1,5 +1,6 @@
 package com.qshuoo.wschat.service;
 
+import com.qshuoo.wschat.utils.WSChatResult;
 
 /**
  * 发送验证码接口
@@ -15,6 +16,6 @@ public interface CodeService {
 	 * @param code 验证码
 	 * @return
 	 */
-	public String sendCheckCode(String receiver);
+	public WSChatResult sendCheckCode(String receiver);
 
 }
