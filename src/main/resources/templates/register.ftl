@@ -34,14 +34,14 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label">用户名</label>
 						<div class="col-sm-8">
-							<input type="text" class="form-control" id="input_username" />
+							<input type="text" class="form-control" name="username" id="input_username" />
 							<div style="color:red;padding-top:3%;display:none;"><strong>用户名不能为空</strong></div>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">密码</label>
 						<div class="col-sm-8">
-							<input type="password" class="form-control" id="input_password" />
+							<input type="password" class="form-control" name="password" id="input_password" />
 							<div style="color:red;padding-top:3%;display:none;"><strong>密码不能为空</strong></div>
 						</div>
 					</div>
@@ -55,14 +55,14 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label">手机号</label>
 						<div class="col-sm-8">
-							<input type="text" class="form-control" id="input_phone" />
+							<input type="text" class="form-control" name="phone" id="input_phone" />
 							<div style="color:red;padding-top:3%;display:none;"><strong>手机号输入错误</strong></div>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">验证码</label>
 						<div class="col-sm-5">
-							<input type="text" class="form-control" id="input_code" />
+							<input type="text" class="form-control" name="code" id="input_code" />
 							<div style="color:red;padding-top:3%;display:none;"><strong id = "err_code_msg"></strong></div>
 						</div>
 						<div class="col-sm-3">

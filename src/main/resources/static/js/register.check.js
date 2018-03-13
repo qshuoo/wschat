@@ -38,6 +38,7 @@ $(document).ready(function() {
 	$("#btn_check").click(function() {
 		$("#input_username,#input_password,#input_password_confirm,#input_phone").blur();
 		if ($(".has-error").size() == 0) {
+			$("#btn_check").attr("disabled", "disabled");
 			$("#btn_check").text("发送中...");
 			// 1 发送验证码
 			$.ajax({
@@ -57,7 +58,6 @@ $(document).ready(function() {
 	
 	// 重新发送倒计时
 	function calcReSendCode(time){
-		$("#btn_check").attr("disabled", "disabled");
 		$("#btn_check").text("重新发送" + time + "S");
 		var i = setInterval(function() {
 			if(time > 0) {

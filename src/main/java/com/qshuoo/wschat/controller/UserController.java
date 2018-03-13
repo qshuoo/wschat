@@ -1,5 +1,7 @@
 package com.qshuoo.wschat.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,12 +43,21 @@ public class UserController {
 	 */
 	@ResponseBody
 	@RequestMapping("/register/code")
-	public WSChatResult sendCode(String codeReceiver) {
-		return codeService.sendCheckCode(codeReceiver);
+	public WSChatResult sendCode(String codeReceiver, HttpSession session) {
+		WSChatResult result =  codeService.sendCheckCode(codeReceiver);
+		if (result.getCode() == 0) { // 验证失败返回错误信息
+			return result;
+		}
+		session.setAttribute("check_code", result.getData());
+		return WSChatResult.ok();
 	}
 	
-	// TODO 注册
-	
+	@ResponseBody
+	@RequestMapping("")
+	public WSChatResult register() {
+		// TODO 注册
+		return null;
+	}
 	// TODO 获取好友列表
 	
 	// TODO 获取群列表
