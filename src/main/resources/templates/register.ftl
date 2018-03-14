@@ -55,7 +55,7 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label">手机号</label>
 						<div class="col-sm-8">
-							<input type="text" class="form-control" name="phone" id="input_phone" />
+							<input type="text" class="form-control" name="checkinfo" id="input_checkinfo" />
 							<div style="color:red;padding-top:3%;display:none;"><strong>手机号输入错误</strong></div>
 						</div>
 					</div>

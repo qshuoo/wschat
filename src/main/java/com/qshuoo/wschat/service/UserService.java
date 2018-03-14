@@ -18,6 +18,14 @@ public interface UserService {
 	 */
 	public WSChatResult checkLoginUser(Long account, String password) throws Exception;
 	
-	public WSChatResult registerUser(String username, String password, String phone, String code);
+	/**
+	 * 注册
+	 * @param username 用户名
+	 * @param password 密码
+	 * @param checkinfo 校验信息
+	 * @param checktype 校验类型
+	 * @return
+	 */
+	public WSChatResult registerUser(String username, String password, String checkinfo, String checktype);
 
 }

@@ -3,6 +3,8 @@ package com.qshuoo.wschat.dao;
 import java.util.List;
 import java.util.Map;
 
+import com.qshuoo.wschat.pojo.User;
+
 
 /**
  * 用户dao
@@ -16,5 +18,7 @@ public interface UserDao {
 	 * @return
 	 */
 	public List<Map<String, Object>> getUserById(Long account);
+
+	public User saveUser(User user);
 
 }

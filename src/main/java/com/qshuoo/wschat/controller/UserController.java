@@ -52,10 +52,23 @@ public class UserController {
 		return WSChatResult.ok();
 	}
 	
+	/**
+	 * 注册
+	 * @param username 用户名
+	 * @param password 密码
+	 * @param checkinfo 校验方式  手机/邮箱
+	 * @param inputcode 输入的验证码
+	 * @param session
+	 * @return
+	 */
 	@ResponseBody
-	@RequestMapping("")
-	public WSChatResult register() {
+	@RequestMapping("/user/register")
+	public WSChatResult register(String username, String password, String checkinfo, String inputcode, HttpSession session) {
 		// TODO 注册
+		if (!session.getAttribute("check_code").equals(inputcode)) {
+			return WSChatResult.notOk("验证码输入错误");
+		}
+		userService.registerUser(username, password, checkinfo, "email");
 		return null;
 	}
 	// TODO 获取好友列表

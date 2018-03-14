@@ -36,11 +36,19 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public WSChatResult registerUser(String username, String password, String phone, String code) {
+	public WSChatResult registerUser(String username, String password, String checkinfo, String checktype) {
 		// TODO Auto-generated method stub
-		return null;
+		User user = new User();
+		user.setUname(username);
+		user.setPwd(password);
+		if ("email".equals(checktype)) {
+			user.setEmail(checkinfo);
+		} else {
+			user.setPhone(checkinfo);
+		}
+		User doneUser = userDao.saveUser(user);
+		return WSChatResult.ok(doneUser);
 	}
-	
 	
 
 }

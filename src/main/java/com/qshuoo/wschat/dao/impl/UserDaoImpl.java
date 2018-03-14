@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.qshuoo.wschat.dao.UserDao;
+import com.qshuoo.wschat.pojo.User;
 
 /**
  * 用户Dao
@@ -32,6 +33,12 @@ public class UserDaoImpl implements UserDao {
 		String sql = "SELECT * FROM user WHERE uid = ?";
 		List<Map<String, Object>> users = jdbcTemplate.queryForList(sql, new Object[] {account});
 		return users;
+	}
+
+	@Override
+	public User saveUser(User user) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
