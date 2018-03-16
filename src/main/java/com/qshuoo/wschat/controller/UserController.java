@@ -2,6 +2,8 @@ package com.qshuoo.wschat.controller;
 
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +20,8 @@ import com.qshuoo.wschat.utils.WSChatResult;
  */
 @Controller
 public class UserController {
+	
+	private Logger logger = LoggerFactory.getLogger(UserController.class);
 	
 	@Autowired
 	private UserService userService;
@@ -49,6 +53,7 @@ public class UserController {
 			return result;
 		}
 		session.setAttribute("check_code", result.getData());
+		session.setMaxInactiveInterval(60); // 60s过期
 		return WSChatResult.ok();
 	}
 	
@@ -60,17 +65,18 @@ public class UserController {
 	 * @param inputcode 输入的验证码
 	 * @param session
 	 * @return
+	 * @throws Exception 
 	 */
 	@ResponseBody
 	@RequestMapping("/user/register")
-	public WSChatResult register(String username, String password, String checkinfo, String inputcode, HttpSession session) {
-		// TODO 注册
+	public WSChatResult register(String username, String password, String checkinfo, String inputcode, HttpSession session) throws Exception {
+		logger.info("STATR REG {}, {}, {}, {}",username, password, checkinfo, inputcode);
 		if (!session.getAttribute("check_code").equals(inputcode)) {
 			return WSChatResult.notOk("验证码输入错误");
 		}
-		userService.registerUser(username, password, checkinfo, "email");
-		return null;
+		return userService.registerUser(username, password, checkinfo, "email");
 	}
+	
 	// TODO 获取好友列表
 	
 	// TODO 获取群列表

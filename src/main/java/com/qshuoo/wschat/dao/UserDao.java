@@ -19,6 +19,18 @@ public interface UserDao {
 	 */
 	public List<Map<String, Object>> getUserById(Long account);
 
-	public User saveUser(User user);
+	/**
+	 * 保存用户
+	 * @param user 用户信息
+	 * @return
+	 * @throws Exception 
+	 */
+	public int saveUser(User user) throws Exception;
+	
+	/**
+	 * 获取当前最大值的账号
+	 * @return
+	 */
+	public List<Map<String, Object>> getMaxAccount();
 
 }

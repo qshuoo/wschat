@@ -15,7 +15,7 @@ public abstract class BaseCodeServiceImpl implements CodeService{
 			sendCode(receiver, code);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return WSChatResult.notOk("验证码发送失败，请检查网络连接");
+			return WSChatResult.notOk("验证码发送失败，请检查输入是否正确");
 		}
 		return WSChatResult.ok(code);
 	}

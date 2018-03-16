@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.qshuoo.wschat.dao.UserDao;
 import com.qshuoo.wschat.pojo.User;
+import com.qshuoo.wschat.utils.SqlUtils;
 
 /**
  * 用户Dao
@@ -19,11 +20,6 @@ import com.qshuoo.wschat.pojo.User;
 @Repository
 public class UserDaoImpl implements UserDao {
 	
-	/**
-	 * 根据账户查询用户
-	 * @param account
-	 * @return
-	 */
 	@Autowired
 	@Qualifier("jdbcTemplate")
 	private JdbcTemplate jdbcTemplate;
@@ -36,9 +32,17 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public User saveUser(User user) {
-		// TODO Auto-generated method stub
-		return null;
+	public int saveUser(User user) throws Exception {
+		String sql = SqlUtils.generateInsertSQL(user, User.class);
+		int cnt = jdbcTemplate.update(sql);
+		return cnt;
+	}
+
+	@Override
+	public List<Map<String, Object>> getMaxAccount() {
+		String sql = "SELECT MAX(uid) AS ID FROM user";
+		List<Map<String, Object>> id = jdbcTemplate.queryForList(sql);
+		return id;
 	}
 
 }

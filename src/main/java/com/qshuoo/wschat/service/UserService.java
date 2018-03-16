@@ -25,7 +25,8 @@ public interface UserService {
 	 * @param checkinfo 校验信息
 	 * @param checktype 校验类型
 	 * @return
+	 * @throws Exception 
 	 */
-	public WSChatResult registerUser(String username, String password, String checkinfo, String checktype);
+	public WSChatResult registerUser(String username, String password, String checkinfo, String checktype) throws Exception;
 
 }

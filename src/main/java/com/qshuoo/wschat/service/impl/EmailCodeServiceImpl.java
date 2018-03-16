@@ -17,7 +17,7 @@ public class EmailCodeServiceImpl extends BaseCodeServiceImpl{
 	private String sender;
 	
 	// 主题
-	@Value("${spring.mail.subject}")
+	@Value("${mail.subject}")
 	private String subject;
 
 

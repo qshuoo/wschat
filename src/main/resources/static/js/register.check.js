@@ -35,6 +35,7 @@ $(document).ready(function() {
 	
 	// 点击发送验证码 
 	$("#btn_check").click(function() {
+		$("#input_code").focus();
 		$("#input_username,#input_password,#input_password_confirm,#input_checkinfo").blur();
 		if ($(".has-error").size() == 0) {
 			$("#btn_check").attr("disabled", "disabled");
@@ -48,8 +49,15 @@ $(document).ready(function() {
 					if (data.code == 1) {
 						calcReSendCode(60); // 2 按钮1分钟内不可点击
 					} else {
-						$("#err_code_msg").text(data.msg);
+						$("#btn_check").removeAttr("disabled");
+						$("#btn_check").text("发送验证码");
+						showRegError(data.msg);
 					}
+				},
+				error:function(data) {
+					$("#btn_check").removeAttr("disabled");
+					$("#btn_check").text("发送验证码");
+					showRegError("发送失败，请检查网络连接");
 				}
 			});
 		}
@@ -74,30 +82,41 @@ $(document).ready(function() {
 	$("#btn_reg").click(function() {
 		$("#input_username,#input_password,#input_password_confirm,#input_checkinfo").blur();
 		if ($(".has-error").size() == 0) {
-			if($("#input_code").val() == '') {
-				$("#err_code_msg").text("验证码不能为空");
-				$($("#input_code").next()).show();
-				$($("#input_code").parent()).addClass("has-error");
-			} else {
-				$.ajax({
-					type:"POST",
-					url:"/user/register",
-					data:{username:$("#input_username").val(),
-						  password:$("#input_password").val(),
-						  checkinfo:$("#input_checkinfo").val(),
-						  inputcode:$("input_code").val()
-						  },
-					success:function(data) {
-						if (data.code == 1) {
-							console.log(data.data.toString());
-							window.location.href = '/wschat/login';
-						} else {
-							$("#err_code_msg").text(data.msg);
-						}
-					}
-				});
+			if(typeof($("#btn_check").attr("disabled")) == "undefined") {
+				showRegError("请发送验证码");
+				return;
 			}
+			if($("#input_code").val() == '') {
+				showRegError("验证码不能为空");
+				return;
+			}
+			$.ajax({
+				type:"POST",
+				url:"/user/register",
+				data:{username:$("#input_username").val(),
+					password:$("#input_password").val(),
+					checkinfo:$("#input_checkinfo").val(),
+					inputcode:$("#input_code").val()
+					},
+				success:function(data) {
+					if (data.code == 1) {
+						console.log(data.data.toString());
+						window.location.href = '/wschat/login';
+					} else {
+						showRegError(data.msg);
+					}
+				},
+				error:function(data) {
+					showRegError("出错了，请检查网络信息");
+				}
+			});
 			
 		}
 	});
+	
+	function showRegError(data){
+		$("#err_code_msg").text(data);
+		$($("#input_code").next()).show();
+		$($("#input_code").parent()).addClass("has-error");
+	}
 });
