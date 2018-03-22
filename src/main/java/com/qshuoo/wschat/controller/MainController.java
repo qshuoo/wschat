@@ -21,7 +21,7 @@ public class MainController {
 	 */
 	@RequestMapping("/index/{account}")
 	public String toIndex(@PathVariable("account") String account, ModelMap map) {
-		map.put("username", account);
+		map.put("account", account);
 		return "index";
 	}
 

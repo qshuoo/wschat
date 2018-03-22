@@ -1,6 +1,7 @@
 package com.qshuoo.wschat.service.impl;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ import org.springframework.util.CollectionUtils;
 
 import com.qshuoo.wschat.cache.WSRedicCache;
 import com.qshuoo.wschat.dao.UserDao;
+import com.qshuoo.wschat.pojo.Friend;
 import com.qshuoo.wschat.pojo.User;
 import com.qshuoo.wschat.service.UserService;
 import com.qshuoo.wschat.utils.PojoUtil;
@@ -70,6 +72,16 @@ public class UserServiceImpl implements UserService{
 		
 		logger.info("REG SUCCESS", id);
 		return WSChatResult.ok(id);
+	}
+
+	@Override
+	public WSChatResult listFriends(Long account) throws Exception {
+		List<Map<String, Object>> friends = userDao.listFriends(account);
+		List<Friend> friendList = new ArrayList<Friend>();
+		for (Map<String, Object> map : friends) {
+			friendList.add((Friend) PojoUtil.map2Object(map, Friend.class));
+		}
+		return WSChatResult.ok(friendList);
 	}
 	
 

@@ -22,7 +22,7 @@
 				<!-- <div> -->
 				<div class="col-md-12 column">
 					<h1>TO DO</h1>
-					<input id="from" value="${username}" style="display:none">
+					<input id="account" value="${account}" style="display:none">
 					<input id="to" value="99999" style="display:none">
 				</div>
 				<!-- </div> -->
@@ -35,15 +35,7 @@
 						<div class="tab-content">
 							<div class="tab-pane active" id="panel-620501">
 								<div class="list-group">
-									<ul class="list-group">
-										<li class="list-group-item">TODO</li>
-										<li class="list-group-item">TODO</li>
-										<li class="list-group-item">TODO</li>
-										<li class="list-group-item"><span class="badge">1</span>
-											TODO</li>
-										<li class="list-group-item">TODO</li>
-										<li class="list-group-item"><span class="badge">2</span>
-											TODO</li>
+									<ul id = "friend-list" class="list-group">
 									</ul>
 								</div>
 							</div>

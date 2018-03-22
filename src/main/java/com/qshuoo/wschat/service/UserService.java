@@ -29,4 +29,11 @@ public interface UserService {
 	 */
 	public WSChatResult registerUser(String username, String password, String checkinfo, String checktype) throws Exception;
 
+	/**
+	 * 
+	 * @param account 账户
+	 * @return
+	 * @throws Exception 
+	 */
+	public WSChatResult listFriends(Long account) throws Exception;
 }

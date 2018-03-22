@@ -37,6 +37,7 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping("/login/check")
 	public WSChatResult checkLogin(Long account, String password) throws Exception {
+		// TODO 添加 用户至session 或 redis
 		return userService.checkLoginUser(account, password);
 	}
 	
@@ -78,7 +79,11 @@ public class UserController {
 	}
 	
 	// TODO 获取好友列表
-	
+	@ResponseBody
+	@RequestMapping("/user/friend")
+	public WSChatResult getFriendsList(Long account) throws Exception {
+		return userService.listFriends(account);
+	}
 	// TODO 获取群列表
 	
 	// TODO 搜索用户/群

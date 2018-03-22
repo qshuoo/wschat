@@ -26,7 +26,7 @@ public class UserDaoImpl implements UserDao {
 	
 	@Override
 	public List<Map<String, Object>> getUserById(Long account) {
-		String sql = "SELECT * FROM user WHERE uid = ?";
+		String sql = "SELECT * FROM user WHERE uid = ?;";
 		List<Map<String, Object>> users = jdbcTemplate.queryForList(sql, new Object[] {account});
 		return users;
 	}
@@ -40,9 +40,17 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public List<Map<String, Object>> getMaxAccount() {
-		String sql = "SELECT MAX(uid) AS ID FROM user";
+		String sql = "SELECT MAX(uid) AS ID FROM user;";
 		List<Map<String, Object>> id = jdbcTemplate.queryForList(sql);
 		return id;
+	}
+
+	@Override
+	public List<Map<String, Object>> listFriends(Long account) {
+		// TODO Auto-generated method stub
+		String sql = "SELECT a.uid, a.uname, a.img, a.signature FROM user a join friend_relation b on a.uid = b.uid2 WHERE b.uid1 = ? AND b.state = 1;";
+		List<Map<String, Object>> friends = jdbcTemplate.queryForList(sql, new Object[] {account});
+		return friends;
 	}
 
 }

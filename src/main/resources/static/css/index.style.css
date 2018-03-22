@@ -47,6 +47,21 @@
 	margin-bottom: 1%;
 }
 
+.circle {
+	width: 15%;
+	height: 100%;
+	border-radius: 50%;
+	-moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+}
+
+.user-name {
+	padding-left:20px;
+	/* letter-spacing:1px; */
+	font-size:110%;
+}
+
+
 .chat-thread {
   /* margin: 24px auto 0 auto; */
   padding: 0 20px 0 20px;
