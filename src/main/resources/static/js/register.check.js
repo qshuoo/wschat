@@ -99,9 +99,8 @@ $(document).ready(function() {
 					inputcode:$("#input_code").val()
 					},
 				success:function(data) {
-					if (data.code == 1) {
-						console.log(data.data.toString());
-						window.location.href = '/wschat/login';
+					if (data.code == 1) { // 注册成功
+						window.location.href = '/wschat/regsucc/' + data.data;
 					} else {
 						showRegError(data.msg);
 					}

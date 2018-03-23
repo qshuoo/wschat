@@ -30,7 +30,7 @@ $(document).ready(function() {
 					if (data.code == 0) { // failuer
 						$("#login_err_tip").html(data.msg);
 					} else if (data.code == 1) { // success
-						location.href = "index/" + data.data.uid;
+						location.href = "index";
 					}
 				},
 				error : function(data) {

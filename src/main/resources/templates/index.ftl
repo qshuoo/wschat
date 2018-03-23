@@ -22,7 +22,7 @@
 				<!-- <div> -->
 				<div class="col-md-12 column">
 					<h1>TO DO</h1>
-					<input id="account" value="${account}" style="display:none">
+					<input id="account" value="${user.uid?c}" style="display:none">
 					<input id="to" value="99999" style="display:none">
 				</div>
 				<!-- </div> -->
