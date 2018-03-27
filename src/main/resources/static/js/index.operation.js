@@ -44,6 +44,22 @@ $(document).ready(function() {
 	}
 
 	$("#convo").scrollTop($("#convo")[0].scrollHeight);
+	
+	$(".list-group-item").mouseover(function() {
+		if ($(this).css("background") != "#e9e9e4")
+			$(this).css("background", "#c5c5c5");
+	});
+	
+	$(".list-group-item").mouseout(function() {
+		if ($(this).css("background") != "#e9e9e4")
+			$(this).css("background", "#eeeeee");
+	})
+	
+	$(".list-group-item").click(function() {
+		$(this).siblings().css("background","#e9e9e4");
+		$(this).css("background", "#b0b0b0");
+	});
+	
 
 });
 
@@ -113,9 +129,10 @@ function scrollSild() {
  * @returns
  */
 function drewFriendList(account, url, username) { // 一好友显示的模块
-	var str = "<li id='" + account + "' class=\"list-group-item\">"
-			+ "<img src='" + url + "' class=\"circle\"></img>"
+	var str = "<li id='" + account + "' class=\"list-group-item\" style=\"border-style: solid; border-color: blue\">"
+			+ "<img src='" + url + "' class=\"circle\" onerror=\"this.src='/img/default.jpg'\"></img>"
 			+ "<span class = \"user-name\">" + username + "</span>"
 			+ "<span class=\"badge\"></span>" + "</li>"
 	return str;
 }
+
