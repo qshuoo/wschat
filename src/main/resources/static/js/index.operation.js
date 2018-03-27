@@ -45,22 +45,34 @@ $(document).ready(function() {
 
 	$("#convo").scrollTop($("#convo")[0].scrollHeight);
 	
-	$(".list-group-item").mouseover(function() {
-		if ($(this).css("background") != "#e9e9e4")
-			$(this).css("background", "#c5c5c5");
-	});
-	
-	$(".list-group-item").mouseout(function() {
-		if ($(this).css("background") != "#e9e9e4")
-			$(this).css("background", "#eeeeee");
-	})
-	
-	$(".list-group-item").click(function() {
-		$(this).siblings().css("background","#e9e9e4");
-		$(this).css("background", "#b0b0b0");
-	});
-	
+});
 
+/**
+ * 绑定事件
+ * @param msg
+ * @returns
+ */
+$(document).on('click', '.list-group-item', function() {
+	// 修改显示样式
+	$(".item-selected").removeClass("item-selected");
+	$(this).addClass("item-selected");
+	$(this).siblings().css("background","#e9e9e4");
+	$(this).css("background", "#b0b0b0");
+	// 消息会话赋值
+	userAccount = $(this).attr("id");
+	// 打开聊天窗口
+	$("#to-username").text($($(this).children("span")[0]).text());
+	$("#fuc-chat").show();
+});
+
+$(document).on('mouseover', '.list-group-item', function() {
+	if (!$(this).hasClass("item-selected"))
+		$(this).css("background", "#c5c5c5");
+});
+
+$(document).on('mouseout', '.list-group-item', function() {
+	if (!$(this).hasClass("item-selected"))
+		$(this).css("background", "#eeeeee");
 });
 
 // 将消息显示在网页上
@@ -129,7 +141,7 @@ function scrollSild() {
  * @returns
  */
 function drewFriendList(account, url, username) { // 一好友显示的模块
-	var str = "<li id='" + account + "' class=\"list-group-item\" style=\"border-style: solid; border-color: blue\">"
+	var str = "<li id='" + account + "' class=\"list-group-item\">"
 			+ "<img src='" + url + "' class=\"circle\" onerror=\"this.src='/img/default.jpg'\"></img>"
 			+ "<span class = \"user-name\">" + username + "</span>"
 			+ "<span class=\"badge\"></span>" + "</li>"
