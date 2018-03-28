@@ -1,5 +1,5 @@
 var websocket = null; // websocket
-var msgMap = null; // 接收到的消息列表
+var msgMap = {}; // 接收到的消息列表
 var userAccount = null; // 用户账号
 var toUser = null; // 接收消息账号
 $(document).ready(function() {
@@ -13,7 +13,6 @@ $(document).ready(function() {
 	// 判断当前浏览器是否支持WebSocket
 	if ('WebSocket' in window) {
 		var conn = "ws://127.0.0.1:8088/websocket/" + $("#account").val();
-		console.log(conn);
 		websocket = new WebSocket(conn);
 	} else {
 		alert('当前浏览器 Not support websocket')
@@ -26,17 +25,17 @@ $(document).ready(function() {
 
 	// 连接成功建立的回调方法
 	websocket.onopen = function() {
-		setMessageInnerHTML("WebSocket连接成功");
+//		setMessageInnerHTML("WebSocket连接成功");
 	}
 
 	// 接收到消息的回调方法
 	websocket.onmessage = function(event) {
-		setMessageInnerHTML(event.data);
+		receive(JSON.parse(event.data));
 	}
 
 	// 连接关闭的回调方法
 	websocket.onclose = function() {
-		setMessageInnerHTML("WebSocket连接关闭");
+//		setMessageInnerHTML("WebSocket连接关闭");
 	}
 	// 监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
 	window.onbeforeunload = function() {
@@ -48,7 +47,7 @@ $(document).ready(function() {
 });
 
 /**
- * 绑定事件
+ * 绑定事件 (会话列表点击)
  * @param msg
  * @returns
  */
@@ -58,11 +57,25 @@ $(document).on('click', '.list-group-item', function() {
 	$(this).addClass("item-selected");
 	$(this).siblings().css("background","#e9e9e4");
 	$(this).css("background", "#b0b0b0");
+	
+	// 消除离线消息数量提示
+	$($(this).children(".badge")[0]).text("");
+	
 	// 消息会话赋值
-	userAccount = $(this).attr("id");
+	toUser = $(this).attr("id");
+	
 	// 打开聊天窗口
 	$("#to-username").text($($(this).children("span")[0]).text());
 	$("#fuc-chat").show();
+	
+	// 清空聊天内容  (暂时)
+	$(".chat-thread").empty();
+	
+	// 加载未读消息
+	var list = JSON.parse($.data(msgMap, toUser));
+	for (let i = 0; i < list.length; i++) {
+		setMessageInnerHTML(list[i]);
+	}
 });
 
 $(document).on('mouseover', '.list-group-item', function() {
@@ -75,15 +88,52 @@ $(document).on('mouseout', '.list-group-item', function() {
 		$(this).css("background", "#eeeeee");
 });
 
-// 将消息显示在网页上
+// 将消息显示在聊天列表
 function setMessageInnerHTML(msg) {
 	$(".chat-thread").append("<li class='rec-msg'>" + msg + "</li>");
-	scrollSild()
+	scrollSild();
 }
 
 // 关闭WebSocket连接
 function closeWebSocket() {
 	websocket.close();
+}
+
+// 接收消息
+function receive(recMsg) {
+	var fromUid = recMsg.fromUid.toString();
+	var li = $("#" + fromUid); // 获取对应会话
+	if (!li[0]) { // 会话不再列表中
+		console.log("not in list");
+		// 获取好友
+		// 添加至列表中
+	} else {
+		li.remove(); // 移除会话
+		li.prependTo($("#friend-list")); // 添加至列表开头
+	}
+	
+	// 会话被选中 直接显示消息 返回
+	if (li.hasClass("item-selected")) {
+		setMessageInnerHTML(recMsg.msg);
+		return;
+	}
+	
+	// 会话未被选中 好友列表中离线消息数量+1 
+	var cntShow = $(li.children(".badge")[0]);
+	if (cntShow.text() == "") { // 没有未读消息 
+		cntShow.text(1);
+	} else {
+		cntShow.text((Number(cntShow.text()) + 1));
+	}
+	
+	// 缓存消息 
+	var msgList = $.hasData(msgMap, fromUid);
+	var list = new Array();
+	if (msgList) {
+		list = $.data(msgMap, fromUid);
+	}
+	list.push(recMsg.msg);
+	$.data(msgMap, fromUid, JSON.stringify(list));
 }
 
 // 发送消息
@@ -93,8 +143,8 @@ function send() {
 			"<li class='send-msg'>" + $('#msg').val() + "</li>");
 	// 发送消息
 	var message = {
-		fromUid : $('#account').val(),
-		toUid : $('#to').val(),
+		fromUid : userAccount,
+		toUid : toUser,
 		msg : $('#msg').val()
 	}
 	websocket.send(JSON.stringify(message));

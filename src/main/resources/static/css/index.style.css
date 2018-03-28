@@ -54,13 +54,15 @@
     display: -webkit-flex; /* Safari */
     align-items:center;/*指定垂直居中*/
     padding-left:15px;
-    background-color:#0a90ea14;
+    background-color:#b3d4d4;
+    
 }
 
 #convo {
 /* 	border:1px solid red;  */
 	padding-left: 0px;
     padding-right: 0px;
+    border-bottom: 1px solid #b3d4d4;
 }
 
 #snovo {
@@ -102,6 +104,7 @@
 	border-radius: 50px;
 	-moz-border-radius: 50px;
 	-webkit-border-radius: 50px;
+	border: 1px solid white;
 }
 
 .user-name {
@@ -210,7 +213,7 @@
   }
   
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
-	background-color:#b0b0b0;
+	background-color:#0a90ea14;
 }
 
   

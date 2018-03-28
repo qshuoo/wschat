@@ -63,11 +63,9 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-8" id="fuc-chat" style="display:none;">
+			<div class="col-md-8" id="fuc-chat" style="display: none;">
 				<div class="info-display">
-					<h3 id="to-username">TO DO</h3>
-					<input id="account" value="${user.uid?c}" style="display: none">
-					<input id="to" value="99999" style="display: none">
+					<h3 id="to-username"></h3>
 				</div>
 				<form role="form">
 					<div id="convo" data-from="Sonu Joshi">
@@ -77,7 +75,8 @@
 
 					<div id="snovo">
 						<div class="form-group">
-							<textarea id="msg" class="form-control input_text_area" rows="4" style="resize:none;background-color:white;border:none;outline:medium;"></textarea>
+							<textarea id="msg" class="form-control input_text_area" rows="4"
+								style="resize: none; background-color: white; border: none; outline: medium;"></textarea>
 						</div>
 						<div id="btn_send">
 							<button type="button" class="btn btn-default btn-sm "
