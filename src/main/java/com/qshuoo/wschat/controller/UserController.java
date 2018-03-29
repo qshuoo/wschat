@@ -54,7 +54,7 @@ public class UserController {
 			return result;
 		}
 		session.setAttribute("check_code", result.getData());
-		session.setMaxInactiveInterval(60); // 60s过期
+		session.setMaxInactiveInterval(200); // 200s过期
 		return WSChatResult.ok();
 	}
 	
@@ -71,6 +71,9 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping("/user/register")
 	public WSChatResult register(String username, String password, String checkinfo, String inputcode, HttpSession session) throws Exception {
+		if (session.getAttribute("check_code") == null) {
+			return WSChatResult.notOk("验证码已过期，请重新发送");
+		}
 		if (!session.getAttribute("check_code").equals(inputcode)) {
 			return WSChatResult.notOk("验证码输入错误");
 		}
