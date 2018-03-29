@@ -54,7 +54,9 @@ public class MainChat {
         }
         // TODO  接收消息
         for (String string : result) {
+        	logger.info("GET OUTLINE MSG");
 			session.getBasicRemote().sendText(string);
+			logger.info("GET OUTLINE MSG FINSIH");
 		}
     }
 

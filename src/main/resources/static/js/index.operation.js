@@ -30,6 +30,7 @@ $(document).ready(function() {
 
 	// 接收到消息的回调方法
 	websocket.onmessage = function(event) {
+		console.log("RECEIVED MSG");
 		receive(JSON.parse(event.data));
 	}
 
@@ -72,10 +73,14 @@ $(document).on('click', '.list-group-item', function() {
 	$(".chat-thread").empty();
 	
 	// 加载未读消息
+	console.log($.data(msgMap, toUser));
 	var list = JSON.parse($.data(msgMap, toUser));
 	for (let i = 0; i < list.length; i++) {
 		setMessageInnerHTML(list[i]);
 	}
+	
+	// 清除未读缓存
+	$.removeData(msgMap, toUser);
 });
 
 $(document).on('mouseover', '.list-group-item', function() {
@@ -128,12 +133,13 @@ function receive(recMsg) {
 	
 	// 缓存消息 
 	var msgList = $.hasData(msgMap, fromUid);
-	var list = new Array();
+	var list = [];
 	if (msgList) {
-		list = $.data(msgMap, fromUid);
+		list = JSON.parse($.data(msgMap, fromUid));
 	}
 	list.push(recMsg.msg);
 	$.data(msgMap, fromUid, JSON.stringify(list));
+	console.log($.data(msgMap, fromUid));
 }
 
 // 发送消息
@@ -161,6 +167,7 @@ function recFriendList() {
 	$.ajax({
 		url:"/user/friend",
 		type:"get",
+		async:false,
 		data:{account:userAccount},
 		success:function(data) {
 			if (data.code == 1) {
