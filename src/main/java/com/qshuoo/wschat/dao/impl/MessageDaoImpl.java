@@ -28,9 +28,16 @@ public class MessageDaoImpl implements MessageDao {
 
 	@Override
 	public List<Map<String, Object>> listMsgsByToUid(Long account) {
-		String sql = "SELECT * FROM message WHERE toUid = ?";
+		String sql = "SELECT * FROM message WHERE toUid = ? AND status = 0";
 		List<Map<String, Object>> msgs = jdbcTemplate.queryForList(sql, account);
 		return msgs;
+	}
+
+	@Override
+	public int updateMsgByToUid(Long account) {
+		String sql = "UPDATE message SET status = 1 WHERE toUid = ?";
+		int row = jdbcTemplate.update(sql, account);
+		return row;
 	}
 
 }

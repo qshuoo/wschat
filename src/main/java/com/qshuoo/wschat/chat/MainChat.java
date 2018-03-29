@@ -52,12 +52,15 @@ public class MainChat {
         if (result == null) {
         	return;
         }
-        // TODO  接收消息
+        // 接收消息
         for (String string : result) {
         	logger.info("GET OUTLINE MSG");
 			session.getBasicRemote().sendText(string);
 			logger.info("GET OUTLINE MSG FINSIH");
 		}
+        
+        // 离线消息更新已读
+        service.updateOfflineMsgs(account);
     }
 
     /**

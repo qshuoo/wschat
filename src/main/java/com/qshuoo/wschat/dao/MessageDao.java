@@ -27,4 +27,11 @@ public interface MessageDao {
 	 */
 	public List<Map<String, Object>> listMsgsByToUid(Long account);
 
+	/**
+	 * 根据用户id更新离线消息
+	 * @param account
+	 * @return
+	 */
+	public int updateMsgByToUid(Long account);
+
 }

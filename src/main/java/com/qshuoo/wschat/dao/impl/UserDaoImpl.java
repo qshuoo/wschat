@@ -12,11 +12,6 @@ import com.qshuoo.wschat.dao.UserDao;
 import com.qshuoo.wschat.pojo.User;
 import com.qshuoo.wschat.utils.SqlUtils;
 
-/**
- * 用户Dao
- * @author qiaoyongshuo
- *
- */
 @Repository
 public class UserDaoImpl implements UserDao {
 	

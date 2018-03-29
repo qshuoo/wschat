@@ -46,4 +46,9 @@ public class MessageServiceImpl implements MessageService{
 		return offMsgs;
 	}
 
+	@Override
+	public void updateOfflineMsgs(Long account) {
+		dao.updateMsgByToUid(account);
+	}
+
 }

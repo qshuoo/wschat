@@ -27,4 +27,10 @@ public interface MessageService {
 	 * @throws Exception 
 	 */
 	public List<String> getOffLineMsgs(Long account) throws Exception;
+
+	/**
+	 * 更新离线消息
+	 * @param account 
+	 */
+	public void updateOfflineMsgs(Long account);
 }
