@@ -74,6 +74,9 @@ $(document).on('click', '.list-group-item', function() {
 	
 	// 加载未读消息
 	console.log($.data(msgMap, toUser));
+	if (typeof($.data(msgMap, toUser)) == "undefined") { // 没有缓存 return
+		return;
+	}
 	var list = JSON.parse($.data(msgMap, toUser));
 	for (let i = 0; i < list.length; i++) {
 		setMessageInnerHTML(list[i]);
