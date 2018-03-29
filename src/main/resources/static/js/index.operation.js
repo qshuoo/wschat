@@ -12,7 +12,7 @@ $(document).ready(function() {
 	
 	// 判断当前浏览器是否支持WebSocket
 	if ('WebSocket' in window) {
-		var conn = "ws://127.0.0.1:8088/websocket/" + $("#account").val();
+		var conn = "ws://" + window.location.host + "/websocket/" + $("#account").val();
 		websocket = new WebSocket(conn);
 	} else {
 		alert('当前浏览器 Not support websocket')
