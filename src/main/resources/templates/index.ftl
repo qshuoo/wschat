@@ -26,9 +26,9 @@
 				<div class="info-display">
 					<img class="circle" alt="" src="/img/default.jpg">
 					<div class="form-group" style="padding-left: 20px;">
-						<input type="text" class="form-control" placeholder="Search">
+						<input id="input_search" type="text" class="form-control" placeholder="Search">
 					</div>
-					<button type="submit" class="btn btn-default">
+					<button id="btn_search" type="submit" class="btn btn-default">
 						<span class="glyphicon glyphicon-search"></span>
 					</button>
 					<input id="account" value="${user.uid?c}" style="display: none">

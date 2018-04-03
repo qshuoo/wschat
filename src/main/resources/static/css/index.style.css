@@ -105,6 +105,7 @@
 	-moz-border-radius: 50px;
 	-webkit-border-radius: 50px;
 	border: 1px solid white;
+	cursor: pointer;
 }
 
 .user-name {

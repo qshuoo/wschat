@@ -32,6 +32,9 @@ public class UserServiceImpl implements UserService{
 
 	private Logger logger = LoggerFactory.getLogger(UserService.class);
 	
+	// 用户展示的信息
+	private static final String[] USER_SHOW_INFO = {"uid", "uname", "img", "signature"}; 
+	
 	@Autowired
 	private UserDao userDao;
 	
@@ -82,6 +85,21 @@ public class UserServiceImpl implements UserService{
 			friendList.add((Friend) PojoUtil.map2Object(map, Friend.class));
 		}
 		return WSChatResult.ok(friendList);
+	}
+
+	@Override
+	public WSChatResult search(Long account, String type) throws Exception {
+		List<Map<String, Object>> res = new ArrayList<>();
+		if ("user".equals(type)) {
+			res = userDao.getUserById(account);
+			if (CollectionUtils.isEmpty(res)) {
+				return WSChatResult.ok();
+			}
+			Object resObj = PojoUtil.map2Object(res.get(0), User.class, USER_SHOW_INFO);
+			return WSChatResult.ok(resObj);
+		}
+		// TODO 查找群组
+		return WSChatResult.ok();
 	}
 	
 

@@ -36,4 +36,13 @@ public interface UserService {
 	 * @throws Exception 
 	 */
 	public WSChatResult listFriends(Long account) throws Exception;
+
+	/**
+	 * 查找用户或群组
+	 * @param account 账户
+	 * @param type 类型
+	 * @return 用户和群组信息
+	 * @throws Exception 
+	 */
+	public WSChatResult search(Long account, String type) throws Exception;
 }

@@ -4,6 +4,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -93,8 +94,31 @@ public class UserController {
 	}
 	// TODO 获取群列表
 	
-	// TODO 搜索用户/群
+	/**
+	 * 搜索用户
+	 * @param account 账号
+	 * @return 用户信息(账号，昵称，头像，签名)
+	 * @throws Exception 
+	 */
+	@ResponseBody
+	@RequestMapping("/user/search/{account}")
+	public WSChatResult searchUser(@PathVariable("account")Long account) throws Exception {
+		WSChatResult result = userService.search(account, "user");
+		return result;
+	}
 	
+	/**
+	 * 搜索群组
+	 * @param account 群号
+	 * @return 群组信息(群号，群名，群头像)
+	 * @throws Exception 
+	 */
+	@ResponseBody
+	@RequestMapping("/group/search/{account}")
+	public WSChatResult searchGroup(@PathVariable("account")Long account) throws Exception {
+		WSChatResult result = userService.search(account, "group");
+		return result;
+	}
 	// TODO 添加好友/群
 	
 	// TODO 

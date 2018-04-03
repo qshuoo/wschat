@@ -40,4 +40,11 @@ public interface UserDao {
 	 */
 	public List<Map<String, Object>> listFriends(Long account);
 
+	/**
+	 * 通过id获取群组
+	 * @param account 账户
+	 * @return 群组信息
+	 */
+	public List<Map<String, Object>> getGroupById(Long account);
+
 }

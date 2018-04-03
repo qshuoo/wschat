@@ -53,6 +53,11 @@ $(document).ready(function() {
  * @returns
  */
 $(document).on('click', '.list-group-item', function() {
+	// 如果已经被选中  什么都不做
+	if ($(this).hasClass("item-selected")) {
+		return;
+	}
+	
 	// 修改显示样式
 	$(".item-selected").removeClass("item-selected");
 	$(this).addClass("item-selected");
@@ -94,6 +99,28 @@ $(document).on('mouseover', '.list-group-item', function() {
 $(document).on('mouseout', '.list-group-item', function() {
 	if (!$(this).hasClass("item-selected"))
 		$(this).css("background", "#eeeeee");
+});
+
+/**
+ * 搜索
+ * @returns
+ */
+$(document).on('click', '#btn_search', function() {
+	var account = $("#input_search").val();
+	if (account == "") { // 没输入内容返回
+		return;
+	}
+	$.ajax({
+		url : '/user/search/' + account,
+		type : 'GET',
+		success : function(data) {
+			console.log(data);
+		},
+		error : function() {
+			// TODO
+		}
+	});
+	
 });
 
 // 将消息显示在聊天列表
@@ -170,7 +197,7 @@ function recFriendList() {
 	$.ajax({
 		url:"/user/friend",
 		type:"get",
-		async:false,
+		async:false, // 不能异步
 		data:{account:userAccount},
 		success:function(data) {
 			if (data.code == 1) {
