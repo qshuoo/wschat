@@ -26,7 +26,8 @@
 				<div class="info-display">
 					<img class="circle" alt="" src="/img/default.jpg">
 					<div class="form-group" style="padding-left: 20px;">
-						<input id="input_search" type="text" class="form-control" placeholder="Search">
+						<input id="input_search" type="text" class="form-control"
+							placeholder="Search">
 					</div>
 					<button id="btn_search" type="submit" class="btn btn-default">
 						<span class="glyphicon glyphicon-search"></span>
@@ -46,18 +47,6 @@
 						</div>
 						<div class="tab-pane" id="panel-250831">
 							<ul class="list-group">
-								<li class="list-group-item">TODO2</li>
-								<li class="list-group-item">TODO2</li>
-								<li class="list-group-item">TODO2</li>
-								<li class="list-group-item"><span class="badge">1</span>
-									TODO</li>
-								<li class="list-group-item">TODO2</li>
-								<li class="list-group-item"><span class="badge">2</span>
-									TODO</li>
-								<li class="list-group-item">TODO2</li>
-								<li class="list-group-item">TODO2</li>
-								<li class="list-group-item">TODO2</li>
-								<li class="list-group-item">TODO2</li>
 							</ul>
 						</div>
 					</div>
@@ -88,6 +77,24 @@
 		</div>
 		<div class="row clearfix">
 			<div class="col-md-12 column"></div>
+		</div>
+		
+
+		<!-- 展示用户信息 -->
+		<div class="modal fade" id="modal_user" tabindex="-1" role="dialog"
+			aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog" style="width: 500px;">
+				<div id="modal_display" class="modal-content">
+					<div class="modal-header" align=center>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body" align="center"> 
+					</div>
+					<div class="modal-footer" align="center" style="text-align:center">
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </body>

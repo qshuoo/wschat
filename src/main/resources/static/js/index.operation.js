@@ -110,11 +110,21 @@ $(document).on('click', '#btn_search', function() {
 	if (account == "") { // 没输入内容返回
 		return;
 	}
+	$("#modal_user").modal();
 	$.ajax({
 		url : '/user/search/' + account,
 		type : 'GET',
+		beforeSend:function() {  
+            $(".modal-body").html("正在查找中...");
+        },
 		success : function(data) {
-			console.log(data);
+			if (typeof(data.data) == "undefined") {
+				$(".modal-body").html("没有找到相关用户");
+				return;
+			}
+			console.log(data.data);
+			var str = drawSearchUser(data.data.uid.toString(), data.data.img, data.data.uname);
+			$(".modal-body").html(str);
 		},
 		error : function() {
 			// TODO
@@ -134,7 +144,11 @@ function closeWebSocket() {
 	websocket.close();
 }
 
-// 接收消息
+/**
+ * 接收消息
+ * @param recMsg
+ * @returns
+ */
 function receive(recMsg) {
 	var fromUid = recMsg.fromUid.toString();
 	var li = $("#" + fromUid); // 获取对应会话
@@ -172,7 +186,10 @@ function receive(recMsg) {
 	console.log($.data(msgMap, fromUid));
 }
 
-// 发送消息
+/**
+ * 发送消息
+ * @returns
+ */
 function send() {
 	// 聊天窗体显示消息
 	$(".chat-thread").append(
@@ -193,6 +210,10 @@ function send() {
 
 }
 
+/**
+ * 接收好友列表
+ * @returns
+ */
 function recFriendList() {
 	$.ajax({
 		url:"/user/friend",
@@ -211,6 +232,40 @@ function recFriendList() {
 	});
 }
 
+function 
+
+/**
+ * 写入好友列表
+ * @param account
+ * @param imgurl
+ * @param username
+ * @returns
+ */
+function drewFriendList(account, imgurl, username) { // 一好友显示的模块
+	var str = "<li id='" + account + "' class='list-group-item'>"
+			+ "<img src='" + imgurl + "' class='circle' onerror=\"this.src='/img/default.jpg'\"></img>"
+			+ "<span class = 'user-name'>" + username + "</span>"
+			+ "<span class='badge'></span>" + "</li>"
+	return str;
+}
+
+/**
+ * 写查询好友结果
+ * @param imgurl
+ * @param account
+ * @param username
+ * @returns
+ */
+function drawSearchUser(account, imgurl, username) {
+	var str = "<img class='circle' src='" + imgurl + "' onerror=\"this.src='/img/default.jpg'\"/>"
+			+ "<h4>账号：" + account + "</h4>"
+			+ "<h4>用户名：" + username + "</h4>"
+			+ "<textarea class='form-control input_text_area'"
+			+ "style='resize: none;' rows='2' placeholder='我是...'></textarea>"
+			+ "<button type='button' class='form-control btn btn-default'>添加好友</button>"
+	return str;
+}
+
 /**
  * 滚动轮滚动至底端
  * 
@@ -219,19 +274,3 @@ function recFriendList() {
 function scrollSild() {
 	$(".chat-thread").scrollTop($(".chat-thread")[0].scrollHeight);
 }
-
-/**
- * <li id="account" class="list-group-item"><img src="url" class="circle"></img><span
- * class = "user-name">username</span><span class="badge"></span></li>
- * 写入好友列表
- * 
- * @returns
- */
-function drewFriendList(account, url, username) { // 一好友显示的模块
-	var str = "<li id='" + account + "' class=\"list-group-item\">"
-			+ "<img src='" + url + "' class=\"circle\" onerror=\"this.src='/img/default.jpg'\"></img>"
-			+ "<span class = \"user-name\">" + username + "</span>"
-			+ "<span class=\"badge\"></span>" + "</li>"
-	return str;
-}
-
