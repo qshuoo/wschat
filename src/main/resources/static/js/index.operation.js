@@ -232,8 +232,6 @@ function recFriendList() {
 	});
 }
 
-function 
-
 /**
  * 写入好友列表
  * @param account

@@ -3,6 +3,7 @@ encoding//src/main/java=UTF-8
 encoding//src/main/resources=UTF-8
 encoding//src/main/resources/application-dev.properties=UTF-8
 encoding//src/main/resources/application.properties=UTF-8
+encoding//src/main/resources/constValue.properties=UTF-8
 encoding//src/main/resources/static/css/index.style.css=UTF-8
 encoding//src/main/resources/static/js/index.operation.js=UTF-8
 encoding//src/main/resources/templates/index.ftl=UTF-8
