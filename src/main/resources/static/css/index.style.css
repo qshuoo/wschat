@@ -28,14 +28,16 @@
 
 .list-group {
 	background:#eeeeee;
+	overflow-y: scroll;
+  	overflow-x: hidden;
+  	height: 454px;
+  	margin-bottom: 0px;
 }
 
 .list-group-item {
 	height:70px;
 	background:#eeeeee;
 }
-
-#a8e8e833
 
 .input_text_area {
 	resize:none;
@@ -78,10 +80,7 @@
     
 }
 
-.list-group {
-	overflow-y: scroll;
-  	overflow-x: hidden;
-}
+
 
 #fuc-chat {
 	padding-left: 0px;
@@ -205,9 +204,7 @@
   	height: 130px;
   }
   
-  .list-group {
-  	height: 432px;
-  }
+
   
   .info-display {
   	height: 70px;

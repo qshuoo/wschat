@@ -37,21 +37,42 @@
 				</div>
 				<div class="tabbable" id="tabs-503102">
 					<ul class="nav nav-tabs">
-						<li class="active"><a href="#panel-620501" data-toggle="tab">好友</a></li>
-						<li><a href="#panel-250831" data-toggle="tab">群组</a></li>
+						<li class="active"><a id="chat-sign" class="li-sign" href="#panel-121381" data-toggle="tab">会话</a></li>
+						<li><a class="li-sign" href="#panel-121382" data-toggle="tab">好友</a></li>
+						<li><a class="li-sign" href="#panel-121383" data-toggle="tab">群组</a></li>
+						<li><a class="li-sign" href="#panel-121384" data-toggle="tab">新朋友</a></li>
+						<li><a class="li-sign" href="#panel-121385" data-toggle="tab">黑名单</a></li>
 					</ul>
 					<div class="tab-content">
-						<div class="tab-pane active" id="panel-620501">
+						<div class="tab-pane active" id="panel-121381">
+							<ul id="chat-list" class="list-group">
+							</ul>
+						</div>
+						<div class="tab-pane" id="panel-121382">
 							<ul id="friend-list" class="list-group">
 							</ul>
 						</div>
-						<div class="tab-pane" id="panel-250831">
+						<div class="tab-pane" id="panel-121383">
+							<ul class="list-group">
+							</ul>
+						</div>
+						<div class="tab-pane" id="panel-121384">
+							<ul class="list-group">
+							</ul>
+						</div>
+						<div class="tab-pane" id="panel-121385">
 							<ul class="list-group">
 							</ul>
 						</div>
 					</div>
 				</div>
 			</div>
+			
+			<!-- 好友展示 -->
+			<div class="col-md-8" id="fuc-friend" style="display: none;">
+			</div>
+			
+			<!-- 聊天展示 -->
 			<div class="col-md-8" id="fuc-chat" style="display: none;">
 				<div class="info-display">
 					<h3 id="to-username"></h3>

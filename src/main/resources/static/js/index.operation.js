@@ -68,7 +68,7 @@ $(document).on('click', '.list-group-item', function() {
 	$($(this).children(".badge")[0]).text("");
 	
 	// 消息会话赋值
-	toUser = $(this).attr("id");
+	toUser = $(this).attr("data-uid");
 	
 	// 打开聊天窗口
 	$("#to-username").text($($(this).children("span")[0]).text());
@@ -99,6 +99,10 @@ $(document).on('mouseover', '.list-group-item', function() {
 $(document).on('mouseout', '.list-group-item', function() {
 	if (!$(this).hasClass("item-selected"))
 		$(this).css("background", "#eeeeee");
+});
+
+$(document).on('click', '.li-sign', function() {
+	$(this).css("background", "");
 });
 
 /**
@@ -150,16 +154,27 @@ function closeWebSocket() {
  * @returns
  */
 function receive(recMsg) {
+	
+	// 会话提示消息
+	if( !$("#chat-sign").hasClass("active")) {
+		$("#chat-sign").css("background", "#e0570bc4");
+	}
+	
 	var fromUid = recMsg.fromUid.toString();
-	var li = $("#" + fromUid); // 获取对应会话
+	var li = $("#chat-" + fromUid); // 获取对应会话
 	if (!li[0]) { // 会话不再列表中
 		console.log("not in list");
 		// 获取好友
-		// 添加至列表中
+		li = $("#friend-" + fromUid).clone();
+		// 更改所在列表
+		li.attr("id", "chat-" + fromUid);
+		
 	} else {
 		li.remove(); // 移除会话
-		li.prependTo($("#friend-list")); // 添加至列表开头
 	}
+	
+	// 添加至列表开头
+	li.prependTo($("#chat-list"));
 	
 	// 会话被选中 直接显示消息 返回
 	if (li.hasClass("item-selected")) {
@@ -224,7 +239,7 @@ function recFriendList() {
 			if (data.code == 1) {
 				var list = data.data;
 				for (let i = 0; i < list.length; i++) {
-					var res = drewFriendList(list[i].uid.toString(), list[i].img, list[i].uname);
+					var res = drewFriendList(list[i].uid.toString(), list[i].img, list[i].uname, 'friend');
 					$("#friend-list").append(res);
 				}
 			}
@@ -233,14 +248,14 @@ function recFriendList() {
 }
 
 /**
- * 写入好友列表
+ * 写入列表
  * @param account
  * @param imgurl
  * @param username
  * @returns
  */
-function drewFriendList(account, imgurl, username) { // 一好友显示的模块
-	var str = "<li id='" + account + "' class='list-group-item'>"
+function drewFriendList(account, imgurl, username, type) { // 一好友显示的模块
+	var str = "<li id='" + type + "-" + account + "' data-uid='" + account + "' class='list-group-item " +type+ "-item'>"
 			+ "<img src='" + imgurl + "' class='circle' onerror=\"this.src='/img/default.jpg'\"></img>"
 			+ "<span class = 'user-name'>" + username + "</span>"
 			+ "<span class='badge'></span>" + "</li>"
