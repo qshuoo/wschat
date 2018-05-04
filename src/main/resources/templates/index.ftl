@@ -37,7 +37,8 @@
 				</div>
 				<div class="tabbable" id="tabs-503102">
 					<ul class="nav nav-tabs">
-						<li class="active"><a id="chat-sign" class="li-sign" href="#panel-121381" data-toggle="tab">会话</a></li>
+						<li class="active"><a id="chat-sign" class="li-sign"
+							href="#panel-121381" data-toggle="tab">会话</a></li>
 						<li><a class="li-sign" href="#panel-121382" data-toggle="tab">好友</a></li>
 						<li><a class="li-sign" href="#panel-121383" data-toggle="tab">群组</a></li>
 						<li><a class="li-sign" href="#panel-121384" data-toggle="tab">新朋友</a></li>
@@ -67,11 +68,28 @@
 					</div>
 				</div>
 			</div>
-			
+
 			<!-- 好友展示 -->
-			<div class="col-md-8" id="fuc-friend" style="display: none;">
+			<div class="col-md-8" id="fuc-friend" style="background: #b0b0b0;height: 566px;padding-top: 30px">
+				<div class="col-md-3"></div>
+				<div class="col-md-6" align="center" style="border: solid 2px gray;background: white;padding: 0px 0px 0px 0px;">
+					<div style="background:#b3d4d4;height:150px;padding-top: 50px">
+						<img class="circle" src="/img/default.jpg"><br>
+					</div>
+					<div>
+						<label style="color: gray">账号 </label><label>账号</label><br>
+						<label style="color: gray">昵称 </label><label>账号</label><br>
+						<label style="color: gray">邮箱 </label><label>账号</label><br>
+						<label style="color: gray">手机 </label><label>账号</label><br>
+						<label style="color: gray">签名  </label><label>账号</label><br>
+					</div>
+					<button type="submit" class="btn btn-default">发送消息</button>
+					<button type="submit" class="btn btn-default">删除</button>
+					<button type="submit" class="btn btn-default">加入黑名单</button>
+				</div>
+				<div class="col-md-3"></div>
 			</div>
-			
+
 			<!-- 聊天展示 -->
 			<div class="col-md-8" id="fuc-chat" style="display: none;">
 				<div class="info-display">
@@ -99,7 +117,7 @@
 		<div class="row clearfix">
 			<div class="col-md-12 column"></div>
 		</div>
-		
+
 
 		<!-- 展示用户信息 -->
 		<div class="modal fade" id="modal_user" tabindex="-1" role="dialog"
@@ -110,9 +128,8 @@
 						<button type="button" class="close" data-dismiss="modal"
 							aria-hidden="true">&times;</button>
 					</div>
-					<div class="modal-body" align="center"> 
-					</div>
-					<div class="modal-footer" align="center" style="text-align:center">
+					<div class="modal-body" align="center"></div>
+					<div class="modal-footer" align="center" style="text-align: center">
 					</div>
 				</div>
 			</div>
