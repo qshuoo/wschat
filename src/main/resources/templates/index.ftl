@@ -70,28 +70,32 @@
 			</div>
 
 			<!-- 好友展示 -->
-			<div class="col-md-8" id="fuc-friend" style="background: #b0b0b0;height: 566px;padding-top: 30px">
+			<div class="col-md-8 fuc-show" id="fuc-friend" style="background: #b0b0b0;height: 566px;padding-top: 50px; display: none;">
 				<div class="col-md-3"></div>
 				<div class="col-md-6" align="center" style="border: solid 2px gray;background: white;padding: 0px 0px 0px 0px;">
 					<div style="background:#b3d4d4;height:150px;padding-top: 50px">
 						<img class="circle" src="/img/default.jpg"><br>
 					</div>
-					<div>
-						<label style="color: gray">账号 </label><label>账号</label><br>
-						<label style="color: gray">昵称 </label><label>账号</label><br>
-						<label style="color: gray">邮箱 </label><label>账号</label><br>
-						<label style="color: gray">手机 </label><label>账号</label><br>
-						<label style="color: gray">签名  </label><label>账号</label><br>
+					<div align="left" style="padding-top: 50px;padding-left: 100px">
+						<label style="color: gray">账号&nbsp;</label><label id="friend-id"></label><br>
+						<label style="color: gray">昵称&nbsp;</label><label id="friend-uname"></label><br>
+						<label style="color: gray">邮箱&nbsp;</label><label id="friend-email"></label><br>
+						<label style="color: gray">手机&nbsp;</label><label id="friend-phone"></label><br>
+						<label style="color: gray">签名&nbsp;</label><label id="friend-sign"></label><br>
 					</div>
-					<button type="submit" class="btn btn-default">发送消息</button>
-					<button type="submit" class="btn btn-default">删除</button>
-					<button type="submit" class="btn btn-default">加入黑名单</button>
+					<div style="padding-top: 30px">
+						<button type="submit" id="begin-chat" class="btn btn-default">发送消息</button>
+						<button type="submit" class="btn btn-default">删除</button>
+						<button type="submit" class="btn btn-default">加入黑名单</button>
+						<div style="padding-top: 30px">
+						</div>
+					</div>
 				</div>
 				<div class="col-md-3"></div>
 			</div>
 
 			<!-- 聊天展示 -->
-			<div class="col-md-8" id="fuc-chat" style="display: none;">
+			<div class="col-md-8 fuc-show" id="fuc-chat" style="display: none;">
 				<div class="info-display">
 					<h3 id="to-username"></h3>
 				</div>

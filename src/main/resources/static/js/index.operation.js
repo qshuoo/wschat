@@ -48,11 +48,76 @@ $(document).ready(function() {
 });
 
 /**
- * 绑定事件 (会话列表点击)
+ * 绑定事件
  * @param msg
  * @returns
  */
-$(document).on('click', '.list-group-item', function() {
+
+/**
+ * 好友列表点击
+ */
+$(document).on('click', '.friend-item', function() {
+	// 功能区窗口隐藏
+	$(".fuc-show").hide();
+	
+	console.log("friend-item click");
+	
+	$("#fuc-friend").show();
+	$.ajax({
+		url: '/user/search/' + $(this).attr("data-uid"),
+		type: 'GET',
+		success: function(data){
+			$("#friend-id").text(data.data.uid);
+			$("#friend-uname").text(data.data.uname);
+			$("#friend-email").text(data.data.email);
+			$("#friend-phone").text(data.data.phone);
+			$("#friend-sign").text(data.data.signature);
+		},
+		error: function() {
+			// TODO
+		}
+	});
+});
+
+/**
+ * 发送消息按钮点击事件
+ */
+$(document).on('click', '#begin-chat', function() {
+	console.log("begin-chat btn click");
+	// 列表组切换至会话
+	$("#chat-sign").click();
+	
+	// 生成置顶会话列表
+	var fromUid = $("#friend-id").text();
+	var li = $("#chat-" + fromUid); // 获取对应会话
+	if (!li[0]) { // 会话不再列表中
+		console.log("not in list");
+		// 获取好友
+		li = $("#friend-" + fromUid).clone();
+		// 更改所在列表
+		li.attr("id", "chat-" + fromUid);
+		li.removeClass("friend-item");
+		li.addClass("chat-item");
+		
+	} else {
+		li.remove(); // 移除会话
+	}
+	
+	// 添加至列表开头
+	li.prependTo($("#chat-list"));
+	
+	// 列表被点击
+	li.click();
+
+});
+
+/**
+ * 会话列表点击
+ */
+$(document).on('click', '.chat-item', function() {
+	// 功能区窗口隐藏
+	$(".fuc-show").hide();
+	
 	// 如果已经被选中  什么都不做
 	if ($(this).hasClass("item-selected")) {
 		return;

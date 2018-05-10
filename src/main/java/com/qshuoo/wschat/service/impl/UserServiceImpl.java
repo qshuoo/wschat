@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService{
 	private Logger logger = LoggerFactory.getLogger(UserService.class);
 	
 	// 用户展示的信息
-	private static final String[] USER_SHOW_INFO = {"uid", "uname", "img", "signature"}; 
+	private static final String[] USER_SHOW_INFO = {"uid", "uname", "img", "email", "phone", "signature"}; 
 	
 	@Autowired
 	private UserDao userDao;

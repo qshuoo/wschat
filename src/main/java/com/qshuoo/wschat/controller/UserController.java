@@ -97,7 +97,7 @@ public class UserController {
 	/**
 	 * 搜索用户
 	 * @param account 账号
-	 * @return 用户信息(账号，昵称，头像，签名)
+	 * @return 用户信息(账号，昵称，头像，邮箱，手机，签名)
 	 * @throws Exception 
 	 */
 	@ResponseBody
