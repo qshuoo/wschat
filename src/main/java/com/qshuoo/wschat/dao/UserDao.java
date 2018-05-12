@@ -33,12 +33,7 @@ public interface UserDao {
 	 */
 	public List<Map<String, Object>> getMaxAccount();
 	
-	/**
-	 * 获取好友列表
-	 * @param account 用户账号
-	 * @return
-	 */
-	public List<Map<String, Object>> listFriends(Long account);
+	
 
 	/**
 	 * 通过id获取群组

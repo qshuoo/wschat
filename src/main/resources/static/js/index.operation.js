@@ -48,9 +48,7 @@ $(document).ready(function() {
 });
 
 /**
- * 绑定事件
- * @param msg
- * @returns
+ * 绑定事件 BEGIN
  */
 
 /**
@@ -202,13 +200,48 @@ $(document).on('click', '#btn_search', function() {
 	
 });
 
-// 将消息显示在聊天列表
+/**
+ * 添加好友按钮点击事件
+ */
+$(document).on('click', '#btn-add-friend', function() {
+	var aimAccount = $("#input_search").val(); // 添加账号目标
+	var addMsg = $("#text-add-msg").val(); // 添加验证信息
+	console.log("---" + aimAccount + " ____ " + addMsg + " ____ " + userAccount);
+	$.ajax({
+		url: '/friend/add',
+		type: 'POST',
+		data: {applyUid: userAccount, aimUid: aimAccount, msg:addMsg},
+		success: function(data){
+			if (data.code == 1) {
+				console.log("apply has send");
+				//
+			} else {
+				console.log("msg send failure");
+			}
+		},
+		error: function() {
+			// TODO
+		}
+	});
+});
+
+/**
+ * 绑定事件 END
+ */
+
+/**
+ * 将消息显示在聊天列表
+ * @param msg
+ * @returns
+ */
 function setMessageInnerHTML(msg) {
 	$(".chat-thread").append("<li class='rec-msg'>" + msg + "</li>");
 	scrollSild();
 }
 
-// 关闭WebSocket连接
+/**
+ * 关闭WebSocket连接
+ */
 function closeWebSocket() {
 	websocket.close();
 }
@@ -338,9 +371,9 @@ function drawSearchUser(account, imgurl, username) {
 	var str = "<img class='circle' src='" + imgurl + "' onerror=\"this.src='/img/default.jpg'\"/>"
 			+ "<h4>账号：" + account + "</h4>"
 			+ "<h4>用户名：" + username + "</h4>"
-			+ "<textarea class='form-control input_text_area'"
+			+ "<textarea id='text-add-msg' class='form-control input_text_area'"
 			+ "style='resize: none;' rows='2' placeholder='我是...'></textarea>"
-			+ "<button type='button' class='form-control btn btn-default'>添加好友</button>"
+			+ "<button id='btn-add-friend' type='button' class='form-control btn btn-default'>添加好友</button>"
 	return str;
 }
 

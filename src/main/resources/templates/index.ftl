@@ -33,7 +33,6 @@
 						<span class="glyphicon glyphicon-search"></span>
 					</button>
 					<input id="account" value="${user.uid?c}" style="display: none">
-					<input id="to" value="99999" style="display: none">
 				</div>
 				<div class="tabbable" id="tabs-503102">
 					<ul class="nav nav-tabs">
@@ -123,7 +122,7 @@
 		</div>
 
 
-		<!-- 展示用户信息 -->
+		<!-- 添加用户 -->
 		<div class="modal fade" id="modal_user" tabindex="-1" role="dialog"
 			aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog" style="width: 500px;">

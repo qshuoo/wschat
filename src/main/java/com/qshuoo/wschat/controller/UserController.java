@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.qshuoo.wschat.service.CodeService;
+import com.qshuoo.wschat.service.FriendService;
 import com.qshuoo.wschat.service.UserService;
 import com.qshuoo.wschat.utils.WSChatResult;
 
@@ -25,6 +26,9 @@ public class UserController {
 	
 	@Autowired
 	private CodeService codeService;
+	
+	@Autowired
+	private FriendService friendService;
 	
 	/**
 	 * 验证用户名和密码
@@ -90,7 +94,7 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping("/user/friend")
 	public WSChatResult getFriendsList(Long account) throws Exception {
-		return userService.listFriends(account);
+		return friendService.listFriends(account);
 	}
 	// TODO 获取群列表
 	
@@ -119,8 +123,20 @@ public class UserController {
 		WSChatResult result = userService.search(account, "group");
 		return result;
 	}
-	// TODO 添加好友/群
 	
-	// TODO 
+	/**
+	 * 添加好友
+	 * @param applyUid 申请用户
+	 * @param aimUid 目标用户
+	 * @param msg 添加信息
+	 * @return
+	 * @throws Exception 
+	 */
+	@ResponseBody
+	@RequestMapping("/friend/add")
+	public WSChatResult addFriend(Long applyUid, Long aimUid, String msg) throws Exception {
+		friendService.addFriend(applyUid, aimUid, msg);
+		return WSChatResult.ok();
+	}
 
 }

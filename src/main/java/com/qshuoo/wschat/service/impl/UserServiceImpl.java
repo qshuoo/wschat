@@ -15,7 +15,6 @@ import org.springframework.util.CollectionUtils;
 
 import com.qshuoo.wschat.cache.WSRedicCache;
 import com.qshuoo.wschat.dao.UserDao;
-import com.qshuoo.wschat.pojo.Friend;
 import com.qshuoo.wschat.pojo.User;
 import com.qshuoo.wschat.service.UserService;
 import com.qshuoo.wschat.utils.PojoUtil;
@@ -78,16 +77,6 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public WSChatResult listFriends(Long account) throws Exception {
-		List<Map<String, Object>> friends = userDao.listFriends(account);
-		List<Friend> friendList = new ArrayList<Friend>();
-		for (Map<String, Object> map : friends) {
-			friendList.add((Friend) PojoUtil.map2Object(map, Friend.class));
-		}
-		return WSChatResult.ok(friendList);
-	}
-
-	@Override
 	public WSChatResult search(Long account, String type) throws Exception {
 		List<Map<String, Object>> res = new ArrayList<>();
 		if ("user".equals(type)) {
@@ -101,6 +90,5 @@ public class UserServiceImpl implements UserService{
 		// TODO 查找群组
 		return WSChatResult.ok();
 	}
-	
 
 }

@@ -41,14 +41,6 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public List<Map<String, Object>> listFriends(Long account) {
-		// TODO Auto-generated method stub
-		String sql = "SELECT a.uid, a.uname, a.img FROM user a JOIN friend_relation b ON a.uid = b.uid2 WHERE b.uid1 = ? AND b.state = 1;";
-		List<Map<String, Object>> friends = jdbcTemplate.queryForList(sql, new Object[] {account});
-		return friends;
-	}
-
-	@Override
 	public List<Map<String, Object>> getGroupById(Long account) {
 		// TODO Auto-generated method stub
 		return null;
