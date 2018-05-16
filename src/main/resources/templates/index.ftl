@@ -32,7 +32,9 @@
 					<button id="btn_search" type="submit" class="btn btn-default">
 						<span class="glyphicon glyphicon-search"></span>
 					</button>
-					<input id="account" value="${user.uid?c}" style="display: none">
+					<input id="user-account" value="${user.uid?c}" style="display: none">
+					<input id="user-name" value="${user.uname!''}" style="display: none">
+					<input id="user-img" value="${user.img!''}" style="display: none">
 				</div>
 				<div class="tabbable" id="tabs-503102">
 					<ul class="nav nav-tabs">
@@ -40,7 +42,7 @@
 							href="#panel-121381" data-toggle="tab">会话</a></li>
 						<li><a class="li-sign" href="#panel-121382" data-toggle="tab">好友</a></li>
 						<li><a class="li-sign" href="#panel-121383" data-toggle="tab">群组</a></li>
-						<li><a class="li-sign" href="#panel-121384" data-toggle="tab">新朋友</a></li>
+						<li><a id="newfriend-sign" class="li-sign" href="#panel-121384" data-toggle="tab">新朋友</a></li>
 						<li><a class="li-sign" href="#panel-121385" data-toggle="tab">黑名单</a></li>
 					</ul>
 					<div class="tab-content">
@@ -57,7 +59,7 @@
 							</ul>
 						</div>
 						<div class="tab-pane" id="panel-121384">
-							<ul class="list-group">
+							<ul id="newfriend-list" class="list-group">
 							</ul>
 						</div>
 						<div class="tab-pane" id="panel-121385">
@@ -85,6 +87,32 @@
 					<div style="padding-top: 30px">
 						<button type="submit" id="begin-chat" class="btn btn-default">发送消息</button>
 						<button type="submit" class="btn btn-default">删除</button>
+						<button type="submit" class="btn btn-default">加入黑名单</button>
+						<div style="padding-top: 30px">
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3"></div>
+			</div>
+			
+			<!-- 好友申请展示 -->
+			<div class="col-md-8 fuc-show" id="fuc-newfriend" style="background: #b0b0b0;height: 566px;padding-top: 50px; display: none;">
+				<div class="col-md-3"></div>
+				<div class="col-md-6" align="center" style="border: solid 2px gray;background: white;padding: 0px 0px 0px 0px;">
+					<div style="background:#b3d4d4;height:150px;padding-top: 50px">
+						<img class="circle" src="/img/default.jpg"><br>
+					</div>
+					<div align="left" style="padding-top: 50px;padding-left: 100px">
+						<label style="color: gray">账号&nbsp;</label><label id="newfriend-id"></label><br>
+						<label style="color: gray">昵称&nbsp;</label><label id="newfriend-uname"></label><br>
+						<label style="color: gray">邮箱&nbsp;</label><label id="newfriend-email"></label><br>
+						<label style="color: gray">手机&nbsp;</label><label id="newfriend-phone"></label><br>
+						<label style="color: gray">签名&nbsp;</label><label id="newfriend-sign"></label><br>
+						<label style="color: gray">验证消息&nbsp;</label><label id="newfriend-msg"></label><br>
+					</div>
+					<div style="padding-top: 30px">
+						<button type="submit" id="btn-newfriend-agree" class="btn btn-default">接受</button>
+						<button type="submit" class="btn btn-default">拒绝</button>
 						<button type="submit" class="btn btn-default">加入黑名单</button>
 						<div style="padding-top: 30px">
 						</div>

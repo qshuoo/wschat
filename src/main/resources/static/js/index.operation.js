@@ -1,18 +1,26 @@
 var websocket = null; // websocket
 var msgMap = {}; // 接收到的消息列表
+var applyFriendMsg = {}; // 好友添加验证消息缓存
 var userAccount = null; // 用户账号
+var userName = null; // 用户昵称
+var userImgUrl = null; // 用户头像路径
 var toUser = null; // 接收消息账号
 $(document).ready(function() {
 	
 	// 赋值
-	userAccount = $('#account').val();
+	userAccount = $('#user-account').val();
+	userName = $('#user-name').val();
+	userImgUrl = $('#user-img').val();
 	
 	// 接收好友与群组列表
 	recFriendList();
 	
+	// 接受好友申请列表
+	recFriendApply();
+	
 	// 判断当前浏览器是否支持WebSocket
 	if ('WebSocket' in window) {
-		var conn = "ws://" + window.location.host + "/websocket/" + $("#account").val();
+		var conn = "ws://" + window.location.host + "/websocket/" + userAccount;
 		websocket = new WebSocket(conn);
 	} else {
 		alert('当前浏览器 Not support websocket')
@@ -78,35 +86,27 @@ $(document).on('click', '.friend-item', function() {
 });
 
 /**
- * 发送消息按钮点击事件
+ * 好友申请列表点击
  */
-$(document).on('click', '#begin-chat', function() {
-	console.log("begin-chat btn click");
-	// 列表组切换至会话
-	$("#chat-sign").click();
+$(document).on('click', '.newfriend-item', function() {
+	// 功能区窗口隐藏
+	$(".fuc-show").hide();
 	
-	// 生成置顶会话列表
-	var fromUid = $("#friend-id").text();
-	var li = $("#chat-" + fromUid); // 获取对应会话
-	if (!li[0]) { // 会话不再列表中
-		console.log("not in list");
-		// 获取好友
-		li = $("#friend-" + fromUid).clone();
-		// 更改所在列表
-		li.attr("id", "chat-" + fromUid);
-		li.removeClass("friend-item");
-		li.addClass("chat-item");
-		
-	} else {
-		li.remove(); // 移除会话
-	}
-	
-	// 添加至列表开头
-	li.prependTo($("#chat-list"));
-	
-	// 列表被点击
-	li.click();
-
+	$("#fuc-newfriend").show();
+	$.ajax({
+		url: '/user/search/' + $(this).attr("data-uid"),
+		type: 'GET',
+		success: function(data){
+			$("#newfriend-id").text(data.data.uid);
+			$("#newfriend-uname").text(data.data.uname);
+			$("#newfriend-email").text(data.data.email);
+			$("#newfriend-phone").text(data.data.phone);
+			$("#newfriend-sign").text(data.data.signature);
+		},
+		error: function() {
+			// TODO
+		}
+	});
 });
 
 /**
@@ -115,17 +115,6 @@ $(document).on('click', '#begin-chat', function() {
 $(document).on('click', '.chat-item', function() {
 	// 功能区窗口隐藏
 	$(".fuc-show").hide();
-	
-	// 如果已经被选中  什么都不做
-	if ($(this).hasClass("item-selected")) {
-		return;
-	}
-	
-	// 修改显示样式
-	$(".item-selected").removeClass("item-selected");
-	$(this).addClass("item-selected");
-	$(this).siblings().css("background","#e9e9e4");
-	$(this).css("background", "#b0b0b0");
 	
 	// 消除离线消息数量提示
 	$($(this).children(".badge")[0]).text("");
@@ -154,6 +143,51 @@ $(document).on('click', '.chat-item', function() {
 	$.removeData(msgMap, toUser);
 });
 
+/**
+ * 发送消息按钮点击事件
+ */
+$(document).on('click', '#begin-chat', function() {
+	console.log("begin-chat btn click");
+	// 列表组切换至会话
+	$("#chat-sign").click();
+	
+	// 生成置顶会话列表
+	var fromUid = $("#friend-id").text();
+	var li = $("#chat-" + fromUid); // 获取对应会话
+	if (!li[0]) { // 会话不再列表中
+		console.log("not in list");
+		// 获取好友
+		li = $("#friend-" + fromUid).clone();
+		// 更改所在列表
+		li.attr("id", "chat-" + fromUid);
+		li.removeClass("friend-item");
+		li.addClass("chat-item");
+		
+	} else {
+		li.remove(); // 移除会话
+	}
+	
+	// 添加至列表开头
+	li.prependTo($("#chat-list"));
+	
+	// 列表被点击
+	li.click();
+});
+
+/**
+ * 接受好友添加按钮点击事件
+ * @returns
+ */
+$(document).on('click', '#btn-newfriend-agree', function() {
+	// 接受好友添加
+	
+	// 从好友申请列表删除
+	
+	// 添加至好友列表
+	
+	// 发送招呼消息
+});
+
 $(document).on('mouseover', '.list-group-item', function() {
 	if (!$(this).hasClass("item-selected"))
 		$(this).css("background", "#c5c5c5");
@@ -162,6 +196,19 @@ $(document).on('mouseover', '.list-group-item', function() {
 $(document).on('mouseout', '.list-group-item', function() {
 	if (!$(this).hasClass("item-selected"))
 		$(this).css("background", "#eeeeee");
+});
+
+$(document).on('click', '.list-group-item', function() {
+	// 如果已经被选中  什么都不做
+	if ($(this).hasClass("item-selected")) {
+		return;
+	}
+	
+	// 修改显示样式
+	$(".item-selected").removeClass("item-selected");
+	$(this).addClass("item-selected");
+	$(this).siblings().css("background","#e9e9e4");
+	$(this).css("background", "#b0b0b0");
 });
 
 $(document).on('click', '.li-sign', function() {
@@ -177,6 +224,9 @@ $(document).on('click', '#btn_search', function() {
 	if (account == "") { // 没输入内容返回
 		return;
 	}
+	
+	// TODO 此用户已存在列表中
+	
 	$("#modal_user").modal();
 	$.ajax({
 		url : '/user/search/' + account,
@@ -206,17 +256,33 @@ $(document).on('click', '#btn_search', function() {
 $(document).on('click', '#btn-add-friend', function() {
 	var aimAccount = $("#input_search").val(); // 添加账号目标
 	var addMsg = $("#text-add-msg").val(); // 添加验证信息
-	console.log("---" + aimAccount + " ____ " + addMsg + " ____ " + userAccount);
 	$.ajax({
 		url: '/friend/add',
 		type: 'POST',
 		data: {applyUid: userAccount, aimUid: aimAccount, msg:addMsg},
 		success: function(data){
 			if (data.code == 1) {
-				console.log("apply has send");
-				//
+				// 发送系统消息
+				var message = {
+					fromUid : 99999,
+					toUid : aimAccount,
+					msg : {
+						code: 1,
+						applyUid: userAccount,
+						applyUname: userName,
+						applyUImg: userImgUrl,
+						applyRes: addMsg
+					}
+				}
+				websocket.send(JSON.stringify(message));
+				// 添加成功提示
+				alert("申请已发送");
+				// 添加按钮不可点击
+				$("#btn-add-friend").text("申请已发送");
+				$("#btn-add-friend").attr("disabled", "disabled");
 			} else {
-				console.log("msg send failure");
+				alert(data.msg);
+				$("#btn-add-friend").attr("disabled", "disabled");
 			}
 		},
 		error: function() {
@@ -253,12 +319,21 @@ function closeWebSocket() {
  */
 function receive(recMsg) {
 	
+	var fromUid = recMsg.fromUid.toString();
+	
+	// 系统消息
+	if (fromUid == '99999') {
+		var sysMsg = JSON.parse(recMsg.msg);
+		dealSystemMsg(sysMsg);
+		return;
+	}
+
+	// 普通消息
 	// 会话提示消息
 	if( !$("#chat-sign").hasClass("active")) {
 		$("#chat-sign").css("background", "#e0570bc4");
 	}
 	
-	var fromUid = recMsg.fromUid.toString();
 	var li = $("#chat-" + fromUid); // 获取对应会话
 	if (!li[0]) { // 会话不再列表中
 		console.log("not in list");
@@ -300,7 +375,7 @@ function receive(recMsg) {
 }
 
 /**
- * 发送消息
+ * 发送普通会话消息
  * @returns
  */
 function send() {
@@ -324,6 +399,35 @@ function send() {
 }
 
 /**
+ * 处理系统消息
+ * @param msg
+ * @returns
+ */
+function dealSystemMsg(data) {
+	console.log("===== " + JSON.stringify(data));
+	if(data.code == 1) { // 收到新朋友添加请求
+		console.log("System msg for add friend...");
+		dealAddFriend(data);
+	}
+}
+
+/**
+ * 处理系统好友添加通知
+ * @param data
+ * @returns
+ */
+function dealAddFriend(data) {
+	// 新朋友通知
+	if( !$("#newfriend-sign").hasClass("active")) {
+		$("#newfriend-sign").css("background", "#e0570bc4");
+	}
+	
+	// 添加新朋友至列表
+	var li = drewUserLi(data.applyUid, data.applyUImg, data.applyUname, 'newfriend');
+	$(li).prependTo($("#newfriend-list"));
+}
+
+/**
  * 接收好友列表
  * @returns
  */
@@ -337,7 +441,7 @@ function recFriendList() {
 			if (data.code == 1) {
 				var list = data.data;
 				for (let i = 0; i < list.length; i++) {
-					var res = drewFriendList(list[i].uid.toString(), list[i].img, list[i].uname, 'friend');
+					var res = drewUserLi(list[i].uid.toString(), list[i].img, list[i].uname, 'friend');
 					$("#friend-list").append(res);
 				}
 			}
@@ -346,13 +450,42 @@ function recFriendList() {
 }
 
 /**
+ * 接受好友申请
+ */
+function recFriendApply() {
+	$.ajax({
+		url: "/friend/new",
+		type: "GET",
+		async: false,
+		data: {account: userAccount},
+		success: function(data) {
+			if (data.code == 1) {
+				var list = data.data;
+				for (let i = 0; i < list.length; i++) {
+					// 添加申请信息至缓存
+					$.data(applyFriendMsg, list[i].uid.toString(), JSON.stringify(list));
+					
+					// 加载申请列表
+					var res = drewUserLi(list[i].uid.toString(), list[i].img, list[i].uname, 'newfriend');
+					$("#newfriend-list").append(res);
+				}
+			}
+		},
+		error: function() {
+			// TODO
+		}
+	});
+}
+
+
+/**
  * 写入列表
  * @param account
  * @param imgurl
  * @param username
  * @returns
  */
-function drewFriendList(account, imgurl, username, type) { // 一好友显示的模块
+function drewUserLi(account, imgurl, username, type) { // 一好友显示的模块
 	var str = "<li id='" + type + "-" + account + "' data-uid='" + account + "' class='list-group-item " +type+ "-item'>"
 			+ "<img src='" + imgurl + "' class='circle' onerror=\"this.src='/img/default.jpg'\"></img>"
 			+ "<span class = 'user-name'>" + username + "</span>"
@@ -379,7 +512,6 @@ function drawSearchUser(account, imgurl, username) {
 
 /**
  * 滚动轮滚动至底端
- * 
  * @returns
  */
 function scrollSild() {

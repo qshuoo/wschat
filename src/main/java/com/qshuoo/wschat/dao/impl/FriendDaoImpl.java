@@ -38,4 +38,18 @@ public class FriendDaoImpl implements FriendDao{
 		int row = jdbcTemplate.update(sql);
 		return row;
 	}
+
+	@Override
+	public List<Map<String, Object>> getNewFriend(Long aimUid, Long applyUid, int i) {
+		String sql = "SELECT * FROM newfriend WHERE uid1 = ? AND uid2 = ? AND state = ?;";
+		List<Map<String, Object>> res = jdbcTemplate.queryForList(sql, aimUid, applyUid, i);
+		return res;
+	}
+
+	@Override
+	public List<Map<String, Object>> listNewFriend(Long account) {
+		String sql = "SELECT a.uid, a.uname, a.img, a.email, a.phone, b.msg FROM user a, newfriend b WHERE a.uid = b.uid2 AND b.uid1 = ? AND b.state = 0";
+		List<Map<String, Object>> res = jdbcTemplate.queryForList(sql, account);
+		return res;
+	}
 }

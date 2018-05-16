@@ -89,11 +89,10 @@ public class UserController {
 	 * 获取好友列表
 	 * @param account 账号
 	 * @return
-	 * @throws Exception
 	 */
 	@ResponseBody
 	@RequestMapping("/user/friend")
-	public WSChatResult getFriendsList(Long account) throws Exception {
+	public WSChatResult getFriendsList(Long account) {
 		return friendService.listFriends(account);
 	}
 	// TODO 获取群列表
@@ -107,8 +106,7 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping("/user/search/{account}")
 	public WSChatResult searchUser(@PathVariable("account")Long account) throws Exception {
-		WSChatResult result = userService.search(account, "user");
-		return result;
+		return userService.search(account, "user");
 	}
 	
 	/**
@@ -120,8 +118,7 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping("/group/search/{account}")
 	public WSChatResult searchGroup(@PathVariable("account")Long account) throws Exception {
-		WSChatResult result = userService.search(account, "group");
-		return result;
+		return userService.search(account, "group");
 	}
 	
 	/**
@@ -135,8 +132,18 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping("/friend/add")
 	public WSChatResult addFriend(Long applyUid, Long aimUid, String msg) throws Exception {
-		friendService.addFriend(applyUid, aimUid, msg);
-		return WSChatResult.ok();
+		return friendService.addFriend(applyUid, aimUid, msg);
+	}
+	
+	/**
+	 * 获取好友申请列表
+	 * @param account
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/friend/new")
+	public WSChatResult getApplyFriends(Long account) {
+		return friendService.listNewFriends(account);
 	}
 
 }

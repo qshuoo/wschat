@@ -26,4 +26,20 @@ public interface FriendDao {
 	 * @throws Exception 
 	 */
 	public int saveFriend(NewFriend newFriend) throws Exception;
+
+	/**
+	 * 获取对应状态的好友添加纪录
+	 * @param aimUid 目标账号
+	 * @param applyUid 申请账号
+	 * @param i 申请状态
+	 * @return
+	 */
+	public List<Map<String, Object>> getNewFriend(Long aimUid, Long applyUid, int i);
+
+	/**
+	 * 获取好友申请列表
+	 * @param account
+	 * @return
+	 */
+	public List<Map<String, Object>> listNewFriend(Long account);
 }

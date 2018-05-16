@@ -15,7 +15,7 @@ public interface FriendService {
 	 * @return
 	 * @throws Exception 
 	 */
-	public WSChatResult listFriends(Long account) throws Exception;
+	public WSChatResult listFriends(Long account);
 	
 	/**
 	 * 添加好友
@@ -25,5 +25,12 @@ public interface FriendService {
 	 * @return
 	 * @throws Exception 
 	 */
-	public int addFriend(Long applyUid, Long aimUid, String msg) throws Exception;
+	public WSChatResult addFriend(Long applyUid, Long aimUid, String msg) throws Exception;
+	
+	/**
+	 * 获取好友申请列表
+	 * @param account 账号
+	 * @return
+	 */
+	public WSChatResult listNewFriends(Long account);
 }
