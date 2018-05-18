@@ -92,21 +92,33 @@ $(document).on('click', '.newfriend-item', function() {
 	// 功能区窗口隐藏
 	$(".fuc-show").hide();
 	
+	// 展示申请添加用户信息
+	console.log($.data(applyFriendMsg));
+	console.log($.data(applyFriendMsg, '99999'));
+	var applyInfo = JSON.parse($.data(applyFriendMsg, $(this).attr("data-uid")));
+	console.log(applyInfo);
+	$("#newfriend-id").text(applyInfo.uid);
+	$("#newfriend-uname").text(applyInfo.uname);
+	$("#newfriend-msg").text(applyInfo.msg);
 	$("#fuc-newfriend").show();
+	
+	/*
 	$.ajax({
 		url: '/user/search/' + $(this).attr("data-uid"),
 		type: 'GET',
 		success: function(data){
 			$("#newfriend-id").text(data.data.uid);
 			$("#newfriend-uname").text(data.data.uname);
-			$("#newfriend-email").text(data.data.email);
-			$("#newfriend-phone").text(data.data.phone);
-			$("#newfriend-sign").text(data.data.signature);
+//			$("#newfriend-email").text(data.data.email);
+//			$("#newfriend-phone").text(data.data.phone);
+//			$("#newfriend-sign").text(data.data.signature);
+			$("#newfriend-msg").text(data.data.msg);
 		},
 		error: function() {
 			// TODO
 		}
 	});
+	*/
 });
 
 /**
@@ -179,13 +191,43 @@ $(document).on('click', '#begin-chat', function() {
  * @returns
  */
 $(document).on('click', '#btn-newfriend-agree', function() {
+	
 	// 接受好友添加
+	$.ajax({
+		url: '/friend/deal',
+		type: 'POST',
+		async: false,
+		data: {aimUid: userAccount, applyUid: $("#newfriend-id").text(), type: 'agree'},
+		success: function(data) {
+			if (data.code == 1) {
+				alert("添加成功");
+			} else {
+				alert("添加失败，请刷新重试");
+			}
+		},
+		error: function(){}
+	});
+	
+	// 添加至好友展示列表并展示新好友
+	var li = $("#newfriend-" + $("#newfriend-id").text());
+	var newli = li.clone();
+	newli.attr("id", "friend-" + li.attr("data-uid"));
+	newli.removeClass("newfriend-item");
+	newli.addClass("friend-item");
+	newli.prependTo($("#friend-list"));
+	$("#friend-sign").click();
+	newli.click();
 	
 	// 从好友申请列表删除
-	
-	// 添加至好友列表
+	li.remove();
 	
 	// 发送招呼消息
+	var message = {
+		fromUid : userAccount,
+		toUid : newli.attr("data-uid"),
+		msg : 'Hi, 我们现在是好友拉,打声招呼吧'
+	}
+	websocket.send(JSON.stringify(message));
 });
 
 $(document).on('mouseover', '.list-group-item', function() {
@@ -266,12 +308,12 @@ $(document).on('click', '#btn-add-friend', function() {
 				var message = {
 					fromUid : 99999,
 					toUid : aimAccount,
-					msg : {
+					info : {
 						code: 1,
-						applyUid: userAccount,
-						applyUname: userName,
-						applyUImg: userImgUrl,
-						applyRes: addMsg
+						uid: userAccount,
+						uname: userName,
+						img: userImgUrl,
+						msg: addMsg
 					}
 				}
 				websocket.send(JSON.stringify(message));
@@ -323,7 +365,7 @@ function receive(recMsg) {
 	
 	// 系统消息
 	if (fromUid == '99999') {
-		var sysMsg = JSON.parse(recMsg.msg);
+		var sysMsg = JSON.parse(recMsg.info);
 		dealSystemMsg(sysMsg);
 		return;
 	}
@@ -341,6 +383,8 @@ function receive(recMsg) {
 		li = $("#friend-" + fromUid).clone();
 		// 更改所在列表
 		li.attr("id", "chat-" + fromUid);
+		li.removeClass("friend-item");
+		li.addClass("chat-item");
 		
 	} else {
 		li.remove(); // 移除会话
@@ -422,8 +466,11 @@ function dealAddFriend(data) {
 		$("#newfriend-sign").css("background", "#e0570bc4");
 	}
 	
+	// 添加缓存至applyFriendMsg
+	$.data(applyFriendMsg, data.uid.toString(), JSON.stringify(data));
+	
 	// 添加新朋友至列表
-	var li = drewUserLi(data.applyUid, data.applyUImg, data.applyUname, 'newfriend');
+	var li = drewUserLi(data.uid, data.img, data.uname, 'newfriend');
 	$(li).prependTo($("#newfriend-list"));
 }
 
@@ -450,7 +497,7 @@ function recFriendList() {
 }
 
 /**
- * 接受好友申请
+ * 接收好友申请
  */
 function recFriendApply() {
 	$.ajax({
@@ -462,8 +509,9 @@ function recFriendApply() {
 			if (data.code == 1) {
 				var list = data.data;
 				for (let i = 0; i < list.length; i++) {
+					
 					// 添加申请信息至缓存
-					$.data(applyFriendMsg, list[i].uid.toString(), JSON.stringify(list));
+					$.data(applyFriendMsg, list[i].uid.toString(), JSON.stringify(list[i]));
 					
 					// 加载申请列表
 					var res = drewUserLi(list[i].uid.toString(), list[i].img, list[i].uname, 'newfriend');

@@ -38,9 +38,9 @@
 				</div>
 				<div class="tabbable" id="tabs-503102">
 					<ul class="nav nav-tabs">
-						<li class="active"><a id="chat-sign" class="li-sign"
+						<li><a id="chat-sign" class="li-sign"
 							href="#panel-121381" data-toggle="tab">会话</a></li>
-						<li><a class="li-sign" href="#panel-121382" data-toggle="tab">好友</a></li>
+						<li class="active"><a id="friend-sign" class="li-sign" href="#panel-121382" data-toggle="tab">好友</a></li>
 						<li><a class="li-sign" href="#panel-121383" data-toggle="tab">群组</a></li>
 						<li><a id="newfriend-sign" class="li-sign" href="#panel-121384" data-toggle="tab">新朋友</a></li>
 						<li><a class="li-sign" href="#panel-121385" data-toggle="tab">黑名单</a></li>
@@ -105,9 +105,9 @@
 					<div align="left" style="padding-top: 50px;padding-left: 100px">
 						<label style="color: gray">账号&nbsp;</label><label id="newfriend-id"></label><br>
 						<label style="color: gray">昵称&nbsp;</label><label id="newfriend-uname"></label><br>
-						<label style="color: gray">邮箱&nbsp;</label><label id="newfriend-email"></label><br>
-						<label style="color: gray">手机&nbsp;</label><label id="newfriend-phone"></label><br>
-						<label style="color: gray">签名&nbsp;</label><label id="newfriend-sign"></label><br>
+<!-- 						<label style="color: gray">邮箱&nbsp;</label><label id="newfriend-email"></label><br> -->
+<!-- 						<label style="color: gray">手机&nbsp;</label><label id="newfriend-phone"></label><br> -->
+<!-- 						<label style="color: gray">签名&nbsp;</label><label id="newfriend-sign"></label><br> -->
 						<label style="color: gray">验证消息&nbsp;</label><label id="newfriend-msg"></label><br>
 					</div>
 					<div style="padding-top: 30px">

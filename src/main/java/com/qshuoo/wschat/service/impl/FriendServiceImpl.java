@@ -5,13 +5,16 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.qshuoo.wschat.dao.FriendDao;
+import com.qshuoo.wschat.pojo.FriendRelation;
 import com.qshuoo.wschat.pojo.NewFriend;
 import com.qshuoo.wschat.service.FriendService;
 import com.qshuoo.wschat.utils.WSChatResult;
 
 @Service
+@Transactional
 public class FriendServiceImpl implements FriendService{
 	
 	@Autowired
@@ -41,7 +44,7 @@ public class FriendServiceImpl implements FriendService{
 		newFriend.setUid2(applyUid);
 		newFriend.setMsg(msg);
 		newFriend.setState(0);
-		int row = friendDao.saveFriend(newFriend);
+		int row = friendDao.saveNewFriend(newFriend);
 		if (row < 1) {
 			throw new Exception("添加失败");
 		}
@@ -52,6 +55,42 @@ public class FriendServiceImpl implements FriendService{
 	public WSChatResult listNewFriends(Long account) {
 		List<Map<String, Object>> res = friendDao.listNewFriend(account);
 		return WSChatResult.ok(res);
+	}
+
+	@Override
+	public WSChatResult agreeFriendApply(Long aimUid, Long applyUid) throws Exception {
+		// 变更申请状态
+		int row = friendDao.updateStateByUids(aimUid, applyUid, 1);
+		if (row != 1) {
+			throw new Exception("添加失败");
+		}
+		
+		// 添加好友关系
+		FriendRelation fr = new FriendRelation();
+		fr.setUid1(applyUid);
+		fr.setUid2(aimUid);
+		fr.setState(1);
+		row = friendDao.saveFriendRelation(fr);
+		if (row != 1) {
+			throw new Exception("添加失败");
+		}
+		fr.setUid1(aimUid);
+		fr.setUid2(applyUid);
+		row = friendDao.saveFriendRelation(fr);
+		if (row != 1) {
+			throw new Exception("添加失败");
+		}
+		return WSChatResult.ok();
+	}
+
+	@Override
+	public WSChatResult refuseFriendApply(Long aimUid, Long applyUid) throws Exception {
+		// 变更申请状态
+		int row = friendDao.updateStateByUids(aimUid, applyUid, 1);
+		if (row != 1) {
+			throw new Exception("拒绝失败,请刷新重试");
+		}
+		return WSChatResult.ok();
 	}
 
 }

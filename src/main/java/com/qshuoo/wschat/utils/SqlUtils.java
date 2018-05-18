@@ -41,7 +41,7 @@ public class SqlUtils {
 		
 		String field = fieldBuilder.substring(0, fieldBuilder.length() - 1) + ")";
 		String value = valueBuilder.substring(0, valueBuilder.length() - 1) + ")";
-		return sql.append(field).append(" VALUES ").append(value).toString();
+		return sql.append(field).append(" VALUES ").append(value).append(";").toString();
 	}
 
 }

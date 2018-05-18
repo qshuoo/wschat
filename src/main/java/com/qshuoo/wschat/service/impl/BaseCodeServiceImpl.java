@@ -3,9 +3,12 @@ package com.qshuoo.wschat.service.impl;
 import java.text.DecimalFormat;
 import java.util.Random;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.qshuoo.wschat.service.CodeService;
 import com.qshuoo.wschat.utils.WSChatResult;
 
+@Transactional
 public abstract class BaseCodeServiceImpl implements CodeService{
 
 	@Override

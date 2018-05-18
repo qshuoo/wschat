@@ -145,5 +145,25 @@ public class UserController {
 	public WSChatResult getApplyFriends(Long account) {
 		return friendService.listNewFriends(account);
 	}
+	
+	/**
+	 * 处理好友申请
+	 * @param aimUid 目标账号
+	 * @param applyUid 申请账号
+	 * @param type 处理方式
+	 * @return
+	 * @throws Exception 
+	 */
+	@ResponseBody
+	@RequestMapping("/friend/deal")
+	public WSChatResult dealFriendApply(Long aimUid, Long applyUid, String type) throws Exception {
+		WSChatResult result = null;
+		if ("agree".equals(type)) {
+			result = friendService.agreeFriendApply(aimUid, applyUid);
+		} else if ("refuse".equals(type)) {
+			result = friendService.refuseFriendApply(aimUid, applyUid);
+		}
+		return result;
+	}
 
 }

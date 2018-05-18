@@ -33,4 +33,22 @@ public interface FriendService {
 	 * @return
 	 */
 	public WSChatResult listNewFriends(Long account);
+
+	/**
+	 * 同意好友申请
+	 * @param aimUid 目标用户
+	 * @param applyUid 申请用户
+	 * @return
+	 * @throws Exception 
+	 */
+	public WSChatResult agreeFriendApply(Long aimUid, Long applyUid) throws Exception;
+
+	/**
+	 * 拒绝好友申请
+	 * @param aimUid 目标用户
+	 * @param applyUid 申请用户
+	 * @return
+	 * @throws Exception 
+	 */
+	public WSChatResult refuseFriendApply(Long aimUid, Long applyUid) throws Exception;
 }
