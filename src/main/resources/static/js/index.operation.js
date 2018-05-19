@@ -226,7 +226,7 @@ $(document).on('click', '#btn-newfriend-agree', function() {
 		fromUid : userAccount,
 		toUid : newli.attr("data-uid"),
 		msg : 'Hi, 我们现在是好友拉,打声招呼吧'
-	}
+	};
 	websocket.send(JSON.stringify(message));
 });
 
@@ -308,7 +308,7 @@ $(document).on('click', '#btn-add-friend', function() {
 				var message = {
 					fromUid : 99999,
 					toUid : aimAccount,
-					info : {
+					msg : {
 						code: 1,
 						uid: userAccount,
 						uname: userName,
@@ -365,7 +365,7 @@ function receive(recMsg) {
 	
 	// 系统消息
 	if (fromUid == '99999') {
-		var sysMsg = JSON.parse(recMsg.info);
+		var sysMsg = JSON.parse(recMsg.msg);
 		dealSystemMsg(sysMsg);
 		return;
 	}
