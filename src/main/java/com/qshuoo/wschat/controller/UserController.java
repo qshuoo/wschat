@@ -192,7 +192,7 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping("/user/blist")
 	public WSChatResult getBlackList(Long account) {
-		WSChatResult result = blistService.getBlackList(account);
+		WSChatResult result = blistService.listBlackList(account);
 		return result;
 	}
 	
@@ -207,6 +207,20 @@ public class UserController {
 	@RequestMapping("/blist/add")
 	public WSChatResult addToBlackList(Long applyUid, Long aimUid) throws Exception {
 		WSChatResult result = blistService.addToBlackList(applyUid, aimUid);
+		return result;
+	}
+	
+	/**
+	 * 从黑名单恢复
+	 * @param applyUid 申请账号
+	 * @param aimUid 目标账号
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody
+	@RequestMapping("/blist/del")
+	public WSChatResult delFromBList(Long applyUid, Long aimUid) throws Exception {
+		WSChatResult result = blistService.delFromBlackList(applyUid, aimUid);
 		return result;
 	}
 

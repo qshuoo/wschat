@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.qshuoo.wschat.dao.BlackListDao;
 import com.qshuoo.wschat.dao.FriendDao;
 import com.qshuoo.wschat.pojo.FriendRelation;
 import com.qshuoo.wschat.pojo.NewFriend;
@@ -20,18 +21,23 @@ public class FriendServiceImpl implements FriendService{
 	@Autowired
 	private FriendDao friendDao;
 	
+	@Autowired
+	private BlackListDao blistDao;
+	
 	@Override
 	public WSChatResult listFriends(Long account) {
 		List<Map<String, Object>> friends = friendDao.listFriends(account);
-		/*List<Friend> friendList = new ArrayList<Friend>();
-		for (Map<String, Object> map : friends) {
-			friendList.add((Friend) PojoUtil.map2Object(map, Friend.class));
-		}*/
 		return WSChatResult.ok(friends);
 	}
 	
 	@Override
 	public WSChatResult addFriend(Long applyUid, Long aimUid, String msg) throws Exception {
+		// 在黑名单中 -> 返回
+		List<Map<String, Object>> state = blistDao.getBLStateByIds(aimUid, applyUid);
+		if (!state.isEmpty() && (int) state.get(0).get("state") == 1) {
+			return WSChatResult.ok();
+		}
+		
 		// 添加消息已发送 -> 返回
 		List<?> res = friendDao.getNewFriend(aimUid, applyUid, 0);
 		if (!res.isEmpty()) {
@@ -64,7 +70,13 @@ public class FriendServiceImpl implements FriendService{
 		if (row != 1) {
 			throw new Exception("添加失败");
 		}
-		
+		// 好友关系已存在 -> 更新好友状态
+		List<Map<String, Object>> res = friendDao.getFRStateByIds(aimUid, applyUid);
+		if (!res.isEmpty()) {
+			friendDao.updateFRStateByUids(applyUid, aimUid, 1);
+			friendDao.updateFRStateByUids(aimUid, applyUid, 1);
+			return WSChatResult.ok();
+		}
 		// 添加好友关系
 		FriendRelation fr = new FriendRelation();
 		fr.setUid1(applyUid);
@@ -100,9 +112,15 @@ public class FriendServiceImpl implements FriendService{
 		if (row != 1) {
 			throw new Exception("删除失败");
 		}
-		row = friendDao.updateFRStateByUids(aimUid, applyUid, 2);
-		if (row != 1) {
-			throw new Exception("删除失败");
+		
+		// 变更对方好友状态 对方未拉黑 更新状态为删除
+		List<Map<String, Object>> res = friendDao.getFRStateByIds(aimUid, applyUid);
+		int state = (int) res.get(0).get("state");
+		if (state == 1) {
+			row = friendDao.updateFRStateByUids(aimUid, applyUid, 2);
+			if (row > 1) {
+				throw new Exception("删除失败");
+			}
 		}
 		return WSChatResult.ok();
 	}

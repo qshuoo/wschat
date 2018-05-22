@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 import com.alibaba.fastjson.JSON;
 import com.qshuoo.wschat.config.ApplicationContextRegister;
 import com.qshuoo.wschat.pojo.Message;
+import com.qshuoo.wschat.service.BlackListService;
 import com.qshuoo.wschat.service.MessageService;
 import com.qshuoo.wschat.utils.ChatsPool;
 import com.qshuoo.wschat.utils.MsgUtils;
@@ -36,9 +37,11 @@ public class MainChat {
 	
 	private static Logger logger = LoggerFactory.getLogger(MainChat.class);
 
-	// TODO WebSocket @Autowired 注入Bean失败 暂时用ApplicationContext注入
-	private MessageService service = (MessageService) ApplicationContextRegister.getApplicationContext().getBean("MessageService");
+	// WebSocket @Autowired 注入Bean失败 暂时用ApplicationContext注入
+	private MessageService msgService = (MessageService) ApplicationContextRegister.getApplicationContext().getBean("MessageService");
 
+	private BlackListService bListService = (BlackListService) ApplicationContextRegister.getApplicationContext().getBean("BlackListService");
+	
     /**
      * 连接建立成功调用的方法
      * @throws Exception 
@@ -48,19 +51,17 @@ public class MainChat {
         ChatsPool.addSession(account, session);
         logger.info("user {} is connected", account);
         // 读取离线消息  
-        List<String> result = service.getOffLineMsgs(account);
+        List<String> result = msgService.getOffLineMsgs(account);
         if (result == null) {
         	return;
         }
         // 接收消息
         for (String string : result) {
-        	logger.info("GET OUTLINE MSG");
 			session.getBasicRemote().sendText(string);
-			logger.info("GET OUTLINE MSG FINSIH");
 		}
         
         // 离线消息更新已读
-        service.updateOfflineMsgs(account);
+        msgService.updateOfflineMsgs(account);
     }
 
     /**
@@ -69,7 +70,7 @@ public class MainChat {
     @OnClose
     public void onClose(@PathParam("userAccount") Long account){
     	ChatsPool.removeSession(account);
-    	logger.info("user {} is close", account);
+    	logger.info("user {} is closed", account);
     }
 
     /**
@@ -81,12 +82,16 @@ public class MainChat {
     public void onMessage(String message) throws Exception {
     	// 解析消息
     	Message msg = JSON.parseObject(message, Message.class);
+    	// 在黑名单中 -> 不发送消息
+    	if (bListService.isInBlackList(msg.getToUid(), msg.getFromUid())) {
+    		return;
+    	}
     	if (ChatsPool.containKey(msg.getToUid())) { // 用户在线  -> 发送消息  
     		Session session = ChatsPool.getSession(msg.getToUid());
     		session.getBasicRemote().sendText(MsgUtils.getOnMsgs(msg));
     		// TODO 保存聊天记录
     	} else { // 用户不再线 -> 保存聊天记录
-    		service.saveMessage(msg);
+    		msgService.saveMessage(msg);
     	}
     	
     }

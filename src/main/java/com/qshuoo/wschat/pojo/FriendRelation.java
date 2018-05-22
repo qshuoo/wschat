@@ -9,7 +9,7 @@ public class FriendRelation {
 	
 	private Long uid1;
 	private Long uid2;
-	private Integer state;
+	private Integer state; // 1正常 2已解除 3拉入黑名单 4被拉入黑名单
 	public Long getUid1() {
 		return uid1;
 	}

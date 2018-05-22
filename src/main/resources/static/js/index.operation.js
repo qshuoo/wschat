@@ -108,6 +108,20 @@ $(document).on('click', '.newfriend-item', function() {
 });
 
 /**
+ * 黑名单列表点击
+ */
+$(document).on('click', '.blist-item', function() {
+	// 功能区窗口隐藏
+	$(".fuc-show").hide();
+	
+	// 展示申请添加用户信息
+	$("#blist-id").text($(this).attr("data-uid"));
+	$("#blist-uname").text($($(this)[0].children[1]).text());
+	$("#fuc-blist").show();
+	
+});
+
+/**
  * 会话列表点击
  */
 $(document).on('click', '.chat-item', function() {
@@ -377,6 +391,35 @@ $(document).on('click', '.btn-add-blist', function() {
 				addToBlackList(aimAccount);
 			} else {
 				alert("添加失败");
+			}
+		}
+	});
+});
+
+$(document).on('click', '#btn-del-blist', function() {
+	if (!confirm("确定从黑名单中移除吗？")) {
+		return;
+	}
+	var aimAccount = $("#blist-id").text();
+	$.ajax({
+		url: '/blist/del',
+		type: 'POST',
+		data: {applyUid: userAccount, aimUid: aimAccount},
+		success: function(data) {
+			if (data.code == 1) {
+				alert("移除成功");
+				$("fuc-show").hide();
+				var li = $("#blist-" + aimAccount);
+				if (data.data == 1) { // 添加至好友列表
+					var newli = li.clone();
+					newli.attr("id", "friend-" + li.attr("data-uid"));
+					newli.removeClass("blist-item");
+					newli.removeClass("item-selected");
+					newli.addClass("friend-item");
+					newli.prependTo($("#friend-list"));
+				}
+				// 从黑名单中移除
+				li.remove();
 			}
 		}
 	});

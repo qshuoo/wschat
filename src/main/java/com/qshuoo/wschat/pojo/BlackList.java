@@ -8,7 +8,7 @@ package com.qshuoo.wschat.pojo;
 public class BlackList {
 	private Long uid1;
 	private Long uid2;
-	private Integer state;
+	private Integer state; // 黑名单状态 0 已恢复 1 正常
 	public Long getUid1() {
 		return uid1;
 	}

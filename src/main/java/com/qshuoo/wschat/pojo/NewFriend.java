@@ -10,7 +10,7 @@ public class NewFriend {
 	private Long uid1; // 被添加方id
 	private Long uid2; // 添加方id
 	private String msg; // 添加时验证信息
-	private Integer state; // 添加状态
+	private Integer state; // 添加状态 1正常 2拒绝 3拉入黑名单
 	
 	public Long getUid1() {
 		return uid1;

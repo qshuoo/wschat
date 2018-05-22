@@ -105,15 +105,32 @@
 					<div align="left" style="padding-top: 50px;padding-left: 100px">
 						<label style="color: gray">账号&nbsp;</label><label id="newfriend-id"></label><br>
 						<label style="color: gray">昵称&nbsp;</label><label id="newfriend-uname"></label><br>
-<!-- 						<label style="color: gray">邮箱&nbsp;</label><label id="newfriend-email"></label><br> -->
-<!-- 						<label style="color: gray">手机&nbsp;</label><label id="newfriend-phone"></label><br> -->
-<!-- 						<label style="color: gray">签名&nbsp;</label><label id="newfriend-sign"></label><br> -->
 						<label style="color: gray">验证消息&nbsp;</label><label id="newfriend-msg"></label><br>
 					</div>
 					<div style="padding-top: 30px">
 						<button type="submit" id="btn-newfriend-agree" class="btn btn-default">接受</button>
 						<button type="submit" id="btn-newfriend-refuse" class="btn btn-default">拒绝</button>
 						<button type="submit" class="btn btn-default btn-add-blist">加入黑名单</button>
+						<div style="padding-top: 30px">
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3"></div>
+			</div>
+			
+			<!-- 黑名单展示 -->
+			<div class="col-md-8 fuc-show" id="fuc-blist" style="background: #b0b0b0;height: 566px;padding-top: 50px; display: none;">
+				<div class="col-md-3"></div>
+				<div class="col-md-6" align="center" style="border: solid 2px gray;background: white;padding: 0px 0px 0px 0px;">
+					<div style="background:#b3d4d4;height:150px;padding-top: 50px">
+						<img class="circle" src="/img/default.jpg"><br>
+					</div>
+					<div align="left" style="padding-top: 50px;padding-left: 100px">
+						<label style="color: gray">账号&nbsp;</label><label id="blist-id"></label><br>
+						<label style="color: gray">昵称&nbsp;</label><label id="blist-uname"></label><br>
+					</div>
+					<div style="padding-top: 30px">
+						<button type="submit" id="btn-del-blist" class="btn btn-default">移除黑名单</button>
 						<div style="padding-top: 30px">
 						</div>
 					</div>

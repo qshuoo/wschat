@@ -14,7 +14,7 @@ public interface BlackListService {
 	 * @param account 用户账号
 	 * @return
 	 */
-	WSChatResult getBlackList(Long account);
+	WSChatResult listBlackList(Long account);
 
 	/**
 	 * 添加至黑名单
@@ -24,5 +24,21 @@ public interface BlackListService {
 	 * @throws Exception 
 	 */
 	WSChatResult addToBlackList(Long applyUid, Long aimUid) throws Exception;
-
+	
+	/**
+	 * 从黑名单恢复
+	 * @param applyUid 申请账号
+	 * @param aimUid 目标账号
+	 * @return
+	 * @throws Exception 
+	 */
+	WSChatResult delFromBlackList(Long applyUid, Long aimUid) throws Exception;
+	
+	/**
+	 * 是否存在黑名单关系
+	 * @param uid1
+	 * @param uid2
+	 * @return
+	 */
+	boolean isInBlackList(Long uid1, Long uid2);
 }

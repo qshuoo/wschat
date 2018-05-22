@@ -49,14 +49,14 @@ public class FriendDaoImpl implements FriendDao{
 
 	@Override
 	public List<Map<String, Object>> listNewFriend(Long account) {
-		String sql = "SELECT a.uid, a.uname, a.img, b.msg FROM user a, newfriend b WHERE a.uid = b.uid2 AND b.uid1 = ? AND b.state = 0";
+		String sql = "SELECT a.uid, a.uname, a.img, b.msg FROM user a, newfriend b WHERE a.uid = b.uid2 AND b.uid1 = ? AND b.state = 0;";
 		List<Map<String, Object>> res = jdbcTemplate.queryForList(sql, account);
 		return res;
 	}
 
 	@Override
 	public int updateNewFStateByUids(Long aimUid, Long applyUid, int i) {
-		String sql = "UPDATE newfriend a SET a.state = ? WHERE uid1 = ? AND uid2 = ? AND state = 0";
+		String sql = "UPDATE newfriend a SET a.state = ? WHERE uid1 = ? AND uid2 = ? AND state = 0;";
 		int row = jdbcTemplate.update(sql, i, aimUid, applyUid);
 		return row;
 	}
@@ -70,8 +70,15 @@ public class FriendDaoImpl implements FriendDao{
 
 	@Override
 	public int updateFRStateByUids(Long applyUid, Long aimUid, int i) {
-		String sql = "UPDATE friendrelation a SET a.state = ? WHERE a.uid1 = ? and a.uid2 = ?;";
+		String sql = "UPDATE friendrelation a SET a.state = ? WHERE a.uid1 = ? AND a.uid2 = ?;";
 		int row = jdbcTemplate.update(sql, i, applyUid, aimUid);
 		return row;
+	}
+
+	@Override
+	public List<Map<String, Object>> getFRStateByIds(Long uid1, Long uid2) {
+		String sql = "SELECT a.state FROM friendrelation a WHERE a.uid1 = ? AND a.uid2 = ?;";
+		List<Map<String, Object>> res = jdbcTemplate.queryForList(sql, uid1, uid2);
+		return res;
 	}
 }

@@ -69,4 +69,12 @@ public interface FriendDao {
 	 * @return
 	 */
 	public int updateFRStateByUids(Long applyUid, Long aimUid, int i);
+	
+	/**
+	 * 获取好友关系
+	 * @param uid1
+	 * @param uid2
+	 * @return
+	 */
+	public List<Map<String, Object>> getFRStateByIds(Long uid1, Long uid2);
 }

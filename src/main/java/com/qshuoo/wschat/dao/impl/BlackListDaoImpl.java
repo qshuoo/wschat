@@ -23,7 +23,7 @@ public class BlackListDaoImpl implements BlackListDao{
 	private JdbcTemplate jdbcTemplate;
 	
 	@Override
-	public List<Map<String, Object>> getBlackList(Long account) {
+	public List<Map<String, Object>> listBlackList(Long account) {
 		String sql = "SELECT a.uid, a.uname, a.img FROM user a JOIN blacklist b ON a.uid = b.uid2 WHERE b.uid1 = ? AND b.state = 1;";
 		List<Map<String, Object>> res = jdbcTemplate.queryForList(sql, account);
 		return res;
@@ -41,6 +41,13 @@ public class BlackListDaoImpl implements BlackListDao{
 		String sql = "UPDATE blacklist a SET state = ? WHERE uid1 = ? AND uid2 = ?;";
 		int row = jdbcTemplate.update(sql, i, applyUid, aimUid);
 		return row;
+	}
+
+	@Override
+	public List<Map<String, Object>> getBLStateByIds(Long uid1, Long uid2) {
+		String sql = "SELECT a.state FROM blacklist a WHERE a.uid1 = ? AND a.uid2 = ?;";
+		List<Map<String, Object>> res = jdbcTemplate.queryForList(sql, uid1, uid2);
+		return res;
 	}
 
 }

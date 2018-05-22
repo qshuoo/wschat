@@ -17,7 +17,7 @@ public interface BlackListDao {
 	 * @param account 用户账号
 	 * @return
 	 */
-	public List<Map<String, Object>> getBlackList(Long account);
+	public List<Map<String, Object>> listBlackList(Long account);
 	
 	/**
 	 * 添加至黑名单
@@ -35,5 +35,13 @@ public interface BlackListDao {
 	 * @return
 	 */
 	public int updateBLStateByUid(Long applyUid, Long aimUid, int i);
+	
+	/**
+	 * 根据id获取黑名单状态
+	 * @param uid1
+	 * @param uid2
+	 * @return
+	 */
+	public List<Map<String, Object>> getBLStateByIds(Long uid1, Long uid2);
 
 }
