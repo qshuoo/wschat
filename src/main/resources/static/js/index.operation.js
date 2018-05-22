@@ -15,8 +15,11 @@ $(document).ready(function() {
 	// 接收好友与群组列表
 	recFriendList();
 	
-	// 接受好友申请列表
+	// 接收好友申请列表
 	recFriendApply();
+	
+	// 接收黑名单列表
+	recBlackList();
 	
 	$("#friend-sign").click();
 	
@@ -35,7 +38,6 @@ $(document).ready(function() {
 
 	// 连接成功建立的回调方法
 	websocket.onopen = function() {
-//		setMessageInnerHTML("WebSocket连接成功");
 	}
 
 	// 接收到消息的回调方法
@@ -46,7 +48,6 @@ $(document).ready(function() {
 
 	// 连接关闭的回调方法
 	websocket.onclose = function() {
-//		setMessageInnerHTML("WebSocket连接关闭");
 	}
 	// 监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
 	window.onbeforeunload = function() {
@@ -104,23 +105,6 @@ $(document).on('click', '.newfriend-item', function() {
 	$("#newfriend-msg").text(applyInfo.msg);
 	$("#fuc-newfriend").show();
 	
-	/*
-	$.ajax({
-		url: '/user/search/' + $(this).attr("data-uid"),
-		type: 'GET',
-		success: function(data){
-			$("#newfriend-id").text(data.data.uid);
-			$("#newfriend-uname").text(data.data.uname);
-//			$("#newfriend-email").text(data.data.email);
-//			$("#newfriend-phone").text(data.data.phone);
-//			$("#newfriend-sign").text(data.data.signature);
-			$("#newfriend-msg").text(data.data.msg);
-		},
-		error: function() {
-			// TODO
-		}
-	});
-	*/
 });
 
 /**
@@ -381,11 +365,13 @@ $(document).on('click', '.btn-add-blist', function() {
 	if (!confirm('确定加入黑名单吗？')) {
 		return;
 	}
-	var aimAccount = $(".item-selected")[0].attr("data-uid");
+	var aimAccount = $($(".item-selected")[0]).attr("data-uid");
+	console.log(aimAccount);
+	
 	$.ajax({
 		url: '/blist/add',
 		type: 'POST',
-		data: {applyUid, userAccount, aimUid: aimAccount},
+		data: {applyUid: userAccount, aimUid: aimAccount},
 		success: function(data) {
 			if (data.code == 1) {
 				addToBlackList(aimAccount);
@@ -567,7 +553,7 @@ function delFriend(id) {
 	// 好友展示列表 删除对应好友
 	var friendli = $("#friend-" + id);
 	friendli.remove();
-	
+
 	// 会话列表 删除对应好友
 	var chatli = $("#chat-" + id);
 	if (chatli) {
@@ -581,7 +567,24 @@ function delFriend(id) {
  * @returns
  */
 function addToBlackList(id) {
-	// TODO
+	// 提示加入成功 TODO 暂时alert()
+	alert('加入黑名单成功');
+	
+	// 功能框置空 
+	$(".fuc-show").hide();
+	
+	// 从对应列表删除 并添加至黑名单
+	var li = $($(".item-selected")[0]);
+	var newli = li.clone();
+	
+	newli.attr("id", "blist-" + li.attr("data-uid"));
+	newli.removeClass("newfriend-item");
+	newli.removeClass("friend-item");
+	newli.removeClass("item-selected");
+	newli.addClass("blist-item");
+	newli.prependTo($("#blist-list"));
+	li.remove();
+	
 }
 
 /**
@@ -634,10 +637,9 @@ function recFriendApply() {
 		}
 	});
 }
-\
+
 /**
  * 接收黑名单
- * @returns
  */
 function recBlackList(){
 	$.ajax({
@@ -649,7 +651,6 @@ function recBlackList(){
 			if (data.code == 1) {
 				var list = data.data;
 				for (let i = 0; i < list.length; i++) {
-					
 					// 加载黑名单列表
 					var res = drewUserLi(list[i].uid.toString(), list[i].img, list[i].uname, 'blist');
 					$("#blist-list").append(res);

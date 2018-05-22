@@ -65,7 +65,7 @@ public interface FriendDao {
 	 * 更新好友关系
 	 * @param applyUid 申请账号
 	 * @param aimUid 目标账号
-	 * @param i 变更状态 (1:正常状态, 2:关系解除)
+	 * @param i 变更状态 (1:正常状态, 2:关系解除, 3:加入黑名单, 4：被加入黑名单)
 	 * @return
 	 */
 	public int updateFRStateByUids(Long applyUid, Long aimUid, int i);

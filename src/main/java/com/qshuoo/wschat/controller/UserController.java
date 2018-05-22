@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.qshuoo.wschat.service.BlackListService;
 import com.qshuoo.wschat.service.CodeService;
 import com.qshuoo.wschat.service.FriendService;
 import com.qshuoo.wschat.service.UserService;
@@ -29,6 +30,9 @@ public class UserController {
 	
 	@Autowired
 	private FriendService friendService;
+	
+	@Autowired
+	private BlackListService blistService;
 	
 	/**
 	 * 验证用户名和密码
@@ -166,10 +170,43 @@ public class UserController {
 		return result;
 	}
 	
+	/**
+	 * 删除好友
+	 * @param applyUid 申请账号
+	 * @param aimUid 目标账号
+	 * @return
+	 * @throws Exception
+	 */
 	@ResponseBody
 	@RequestMapping("/friend/del")
 	public WSChatResult delFriend(Long applyUid, Long aimUid) throws Exception {
 		WSChatResult result = friendService.delFriend(applyUid, aimUid);
+		return result;
+	}
+	
+	/**
+	 * 获取黑名单
+	 * @param account 用户账号
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/user/blist")
+	public WSChatResult getBlackList(Long account) {
+		WSChatResult result = blistService.getBlackList(account);
+		return result;
+	}
+	
+	/**
+	 * 添加至黑名单
+	 * @param applyUid 申请账号
+	 * @param aimUid 目标账号
+	 * @return
+	 * @throws Exception 
+	 */
+	@ResponseBody
+	@RequestMapping("/blist/add")
+	public WSChatResult addToBlackList(Long applyUid, Long aimUid) throws Exception {
+		WSChatResult result = blistService.addToBlackList(applyUid, aimUid);
 		return result;
 	}
 
