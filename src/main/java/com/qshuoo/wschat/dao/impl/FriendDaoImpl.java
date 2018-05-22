@@ -55,7 +55,7 @@ public class FriendDaoImpl implements FriendDao{
 	}
 
 	@Override
-	public int updateStateByUids(Long aimUid, Long applyUid, int i) {
+	public int updateNewFStateByUids(Long aimUid, Long applyUid, int i) {
 		String sql = "UPDATE newfriend a SET a.state = ? WHERE uid1 = ? AND uid2 = ? AND state = 0";
 		int row = jdbcTemplate.update(sql, i, aimUid, applyUid);
 		return row;
@@ -65,6 +65,13 @@ public class FriendDaoImpl implements FriendDao{
 	public int saveFriendRelation(FriendRelation fr) throws Exception {
 		String sql = SqlUtils.generateInsertSQL(fr, FriendRelation.class);
 		int row = jdbcTemplate.update(sql);
+		return row;
+	}
+
+	@Override
+	public int updateFRStateByUids(Long applyUid, Long aimUid, int i) {
+		String sql = "UPDATE friendrelation a SET a.state = ? WHERE a.uid1 = ? and a.uid2 = ?;";
+		int row = jdbcTemplate.update(sql, i, applyUid, aimUid);
 		return row;
 	}
 }

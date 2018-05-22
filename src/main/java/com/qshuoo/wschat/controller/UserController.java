@@ -165,5 +165,12 @@ public class UserController {
 		}
 		return result;
 	}
+	
+	@ResponseBody
+	@RequestMapping("/friend/del")
+	public WSChatResult delFriend(Long applyUid, Long aimUid) throws Exception {
+		WSChatResult result = friendService.delFriend(applyUid, aimUid);
+		return result;
+	}
 
 }

@@ -51,4 +51,13 @@ public interface FriendService {
 	 * @throws Exception 
 	 */
 	public WSChatResult refuseFriendApply(Long aimUid, Long applyUid) throws Exception;
+
+	/**
+	 * 删除好友
+	 * @param applyUid
+	 * @param aimUid
+	 * @return
+	 * @throws Exception 
+	 */
+	public WSChatResult delFriend(Long applyUid, Long aimUid) throws Exception;
 }

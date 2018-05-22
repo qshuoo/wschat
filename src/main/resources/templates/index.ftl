@@ -38,12 +38,12 @@
 				</div>
 				<div class="tabbable" id="tabs-503102">
 					<ul class="nav nav-tabs">
-						<li><a id="chat-sign" class="li-sign"
+						<li class="active"><a id="chat-sign" class="li-sign"
 							href="#panel-121381" data-toggle="tab">会话</a></li>
-						<li class="active"><a id="friend-sign" class="li-sign" href="#panel-121382" data-toggle="tab">好友</a></li>
+						<li><a id="friend-sign" class="li-sign" href="#panel-121382" data-toggle="tab">好友</a></li>
 						<li><a class="li-sign" href="#panel-121383" data-toggle="tab">群组</a></li>
 						<li><a id="newfriend-sign" class="li-sign" href="#panel-121384" data-toggle="tab">新朋友</a></li>
-						<li><a class="li-sign" href="#panel-121385" data-toggle="tab">黑名单</a></li>
+						<li><a id="blist-sign" class="li-sign" href="#panel-121385" data-toggle="tab">黑名单</a></li>
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane active" id="panel-121381">
@@ -63,7 +63,7 @@
 							</ul>
 						</div>
 						<div class="tab-pane" id="panel-121385">
-							<ul class="list-group">
+							<ul id="blist-list" class="list-group">
 							</ul>
 						</div>
 					</div>
@@ -82,12 +82,12 @@
 						<label style="color: gray">昵称&nbsp;</label><label id="friend-uname"></label><br>
 						<label style="color: gray">邮箱&nbsp;</label><label id="friend-email"></label><br>
 						<label style="color: gray">手机&nbsp;</label><label id="friend-phone"></label><br>
-						<label style="color: gray">签名&nbsp;</label><label id="friend-sign"></label><br>
+						<label style="color: gray">签名&nbsp;</label><label id="friend-signature"></label><br>
 					</div>
 					<div style="padding-top: 30px">
 						<button type="submit" id="begin-chat" class="btn btn-default">发送消息</button>
-						<button type="submit" class="btn btn-default">删除</button>
-						<button type="submit" class="btn btn-default">加入黑名单</button>
+						<button type="submit" id="btn-del-friend" class="btn btn-default">删除</button>
+						<button type="submit" class="btn btn-default btn-add-blist">加入黑名单</button>
 						<div style="padding-top: 30px">
 						</div>
 					</div>
@@ -112,8 +112,8 @@
 					</div>
 					<div style="padding-top: 30px">
 						<button type="submit" id="btn-newfriend-agree" class="btn btn-default">接受</button>
-						<button type="submit" class="btn btn-default">拒绝</button>
-						<button type="submit" class="btn btn-default">加入黑名单</button>
+						<button type="submit" id="btn-newfriend-refuse" class="btn btn-default">拒绝</button>
+						<button type="submit" class="btn btn-default btn-add-blist">加入黑名单</button>
 						<div style="padding-top: 30px">
 						</div>
 					</div>

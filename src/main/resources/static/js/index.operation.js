@@ -18,6 +18,8 @@ $(document).ready(function() {
 	// 接受好友申请列表
 	recFriendApply();
 	
+	$("#friend-sign").click();
+	
 	// 判断当前浏览器是否支持WebSocket
 	if ('WebSocket' in window) {
 		var conn = "ws://" + window.location.host + "/websocket/" + userAccount;
@@ -77,7 +79,7 @@ $(document).on('click', '.friend-item', function() {
 			$("#friend-uname").text(data.data.uname);
 			$("#friend-email").text(data.data.email);
 			$("#friend-phone").text(data.data.phone);
-			$("#friend-sign").text(data.data.signature);
+			$("#friend-signature").text(data.data.signature);
 		},
 		error: function() {
 			// TODO
@@ -334,6 +336,67 @@ $(document).on('click', '#btn-add-friend', function() {
 });
 
 /**
+ * 拒绝好友申请
+ */
+$(document).on('click', '#btn-newfriend-refuse', function() {
+	$.ajax({
+		url: '/friend/deal',
+		type: 'POST',
+		async: false,
+		data: {aimUid: userAccount, applyUid: $("#newfriend-id").text(), type: 'refuse'},
+		success: function(data) {
+			if (data.code == 1) {
+				refuseFriendApply($("#newfriend-id").text());
+			} else {
+				alert("拒绝失败，请刷新重试");
+			}
+		},
+		error: function(){}
+	});
+})
+/**
+ * 好友删除事件点击
+ */
+$(document).on('click', '#btn-del-friend', function() {
+	if (!confirm('确认删除该好友吗？')) {
+		return;
+	}
+	var aimAccount = $("#friend-id").text();
+	$.ajax({
+		url: '/friend/del',
+		type: 'POST',
+		data: {applyUid: userAccount, aimUid: aimAccount},
+		success: function(data) {
+			if (data.code == 1) {
+				delFriend(aimAccount);
+			}
+		}
+	});
+} );
+
+/**
+ * 加入黑名单事件点击
+ */
+$(document).on('click', '.btn-add-blist', function() {
+	if (!confirm('确定加入黑名单吗？')) {
+		return;
+	}
+	var aimAccount = $(".item-selected")[0].attr("data-uid");
+	$.ajax({
+		url: '/blist/add',
+		type: 'POST',
+		data: {applyUid, userAccount, aimUid: aimAccount},
+		success: function(data) {
+			if (data.code == 1) {
+				addToBlackList(aimAccount);
+			} else {
+				alert("添加失败");
+			}
+		}
+	});
+});
+
+/**
  * 绑定事件 END
  */
 
@@ -475,6 +538,53 @@ function dealAddFriend(data) {
 }
 
 /**
+ * 拒绝好友申请
+ * @param id
+ * @returns
+ */
+function refuseFriendApply(id) {
+	// 提示拒绝成功
+	alert('好友拒绝成功');
+	// 清除功能区展示
+	$(".fuc-show").hide();
+	// 删除好友申请列表对应账号
+	var friendli = $("#newfriend-" + id);
+	friendli.remove();
+}
+
+/**
+ * 删除好友
+ * @param id
+ * @returns
+ */
+function delFriend(id) {
+	// 提示删除成功 TODO 暂时alert()
+	alert('好友删除成功');
+	
+	// 功能框置空 
+	$(".fuc-show").hide();
+	
+	// 好友展示列表 删除对应好友
+	var friendli = $("#friend-" + id);
+	friendli.remove();
+	
+	// 会话列表 删除对应好友
+	var chatli = $("#chat-" + id);
+	if (chatli) {
+		chatli.remove();
+	}
+}
+
+/**
+ * 添加至黑名单
+ * @param id
+ * @returns
+ */
+function addToBlackList(id) {
+	// TODO
+}
+
+/**
  * 接收好友列表
  * @returns
  */
@@ -516,6 +626,33 @@ function recFriendApply() {
 					// 加载申请列表
 					var res = drewUserLi(list[i].uid.toString(), list[i].img, list[i].uname, 'newfriend');
 					$("#newfriend-list").append(res);
+				}
+			}
+		},
+		error: function() {
+			// TODO
+		}
+	});
+}
+\
+/**
+ * 接收黑名单
+ * @returns
+ */
+function recBlackList(){
+	$.ajax({
+		url: "/user/blist",
+		type: "GET",
+		async: false,
+		data: {account: userAccount},
+		success: function(data) {
+			if (data.code == 1) {
+				var list = data.data;
+				for (let i = 0; i < list.length; i++) {
+					
+					// 加载黑名单列表
+					var res = drewUserLi(list[i].uid.toString(), list[i].img, list[i].uname, 'blist');
+					$("#blist-list").append(res);
 				}
 			}
 		},

@@ -51,7 +51,7 @@ public interface FriendDao {
 	 * @param i 申请状态
 	 * @return
 	 */
-	public int updateStateByUids(Long aimUid, Long applyUid, int i);
+	public int updateNewFStateByUids(Long aimUid, Long applyUid, int i);
 	
 	/**
 	 * 添加好友关系
@@ -60,4 +60,13 @@ public interface FriendDao {
 	 * @throws Exception 
 	 */
 	public int saveFriendRelation(FriendRelation fr) throws Exception;
+
+	/**
+	 * 更新好友关系
+	 * @param applyUid 申请账号
+	 * @param aimUid 目标账号
+	 * @param i 变更状态 (1:正常状态, 2:关系解除)
+	 * @return
+	 */
+	public int updateFRStateByUids(Long applyUid, Long aimUid, int i);
 }

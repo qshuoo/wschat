@@ -60,7 +60,7 @@ public class FriendServiceImpl implements FriendService{
 	@Override
 	public WSChatResult agreeFriendApply(Long aimUid, Long applyUid) throws Exception {
 		// 变更申请状态
-		int row = friendDao.updateStateByUids(aimUid, applyUid, 1);
+		int row = friendDao.updateNewFStateByUids(aimUid, applyUid, 1);
 		if (row != 1) {
 			throw new Exception("添加失败");
 		}
@@ -86,9 +86,23 @@ public class FriendServiceImpl implements FriendService{
 	@Override
 	public WSChatResult refuseFriendApply(Long aimUid, Long applyUid) throws Exception {
 		// 变更申请状态
-		int row = friendDao.updateStateByUids(aimUid, applyUid, 1);
+		int row = friendDao.updateNewFStateByUids(aimUid, applyUid, 2);
 		if (row != 1) {
 			throw new Exception("拒绝失败,请刷新重试");
+		}
+		return WSChatResult.ok();
+	}
+
+	@Override
+	public WSChatResult delFriend(Long applyUid, Long aimUid) throws Exception {
+		// 变更好友关系状态
+		int row = friendDao.updateFRStateByUids(applyUid, aimUid, 2);
+		if (row != 1) {
+			throw new Exception("删除失败");
+		}
+		row = friendDao.updateFRStateByUids(aimUid, applyUid, 2);
+		if (row != 1) {
+			throw new Exception("删除失败");
 		}
 		return WSChatResult.ok();
 	}
