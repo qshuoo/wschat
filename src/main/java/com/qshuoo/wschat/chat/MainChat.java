@@ -20,6 +20,7 @@ import com.alibaba.fastjson.JSON;
 import com.qshuoo.wschat.config.ApplicationContextRegister;
 import com.qshuoo.wschat.pojo.Message;
 import com.qshuoo.wschat.service.BlackListService;
+import com.qshuoo.wschat.service.FriendService;
 import com.qshuoo.wschat.service.MessageService;
 import com.qshuoo.wschat.utils.ChatsPool;
 import com.qshuoo.wschat.utils.MsgUtils;
@@ -41,6 +42,8 @@ public class MainChat {
 	private MessageService msgService = (MessageService) ApplicationContextRegister.getApplicationContext().getBean("MessageService");
 
 	private BlackListService bListService = (BlackListService) ApplicationContextRegister.getApplicationContext().getBean("BlackListService");
+	
+	private FriendService friendService = (FriendService) ApplicationContextRegister.getApplicationContext().getBean("FriendService");
 	
     /**
      * 连接建立成功调用的方法
@@ -86,6 +89,19 @@ public class MainChat {
     	if (bListService.isInBlackList(msg.getToUid(), msg.getFromUid())) {
     		return;
     	}
+    	// 不是好友关系
+    	if (!msg.getFromUid().equals(99999l) && friendService.isNotFriendRelation(msg.getToUid(), msg.getFromUid())) {
+    		if (ChatsPool.containKey(msg.getFromUid())) { // 用户在线  -> 发送消息  
+        		Session session = ChatsPool.getSession(msg.getFromUid());
+        		Message newMsg = new Message();
+        		newMsg.setFromUid(msg.getToUid());
+        		newMsg.setToUid(msg.getFromUid());
+        		newMsg.setMsg("发送失败,对方与你不是好友关系,请刷新后添加对方为好友");
+        		session.getBasicRemote().sendText(MsgUtils.getOnMsgs(newMsg));
+        	}
+    		return;
+    	}
+    	// 是好友关系
     	if (ChatsPool.containKey(msg.getToUid())) { // 用户在线  -> 发送消息  
     		Session session = ChatsPool.getSession(msg.getToUid());
     		session.getBasicRemote().sendText(MsgUtils.getOnMsgs(msg));

@@ -60,4 +60,12 @@ public interface FriendService {
 	 * @throws Exception 
 	 */
 	public WSChatResult delFriend(Long applyUid, Long aimUid) throws Exception;
+	
+	/**
+	 * 判断好友关系
+	 * @param uid1
+	 * @param uid2
+	 * @return
+	 */
+	public boolean isNotFriendRelation(Long uid1, Long uid2);
 }

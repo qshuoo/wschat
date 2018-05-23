@@ -14,7 +14,7 @@ import com.qshuoo.wschat.pojo.NewFriend;
 import com.qshuoo.wschat.service.FriendService;
 import com.qshuoo.wschat.utils.WSChatResult;
 
-@Service
+@Service("FriendService")
 @Transactional
 public class FriendServiceImpl implements FriendService{
 	
@@ -123,6 +123,12 @@ public class FriendServiceImpl implements FriendService{
 			}
 		}
 		return WSChatResult.ok();
+	}
+
+	@Override
+	public boolean isNotFriendRelation(Long uid1, Long uid2) {
+		List<Map<String, Object>> state = friendDao.getFRStateByIds(uid1, uid2);
+		return !state.isEmpty() && (int) state.get(0).get("state") == 2;
 	}
 
 }

@@ -96,8 +96,6 @@ $(document).on('click', '.newfriend-item', function() {
 	$(".fuc-show").hide();
 	
 	// 展示申请添加用户信息
-	console.log($.data(applyFriendMsg));
-	console.log($.data(applyFriendMsg, '99999'));
 	var applyInfo = JSON.parse($.data(applyFriendMsg, $(this).attr("data-uid")));
 	console.log(applyInfo);
 	$("#newfriend-id").text(applyInfo.uid);
@@ -187,8 +185,18 @@ $(document).on('click', '#begin-chat', function() {
 });
 
 /**
+ * 消息发送enter按键监听事件
+ */
+$(document).on('keypress', '#msg', function(e) {
+	
+	if (e.keyCode == 13) {
+		send();
+	}
+	
+})
+
+/**
  * 接受好友添加按钮点击事件
- * @returns
  */
 $(document).on('click', '#btn-newfriend-agree', function() {
 	
@@ -223,9 +231,14 @@ $(document).on('click', '#btn-newfriend-agree', function() {
 	
 	// 发送招呼消息
 	var message = {
-		fromUid : userAccount,
+		fromUid : 99999,
 		toUid : newli.attr("data-uid"),
-		msg : 'Hi, 我们现在是好友拉,打声招呼吧'
+		msg : {
+			code: 2,
+			uid: userAccount,
+			uname: userName,
+			img: userImgUrl
+		}
 	};
 	websocket.send(JSON.stringify(message));
 });
@@ -268,6 +281,25 @@ $(document).on('click', '#btn_search', function() {
 	}
 	
 	// TODO 此用户已存在列表中
+	var li = $("#friend-" + account);
+	if (li[0]) {
+		$("#friend-sign").click();
+		li.click();
+		return;
+	}
+	li = $("#newfriend-" + account);
+	if (li[0]) {
+		$("#newfriend-sign").click();
+		li.click();
+		return;
+	}
+	
+	li = $("#blist-" + account);
+	if (li[0]) {
+		$("#blist-sign").click();
+		li.click();
+		return;
+	}
 	
 	$("#modal_user").modal();
 	$.ajax({
@@ -396,6 +428,9 @@ $(document).on('click', '.btn-add-blist', function() {
 	});
 });
 
+/**
+ * 移除黑名单点击事件
+ */
 $(document).on('click', '#btn-del-blist', function() {
 	if (!confirm("确定从黑名单中移除吗？")) {
 		return;
@@ -463,11 +498,6 @@ function receive(recMsg) {
 	}
 
 	// 普通消息
-	// 会话提示消息
-	if( !$("#chat-sign").hasClass("active")) {
-		$("#chat-sign").css("background", "#e0570bc4");
-	}
-	
 	var li = $("#chat-" + fromUid); // 获取对应会话
 	if (!li[0]) { // 会话不再列表中
 		console.log("not in list");
@@ -486,11 +516,24 @@ function receive(recMsg) {
 	li.prependTo($("#chat-list"));
 	
 	// 会话被选中 直接显示消息 返回
-	if (li.hasClass("item-selected")) {
-		setMessageInnerHTML(recMsg.msg);
-		return;
+	if (!$("#fuc-chat").is(":hidden")) {
+		if (toUser = fromUid) {
+			setMessageInnerHTML(recMsg.msg);
+			return;
+		}
 	}
 	
+	// 会话提示消息
+	if( !$("#chat-sign").hasClass("active")) {
+		$("#chat-sign").css("background", "#e0570bc4");
+	}
+	
+	// 会话被选中 直接显示消息 返回
+//	if (li.hasClass("item-selected")) {
+//		setMessageInnerHTML(recMsg.msg);
+//		return;
+//	}
+
 	// 会话未被选中 好友列表中离线消息数量+1 
 	var cntShow = $(li.children(".badge")[0]);
 	if (cntShow.text() == "") { // 没有未读消息 
@@ -541,9 +584,13 @@ function send() {
  */
 function dealSystemMsg(data) {
 	console.log("===== " + JSON.stringify(data));
-	if(data.code == 1) { // 收到新朋友添加请求
+	if (data.code == 1) { // 收到新朋友添加请求
 		console.log("System msg for add friend...");
 		dealAddFriend(data);
+	}
+	if (data.code == 2) {
+		console.log("System msg for friend apply has agreed...");
+		dealFriendApplyAgree(data);
 	}
 }
 
@@ -558,12 +605,47 @@ function dealAddFriend(data) {
 		$("#newfriend-sign").css("background", "#e0570bc4");
 	}
 	
+	// 已存在新朋友 li
+	var li = $("#newfriend-" + data.uid.toString());
+	if (li[0]) {
+		return;
+	}
+	
 	// 添加缓存至applyFriendMsg
 	$.data(applyFriendMsg, data.uid.toString(), JSON.stringify(data));
 	
 	// 添加新朋友至列表
 	var li = drewUserLi(data.uid, data.img, data.uname, 'newfriend');
 	$(li).prependTo($("#newfriend-list"));
+}
+
+/**
+ * 处理好友申请被同意
+ * @param data
+ * @returns
+ */
+function dealFriendApplyAgree(data) {
+	// 朋友新列表通知
+	if( !$("#friend-sign").hasClass("active")) {
+		$("#friend-sign").css("background", "#e0570bc4");
+	}
+	
+	// 不存在新朋友 li
+	var li = $("#friend-" + data.uid.toString());
+	if (!li[0]) {
+		var li = drewUserLi(data.uid, data.img, data.uname, 'friend');
+		$(li).prependTo($("#friend-list"));
+	}
+	
+	// 发送招呼消息
+	var message = {
+		fromUid : data.uid,
+		toUid : userAccount,
+		msg : 'Hi, 我们现在是好友拉,打声招呼吧'
+	};
+	
+	websocket.send(JSON.stringify(message));
+	
 }
 
 /**

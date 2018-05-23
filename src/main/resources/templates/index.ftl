@@ -41,7 +41,7 @@
 						<li class="active"><a id="chat-sign" class="li-sign"
 							href="#panel-121381" data-toggle="tab">会话</a></li>
 						<li><a id="friend-sign" class="li-sign" href="#panel-121382" data-toggle="tab">好友</a></li>
-						<li><a class="li-sign" href="#panel-121383" data-toggle="tab">群组</a></li>
+<!-- 						<li><a class="li-sign" href="#panel-121383" data-toggle="tab">群组</a></li> -->
 						<li><a id="newfriend-sign" class="li-sign" href="#panel-121384" data-toggle="tab">新朋友</a></li>
 						<li><a id="blist-sign" class="li-sign" href="#panel-121385" data-toggle="tab">黑名单</a></li>
 					</ul>
@@ -54,10 +54,10 @@
 							<ul id="friend-list" class="list-group">
 							</ul>
 						</div>
-						<div class="tab-pane" id="panel-121383">
-							<ul class="list-group">
-							</ul>
-						</div>
+<!-- 						<div class="tab-pane" id="panel-121383"> -->
+<!-- 							<ul class="list-group"> -->
+<!-- 							</ul> -->
+<!-- 						</div> -->
 						<div class="tab-pane" id="panel-121384">
 							<ul id="newfriend-list" class="list-group">
 							</ul>
@@ -155,7 +155,7 @@
 								style="resize: none; background-color: white; border: none; outline: medium;"></textarea>
 						</div>
 						<div id="btn_send">
-							<button type="button" class="btn btn-default btn-sm "
+							<button id="send-msg" type="button" class="btn btn-default btn-sm "
 								onclick="send()">发送</button>
 						</div>
 					</div>

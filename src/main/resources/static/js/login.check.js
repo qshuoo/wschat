@@ -16,6 +16,12 @@ $(document).ready(function() {
 		}
 	});
 	
+	$("#input_password").keypress(function(e) {
+		if (e.keyCode == 13) {
+			$("#btn_login").click();
+		}
+	});
+	
 	$("#btn_login").click(function() {
 		$("#input_account,#input_password").blur();
 		if ($(".has-error").size() == 0) {
