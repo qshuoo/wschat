@@ -137,20 +137,23 @@ $(document).on('click', '.chat-item', function() {
 	$("#fuc-chat").show();
 	
 	// 清空聊天内容  (暂时)
-	$(".chat-thread").empty();
+//	$(".chat-thread").empty();
 	
 	// 加载未读消息
 	console.log($.data(msgMap, toUser));
 	if (typeof($.data(msgMap, toUser)) == "undefined") { // 没有缓存 return
+		$(".chat-thread").empty();
 		return;
 	}
-	var list = JSON.parse($.data(msgMap, toUser));
-	for (let i = 0; i < list.length; i++) {
-		setMessageInnerHTML(list[i]);
-	}
+	$($(".chat-thread")[0]).html($.data(msgMap, toUser));
+	scrollSild();
+//	var list = JSON.parse($.data(msgMap, toUser));
+//	for (let i = 0; i < list.length; i++) {
+//		setMessageInnerHTML(list[i]);
+//	}
 	
 	// 清除未读缓存
-	$.removeData(msgMap, toUser);
+//	$.removeData(msgMap, toUser);
 });
 
 /**
@@ -171,6 +174,7 @@ $(document).on('click', '#begin-chat', function() {
 		// 更改所在列表
 		li.attr("id", "chat-" + fromUid);
 		li.removeClass("friend-item");
+		li.removeClass("item-selected");
 		li.addClass("chat-item");
 		
 	} else {
@@ -515,16 +519,24 @@ function receive(recMsg) {
 	// 添加至列表开头
 	li.prependTo($("#chat-list"));
 	
+	// 缓存消息
+	var str = "<li class='rec-msg'>" + recMsg.msg + "</li>";
+	var msgData = $.data(msgMap, fromUid);
+	if (typeof(msgData) != "undefined") {
+		str = msgData + str;
+	}
+	$.data(msgMap, fromUid, str);
+	
 	// 会话被选中 直接显示消息 返回
 	if (!$("#fuc-chat").is(":hidden")) {
-		if (toUser = fromUid) {
+		if (toUser == fromUid) {
 			setMessageInnerHTML(recMsg.msg);
 			return;
 		}
 	}
 	
 	// 会话提示消息
-	if( !$("#chat-sign").hasClass("active")) {
+	if( !$($("#chat-sign").parent()).hasClass("active")) {
 		$("#chat-sign").css("background", "#e0570bc4");
 	}
 	
@@ -543,14 +555,14 @@ function receive(recMsg) {
 	}
 	
 	// 缓存消息 
-	var msgList = $.hasData(msgMap, fromUid);
-	var list = [];
-	if (msgList) {
-		list = JSON.parse($.data(msgMap, fromUid));
-	}
-	list.push(recMsg.msg);
-	$.data(msgMap, fromUid, JSON.stringify(list));
-	console.log($.data(msgMap, fromUid));
+//	var msgList = $.hasData(msgMap, fromUid);
+//	var list = [];
+//	if (msgList) {
+//		list = JSON.parse($.data(msgMap, fromUid));
+//	}
+//	list.push(recMsg.msg);
+//	$.data(msgMap, fromUid, JSON.stringify(list));
+//	console.log($.data(msgMap, fromUid));
 }
 
 /**
@@ -558,9 +570,15 @@ function receive(recMsg) {
  * @returns
  */
 function send() {
+	var str = "<li class='send-msg'>" + $('#msg').val() + "</li>";
 	// 聊天窗体显示消息
-	$(".chat-thread").append(
-			"<li class='send-msg'>" + $('#msg').val() + "</li>");
+	$(".chat-thread").append(str);
+	// 缓存消息
+	var msgData = $.data(msgMap, toUser);
+	if (typeof(msgData) != 'undefined') {
+		str = msgData + str;
+	}
+	$.data(msgMap, toUser, str);
 	// 发送消息
 	var message = {
 		fromUid : userAccount,
@@ -574,7 +592,6 @@ function send() {
 	scrollSild();
 	// 发送窗体重新聚焦
 	$('#msg').focus();
-
 }
 
 /**

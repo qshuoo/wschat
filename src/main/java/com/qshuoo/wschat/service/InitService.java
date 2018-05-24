@@ -38,16 +38,14 @@ public class InitService implements InitializingBean{
 	 */
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		if(!redisCache.existsKey(accountKey)) {
-			List<Map<String,Object>> maxAccount = userDao.getMaxAccount();
-			if (CollectionUtils.isEmpty(maxAccount)) {
-				logger.error("初始化账号生成缓存失败");
-				return;
-			}
-			String id = maxAccount.get(0).get("ID").toString();
-			redisCache.setKAndV(accountKey, id);
+		List<Map<String,Object>> maxAccount = userDao.getMaxAccount();
+		if (CollectionUtils.isEmpty(maxAccount)) {
+			logger.error("初始化账号生成缓存失败");
+			return;
 		}
-		logger.info("初始化账号生成缓存成功");
+		String id = maxAccount.get(0).get("ID").toString();
+		redisCache.setKAndV(accountKey, id);
+		logger.info("初始化账号生成缓存成功, 当前序列值为 {}", redisCache.getValue(accountKey));
 	}
 
 }
