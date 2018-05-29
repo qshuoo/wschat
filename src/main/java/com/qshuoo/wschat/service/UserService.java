@@ -38,4 +38,11 @@ public interface UserService {
 	 */
 	public WSChatResult search(Long account, String type) throws Exception;
 	
+	/**
+	 * 匹配聊天
+	 * @param account 账号
+	 * @return
+	 */
+	public WSChatResult match(Long account);
+	
 }

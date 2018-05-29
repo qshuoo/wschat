@@ -43,6 +43,9 @@ public class UserServiceImpl implements UserService{
 	@Value("${redis.key.account}")
 	private String accountKey;
 	
+	@Value("${redis.key.match}")
+	private String matchKey;
+	
 	@Override
 	public WSChatResult checkLoginUser(Long account, String password) throws Exception {
 		List<Map<String, Object>> users = userDao.getUserById(account);
@@ -88,6 +91,26 @@ public class UserServiceImpl implements UserService{
 			return WSChatResult.ok(resObj);
 		}
 		// TODO 查找群组
+		return WSChatResult.ok();
+	}
+
+	@Override
+	public WSChatResult match(Long account) {
+		logger.info("user {} is matching chat", account);
+		// 1 查找redis中账号 存在 -> 返回
+		if (redisCache.existsKey(matchKey)) { // 存在key
+			synchronized (this) {
+				if (redisCache.existsKey(matchKey)) {
+					String value = redisCache.getValue(matchKey).trim();
+					redisCache.delKey(matchKey);
+					logger.info("user {} matching {} is success", account, value);
+					return WSChatResult.ok(value);
+				}
+			}
+		}
+		
+		// 不存在 -> 加入 时间 55s
+		redisCache.setKAndV(matchKey, account.toString(), 55L);
 		return WSChatResult.ok();
 	}
 

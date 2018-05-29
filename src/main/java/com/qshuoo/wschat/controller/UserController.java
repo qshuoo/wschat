@@ -223,5 +223,17 @@ public class UserController {
 		WSChatResult result = blistService.delFromBlackList(applyUid, aimUid);
 		return result;
 	}
+	
+	/**
+	 * 开启聊天匹配
+	 * @param account 账号
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/sctchat/match")
+	public WSChatResult matchChat(Long account) {
+		WSChatResult result = userService.match(account);
+		return result;
+	}
 
 }

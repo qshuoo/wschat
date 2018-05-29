@@ -32,6 +32,9 @@
 					<button id="btn_search" type="submit" class="btn btn-default">
 						<span class="glyphicon glyphicon-search"></span>
 					</button>
+					<button id="btn_secret" type="submit" class="btn btn-default">
+						<span class="glyphicon glyphicon-heart-empty"></span>
+					</button>
 					<input id="user-account" value="${user.uid?c}" style="display: none">
 					<input id="user-name" value="${user.uname!''}" style="display: none">
 					<input id="user-img" value="${user.img!''}" style="display: none">
@@ -41,7 +44,6 @@
 						<li class="active"><a id="chat-sign" class="li-sign"
 							href="#panel-121381" data-toggle="tab">会话</a></li>
 						<li><a id="friend-sign" class="li-sign" href="#panel-121382" data-toggle="tab">好友</a></li>
-<!-- 						<li><a class="li-sign" href="#panel-121383" data-toggle="tab">群组</a></li> -->
 						<li><a id="newfriend-sign" class="li-sign" href="#panel-121384" data-toggle="tab">新朋友</a></li>
 						<li><a id="blist-sign" class="li-sign" href="#panel-121385" data-toggle="tab">黑名单</a></li>
 					</ul>
@@ -54,10 +56,6 @@
 							<ul id="friend-list" class="list-group">
 							</ul>
 						</div>
-<!-- 						<div class="tab-pane" id="panel-121383"> -->
-<!-- 							<ul class="list-group"> -->
-<!-- 							</ul> -->
-<!-- 						</div> -->
 						<div class="tab-pane" id="panel-121384">
 							<ul id="newfriend-list" class="list-group">
 							</ul>
@@ -171,17 +169,37 @@
 		<div class="modal fade" id="modal_user" tabindex="-1" role="dialog"
 			aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog" style="width: 500px;">
-				<div id="modal_display" class="modal-content">
+				<div class="modal-content">
 					<div class="modal-header" align=center>
 						<button type="button" class="close" data-dismiss="modal"
 							aria-hidden="true">&times;</button>
 					</div>
-					<div class="modal-body" align="center"></div>
-					<div class="modal-footer" align="center" style="text-align: center">
+					<div id="modal-search-body" class="modal-body" align="center"></div>
+					<div id="modal-search-footer" class="modal-footer" align="center" style="text-align: center">
 					</div>
 				</div>
 			</div>
 		</div>
+		
+		<!-- 匿名聊天 -->
+		<div class="modal fade" id="modal_secret" tabindex="-1" role="dialog"
+			aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog" style="width: 500px;">
+				<div class="modal-content">
+					<div class="modal-header" align=center>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body" align="center">
+						<label id="label-match">开启私密聊天，与陌生人倾诉你的心声</label>
+					</div>
+					<div class="modal-footer" align="center" style="text-align: center">
+						<button type="submit" id="btn-match" class="btn btn-default">开始匹配</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		
 	</div>
 </body>
 </html>

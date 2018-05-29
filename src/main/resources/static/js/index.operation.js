@@ -310,16 +310,16 @@ $(document).on('click', '#btn_search', function() {
 		url : '/user/search/' + account,
 		type : 'GET',
 		beforeSend:function() {  
-            $(".modal-body").html("正在查找中...");
+            $("#modal-search-body").html("正在查找中...");
         },
 		success : function(data) {
 			if (typeof(data.data) == "undefined") {
-				$(".modal-body").html("没有找到相关用户");
+				$("#modal-search-body").html("没有找到相关用户");
 				return;
 			}
 			console.log(data.data);
 			var str = drawSearchUser(data.data.uid.toString(), data.data.img, data.data.uname);
-			$(".modal-body").html(str);
+			$("#modal-search-body").html(str);
 		},
 		error : function() {
 			// TODO
@@ -463,6 +463,59 @@ $(document).on('click', '#btn-del-blist', function() {
 		}
 	});
 });
+
+/**
+ * 匿名聊天按钮点击
+ */
+$(document).on('click', '#btn_secret', function() {
+	$("#label-match").text("开启私密聊天，与陌生人倾诉你的心声");
+	$("#modal_secret").modal();
+})
+
+/**
+ * 匹配按钮点击
+ */
+$(document).on('click', '#btn-match', function() {
+	// 按钮文字改变 不可点击
+	$(this).attr('disabled', 'disabled');
+	var sec = 0;
+	var tem = setInterval(function() {
+		if (sec >= 60) { // 清除定时器
+			$("#label-match").text("当前匹配人数较少，请稍后再匹配");
+			$('#btn-match').removeAttr('disabled');
+			clearInterval(tem);
+			return;
+		}
+		$("#label-match").text("匹配中");
+		for (let i = 0; i < sec%4; i++) {
+			$("#label-match").append(".");
+		}
+		sec++;
+	}, 1000);
+	
+	$.ajax({
+		url: '/sctchat/match',
+		type: 'POST',
+		data: {account: userAccount},
+		success: function(data) {
+			if (data.code == 1 && data.data) {
+				// 发送消息
+				var message = {
+						fromUid: 99999,
+						toUid: data.data,
+						msg: {
+							code: 3,
+							uid: userAccount
+						}
+				}
+				websocket.send(JSON.stringify(message));
+				// 匹配成功
+			}
+		},
+		error: function(){}
+	});
+	
+})
 
 /**
  * 绑定事件 END
@@ -609,6 +662,13 @@ function dealSystemMsg(data) {
 		console.log("System msg for friend apply has agreed...");
 		dealFriendApplyAgree(data);
 	}
+	if (data.code == 3) {
+		console.log("System msg for match chat...");
+	}
+}
+
+function dealMatchChat(data) {
+	console.log(data.uid);
 }
 
 /**

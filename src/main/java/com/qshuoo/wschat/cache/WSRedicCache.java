@@ -22,6 +22,14 @@ public interface WSRedicCache {
 	public void setKAndV(String key, String value);
 	
 	/**
+	 * 设置 k and v 有时间限制
+	 * @param key
+	 * @param value
+	 * @param time
+	 */
+	public void setKAndV(String key, String value, Long offset);
+	
+	/**
 	 * value 自增
 	 * @param key
 	 * @param value
@@ -35,5 +43,7 @@ public interface WSRedicCache {
 	 * @return
 	 */
 	public boolean existsKey(String key);
+	
+	public void delKey(String key);
 
 }

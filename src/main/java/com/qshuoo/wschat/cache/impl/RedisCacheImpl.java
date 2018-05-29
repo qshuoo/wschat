@@ -20,7 +20,11 @@ public class RedisCacheImpl implements WSRedicCache {
 	@Override
 	public void setKAndV(String key, String value) {
 		template.opsForValue().set(key, value);
-
+	}
+	
+	@Override
+	public void setKAndV(String key, String value, Long offset) {
+		template.opsForValue().set(key, value, offset);
 	}
 
 	@Override
@@ -33,4 +37,8 @@ public class RedisCacheImpl implements WSRedicCache {
 		return template.hasKey(key);
 	}
 
+	@Override
+	public void delKey(String key) {
+		template.delete(key);
+	}
 }
