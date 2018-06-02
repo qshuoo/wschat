@@ -2,7 +2,14 @@ package com.qshuoo.wschat.utils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * 
+ * @author qshuoo
+ *
+ */
 public class SqlUtils {
 	
 	/**
@@ -42,6 +49,35 @@ public class SqlUtils {
 		String field = fieldBuilder.substring(0, fieldBuilder.length() - 1) + ")";
 		String value = valueBuilder.substring(0, valueBuilder.length() - 1) + ")";
 		return sql.append(field).append(" VALUES ").append(value).append(";").toString();
+	}
+	
+	public static String generateUpdateSql(Object o, Class<?> c, String[] condis, String[] elems) throws Exception {
+		StringBuilder builder = new StringBuilder();
+		builder.append("UPDATE ").append(c.getSimpleName().toLowerCase()).append(" SET ");
+		List<String> elemList = new ArrayList<>();
+		// 更新属性
+		for (String elem : elems) {
+			Field field = c.getDeclaredField(elem);
+			field.setAccessible(true);
+			String value = "'" + field.get(o).toString() + "'";
+			elemList.add(elem + " = " + value);
+		}
+		// 更新条件
+		List<String> condiList = new ArrayList<>();
+		
+		for (String condi : condis) {
+			Field field = c.getDeclaredField(condi);
+			field.setAccessible(true);
+			Object value = field.get(o);
+			if (!(value instanceof Number)) {
+				value = "'" + value.toString() + "'";
+			}
+			condiList.add(condi + " = " + value.toString());
+		}
+		String elemStr = String.join(", ", elemList);
+		String condiStr = String.join(" AND ", condiList);
+		builder.append(elemStr).append(" WHERE ").append(condiStr).append(";");
+		return builder.toString();
 	}
 
 }

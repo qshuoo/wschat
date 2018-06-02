@@ -114,4 +114,13 @@ public class UserServiceImpl implements UserService{
 		return WSChatResult.ok();
 	}
 
+	@Override
+	public WSChatResult updateUserInfo(User user, String[] elem, String[] condi) throws Exception {
+		int row = userDao.updateUser(user, elem, condi);
+		if (row <= 0) {
+			throw new Exception();
+		}
+		return WSChatResult.ok();
+	}
+
 }

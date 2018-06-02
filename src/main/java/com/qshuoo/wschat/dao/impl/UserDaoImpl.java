@@ -46,4 +46,11 @@ public class UserDaoImpl implements UserDao {
 		return null;
 	}
 
+	@Override
+	public int updateUser(User user, String[] elem, String[] condi) throws Exception {
+		String sql = SqlUtils.generateUpdateSql(user, User.class, elem, condi);
+		int row = jdbcTemplate.update(sql);
+		return row;
+	}
+
 }

@@ -1,5 +1,6 @@
 package com.qshuoo.wschat.service;
 
+import com.qshuoo.wschat.pojo.User;
 import com.qshuoo.wschat.utils.WSChatResult;
 
 /**
@@ -44,5 +45,15 @@ public interface UserService {
 	 * @return
 	 */
 	public WSChatResult match(Long account);
+	
+	/**
+	 * 更新用户信息
+	 * @param user 更新后的属性值
+	 * @param elem 更新的属性
+	 * @param condi 更新的条件
+	 * @return
+	 * @throws Exception
+	 */
+	public WSChatResult updateUserInfo(User user, String[] elem, String[] condi) throws Exception;
 	
 }

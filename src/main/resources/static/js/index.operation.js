@@ -3,14 +3,22 @@ var msgMap = {}; // 接收到的消息列表
 var applyFriendMsg = {}; // 好友添加验证消息缓存
 var userAccount = null; // 用户账号
 var userName = null; // 用户昵称
+var userEmail = null; // 用户邮箱
+var userPhone = null; // 用户手机
+var userSign = null; // 用户签名
 var userImgUrl = null; // 用户头像路径
 var toUser = null; // 接收消息账号
+var secertUser = null;// 匹配账号
+var tem = null; // 匹配定时器
 $(document).ready(function() {
 	
 	// 赋值
-	userAccount = $('#user-account').val();
-	userName = $('#user-name').val();
+	userAccount = $('#user-account').text();
+	userName = $('#user-uname').val();
 	userImgUrl = $('#user-img').val();
+	userEmail = $('#user-email').val();
+	userPhone = $("#user-phone").val();
+	userSign = $("#user-sign").val();
 	
 	// 接收好友与群组列表
 	recFriendList();
@@ -33,7 +41,8 @@ $(document).ready(function() {
 
 	// 连接发生错误的回调方法
 	websocket.onerror = function() {
-		setMessageInnerHTML("WebSocket连接发生错误");
+		$("#btn-secert-end").click();
+//		setMessageInnerHTML("WebSocket连接发生错误");
 	};
 
 	// 连接成功建立的回调方法
@@ -42,12 +51,13 @@ $(document).ready(function() {
 
 	// 接收到消息的回调方法
 	websocket.onmessage = function(event) {
-		console.log("RECEIVED MSG");
+//		console.log("RECEIVED MSG");
 		receive(JSON.parse(event.data));
 	}
 
 	// 连接关闭的回调方法
 	websocket.onclose = function() {
+		$("#btn-secert-end").click();
 	}
 	// 监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
 	window.onbeforeunload = function() {
@@ -147,13 +157,6 @@ $(document).on('click', '.chat-item', function() {
 	}
 	$($(".chat-thread")[0]).html($.data(msgMap, toUser));
 	scrollSild();
-//	var list = JSON.parse($.data(msgMap, toUser));
-//	for (let i = 0; i < list.length; i++) {
-//		setMessageInnerHTML(list[i]);
-//	}
-	
-	// 清除未读缓存
-//	$.removeData(msgMap, toUser);
 });
 
 /**
@@ -195,6 +198,14 @@ $(document).on('keypress', '#msg', function(e) {
 	
 	if (e.keyCode == 13) {
 		send();
+	}
+	
+})
+
+$(document).on('keypress', '#secert-msg', function(e) {
+	
+	if (e.keyCode == 13) {
+		secertSend()
 	}
 	
 })
@@ -468,7 +479,8 @@ $(document).on('click', '#btn-del-blist', function() {
  * 匿名聊天按钮点击
  */
 $(document).on('click', '#btn_secret', function() {
-	$("#label-match").text("开启私密聊天，与陌生人倾诉你的心声");
+	$("#btn_secret").css("background-color", "white");
+	initScrect();
 	$("#modal_secret").modal();
 })
 
@@ -476,29 +488,36 @@ $(document).on('click', '#btn_secret', function() {
  * 匹配按钮点击
  */
 $(document).on('click', '#btn-match', function() {
+	
 	// 按钮文字改变 不可点击
 	$(this).attr('disabled', 'disabled');
-	var sec = 0;
-	var tem = setInterval(function() {
-		if (sec >= 60) { // 清除定时器
-			$("#label-match").text("当前匹配人数较少，请稍后再匹配");
-			$('#btn-match').removeAttr('disabled');
-			clearInterval(tem);
-			return;
-		}
-		$("#label-match").text("匹配中");
-		for (let i = 0; i < sec%4; i++) {
-			$("#label-match").append(".");
-		}
-		sec++;
-	}, 1000);
+	secertUser = "matching";
 	
 	$.ajax({
 		url: '/sctchat/match',
 		type: 'POST',
 		data: {account: userAccount},
+		beforeSend: function() {
+			var sec = 0;
+			tem = setInterval(function() {
+				if (sec >= 60) { // 清除定时器
+					secertUser = null;
+					$("#label-match").text("当前匹配人数较少，请稍后再匹配");
+					$('#btn-match').removeAttr('disabled');
+					clearInterval(tem);
+					return;
+				}
+				$("#label-match").text("匹配中");
+				for (let i = 0; i < sec%4; i++) {
+					$("#label-match").append(".");
+				}
+				sec++;
+			}, 1000);
+		},
 		success: function(data) {
 			if (data.code == 1 && data.data) {
+				// 清除定时器
+				clearInterval(tem);
 				// 发送消息
 				var message = {
 						fromUid: 99999,
@@ -510,16 +529,121 @@ $(document).on('click', '#btn-match', function() {
 				}
 				websocket.send(JSON.stringify(message));
 				// 匹配成功
+				screctChat(data.data);
 			}
 		},
 		error: function(){}
 	});
 	
-})
+});
+
+/**
+ * 匿名消息发送
+ * @returns
+ */
+$(document).on('click', '#secert-send-msg', function() {
+	secertSend();
+});
+
+/**
+ * 匹配会话结束按钮点击
+ */
+$(document).on('click', '#btn-secert-end', function() {
+	console.log("btn-secert-end click")
+	console.log(secertUser);
+	if (!secertUser) {
+		return;
+	}
+	// 发送消息
+	var message = {
+			fromUid: 99999,
+			toUid: secertUser,
+			msg: {
+				code: 5
+			}
+	};
+	websocket.send(JSON.stringify(message));
+	
+	// 匹配人置空
+	secertUser = null;
+	$('#modal_secret').modal('hide');
+});
+
+/**
+ * img-pinfo点击事件
+ */
+$(document).on('click', '#img-pinfo', function() {
+	$("#modal_pinfo").modal();
+});
+
+/**
+ * 个人信息修改
+ */
+$(document).on('click', '#btn-change-info', function() {
+	var list = [];
+	if ($("#user-uname").val() != userName) {
+		console.log(userName);
+		console.log($("#user-uname").val());
+		list.push("uname");
+	}
+	if ($("#user-phone").val() != userPhone) {
+		list.push("phone");
+	}
+	if ($("#user-sign").val() != userSign) {
+		list.push("signature");
+	}
+	if (list.length == 0) {
+		alert("提交成功");
+		return;
+	}
+	console.log(list);
+	$.ajax({
+		url: '/user/update',
+		type: 'POST',
+		data: {
+			uid: userAccount,
+			uname: $("#user-uname").val(), 
+			phone: $("#user-phone").val(), 
+			signature: $("#user-sign").val(), 
+			param: list,
+			condi: "uid"},
+		traditional: true,
+		success: function(data) {
+			if (data.code == 1) {
+				alert("更新成功");
+			}
+		}
+	});
+	
+});
 
 /**
  * 绑定事件 END
  */
+
+function secertSend() {
+	if ($("#secert-msg").val() == '') {
+		return;
+	}
+	// 会话显示消息记录
+	$(".secert-chat-thread").append("<li class='send-msg'>" + $("#secert-msg").val() + "</li>");
+	
+	// 发送消息
+	var message = {
+			fromuid: 99999,
+			toUid: secertUser,
+			msg: {
+				code: 4,
+				msg: $("#secert-msg").val()
+			}
+	}
+	websocket.send(JSON.stringify(message));
+	
+	// 清除发送窗口消息
+	$("#secert-msg").val('');
+	$(".secert-chat-thread").scrollTop($(".secert-chat-thread")[0].scrollHeight);
+	
+}
 
 /**
  * 将消息显示在聊天列表
@@ -592,12 +716,6 @@ function receive(recMsg) {
 	if( !$($("#chat-sign").parent()).hasClass("active")) {
 		$("#chat-sign").css("background", "#e0570bc4");
 	}
-	
-	// 会话被选中 直接显示消息 返回
-//	if (li.hasClass("item-selected")) {
-//		setMessageInnerHTML(recMsg.msg);
-//		return;
-//	}
 
 	// 会话未被选中 好友列表中离线消息数量+1 
 	var cntShow = $(li.children(".badge")[0]);
@@ -606,23 +724,15 @@ function receive(recMsg) {
 	} else {
 		cntShow.text((Number(cntShow.text()) + 1));
 	}
-	
-	// 缓存消息 
-//	var msgList = $.hasData(msgMap, fromUid);
-//	var list = [];
-//	if (msgList) {
-//		list = JSON.parse($.data(msgMap, fromUid));
-//	}
-//	list.push(recMsg.msg);
-//	$.data(msgMap, fromUid, JSON.stringify(list));
-//	console.log($.data(msgMap, fromUid));
 }
 
 /**
  * 发送普通会话消息
- * @returns
  */
 function send() {
+	if ($('#msg').val() == '') {
+		return;
+	}
 	var str = "<li class='send-msg'>" + $('#msg').val() + "</li>";
 	// 聊天窗体显示消息
 	$(".chat-thread").append(str);
@@ -663,12 +773,55 @@ function dealSystemMsg(data) {
 		dealFriendApplyAgree(data);
 	}
 	if (data.code == 3) {
+		dealMatchChat(data);
 		console.log("System msg for match chat...");
+	}
+	if (data.code == 4) {
+		console.log("System msg from secert user");
+		dealSecertMsg(data);
+	}
+	if (data.code == 5) {
+		console.log("System msg for end match chat...");
+		dealEndMatchChat();
 	}
 }
 
+/**
+ * 结束匹配消息会话
+ */
+function dealEndMatchChat() {
+	alert("对方已结束会话"); 
+	initScrect();
+	secertUser = null;
+	$('#modal_secret').modal('hide');
+};
+
+/**
+ * 匹配消息处理
+ */
+function dealSecertMsg(data) {
+	// 提示
+	if (!$('body').hasClass("modal-open")) {
+		$("#btn_secret").css("background-color", "#e0570bc4");
+	}
+	var str = "<li class='rec-msg'>" + data.msg + "</li>";
+	$(".secert-chat-thread").append(str);
+	$(".secert-chat-thread").scrollTop($(".secert-chat-thread")[0].scrollHeight);
+	
+}
+
+
+/**
+ * 匹配成功处理
+ */
 function dealMatchChat(data) {
-	console.log(data.uid);
+	// 清除定时器
+	clearInterval(tem);
+	// 提示
+	if (!$('body').hasClass("modal-open")) {
+		$("#btn_secret").css("background-color", "#e0570bc4");
+	}
+	screctChat(data.uid);
 }
 
 /**
@@ -786,6 +939,35 @@ function addToBlackList(id) {
 	newli.addClass("blist-item");
 	newli.prependTo($("#blist-list"));
 	li.remove();
+}
+
+/**
+ * 初始化匹配聊天框
+ * @returns
+ */
+function initScrect() {
+	if (secertUser) {
+		return;
+	}
+	$("#btn-secert-end").remove();
+	var str = "<label id='label-match'>开启私密聊天，与陌生人倾诉你的心声</label>"
+	$("#modal-screct-body").html(str);
+	str = "<button type='submit' id='btn-match' class='btn btn-default'>开始匹配</button>"
+	$("#modal-screct-footer").html(str);
+}
+
+/**
+ * 处理私密聊天
+ * @returns
+ */
+function screctChat(data) {
+	secertUser =data;
+	var cnovo = $("#secert-convo");
+	var snovo = $("#secert-snovo");
+	var str = "<button id='btn-secert-end' type='button' class='btn btn-default btn-sm'>结束会话</button>";
+	$("#modal-screct-header").prepend(str);
+	$("#modal-screct-footer").html(snovo);
+	$("#modal-screct-body").html(cnovo);
 	
 }
 
@@ -874,6 +1056,10 @@ function recBlackList(){
  * @returns
  */
 function drewUserLi(account, imgurl, username, type) { // 一好友显示的模块
+	if (!imgurl) {
+		console.log("drewUserLi(): user img not found");
+		imgurl = '/img/default.jpg';
+	}
 	var str = "<li id='" + type + "-" + account + "' data-uid='" + account + "' class='list-group-item " +type+ "-item'>"
 			+ "<img src='" + imgurl + "' class='circle' onerror=\"this.src='/img/default.jpg'\"></img>"
 			+ "<span class = 'user-name'>" + username + "</span>"

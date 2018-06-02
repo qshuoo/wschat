@@ -42,4 +42,13 @@ public interface UserDao {
 	 */
 	public List<Map<String, Object>> getGroupById(Long account);
 
+	/**
+	 * 更新用户信息
+	 * @param user 更新后的用户信息
+	 * @param elem 更新的属性列
+	 * @return
+	 * @throws Exception 
+	 */
+	public int updateUser(User user, String[] elem, String[] condi) throws Exception;
+
 }

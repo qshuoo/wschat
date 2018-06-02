@@ -24,7 +24,7 @@
 			style="border-style: solid; border-color: gray">
 			<div id="fucli" class="col-md-4">
 				<div class="info-display">
-					<img class="circle" alt="" src="/img/default.jpg">
+					<img id="img-pinfo" class="circle" alt="" src="/img/default.jpg">
 					<div class="form-group" style="padding-left: 20px;">
 						<input id="input_search" type="text" class="form-control"
 							placeholder="Search">
@@ -35,17 +35,17 @@
 					<button id="btn_secret" type="submit" class="btn btn-default">
 						<span class="glyphicon glyphicon-heart-empty"></span>
 					</button>
-					<input id="user-account" value="${user.uid?c}" style="display: none">
-					<input id="user-name" value="${user.uname!''}" style="display: none">
-					<input id="user-img" value="${user.img!''}" style="display: none">
 				</div>
 				<div class="tabbable" id="tabs-503102">
 					<ul class="nav nav-tabs">
 						<li class="active"><a id="chat-sign" class="li-sign"
 							href="#panel-121381" data-toggle="tab">会话</a></li>
-						<li><a id="friend-sign" class="li-sign" href="#panel-121382" data-toggle="tab">好友</a></li>
-						<li><a id="newfriend-sign" class="li-sign" href="#panel-121384" data-toggle="tab">新朋友</a></li>
-						<li><a id="blist-sign" class="li-sign" href="#panel-121385" data-toggle="tab">黑名单</a></li>
+						<li><a id="friend-sign" class="li-sign" href="#panel-121382"
+							data-toggle="tab">好友</a></li>
+						<li><a id="newfriend-sign" class="li-sign"
+							href="#panel-121384" data-toggle="tab">新朋友</a></li>
+						<li><a id="blist-sign" class="li-sign" href="#panel-121385"
+							data-toggle="tab">黑名单</a></li>
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane active" id="panel-121381">
@@ -69,68 +69,75 @@
 			</div>
 
 			<!-- 好友展示 -->
-			<div class="col-md-8 fuc-show" id="fuc-friend" style="background: #b0b0b0;height: 566px;padding-top: 50px; display: none;">
+			<div class="col-md-8 fuc-show" id="fuc-friend"
+				style="background: #b0b0b0; height: 566px; padding-top: 50px; display: none;">
 				<div class="col-md-3"></div>
-				<div class="col-md-6" align="center" style="border: solid 2px gray;background: white;padding: 0px 0px 0px 0px;">
-					<div style="background:#b3d4d4;height:150px;padding-top: 50px">
+				<div class="col-md-6" align="center"
+					style="border: solid 2px gray; background: white; padding: 0px 0px 0px 0px;">
+					<div style="background: #b3d4d4; height: 150px; padding-top: 50px">
 						<img class="circle" src="/img/default.jpg"><br>
 					</div>
-					<div align="left" style="padding-top: 50px;padding-left: 100px">
+					<div align="left" style="padding-top: 50px; padding-left: 100px">
 						<label style="color: gray">账号&nbsp;</label><label id="friend-id"></label><br>
-						<label style="color: gray">昵称&nbsp;</label><label id="friend-uname"></label><br>
-						<label style="color: gray">邮箱&nbsp;</label><label id="friend-email"></label><br>
-						<label style="color: gray">手机&nbsp;</label><label id="friend-phone"></label><br>
-						<label style="color: gray">签名&nbsp;</label><label id="friend-signature"></label><br>
+						<label style="color: gray">昵称&nbsp;</label><label
+							id="friend-uname"></label><br> <label style="color: gray">邮箱&nbsp;</label><label
+							id="friend-email"></label><br> <label style="color: gray">手机&nbsp;</label><label
+							id="friend-phone"></label><br> <label style="color: gray">签名&nbsp;</label><label
+							id="friend-signature"></label><br>
 					</div>
 					<div style="padding-top: 30px">
 						<button type="submit" id="begin-chat" class="btn btn-default">发送消息</button>
 						<button type="submit" id="btn-del-friend" class="btn btn-default">删除</button>
 						<button type="submit" class="btn btn-default btn-add-blist">加入黑名单</button>
-						<div style="padding-top: 30px">
-						</div>
+						<div style="padding-top: 30px"></div>
 					</div>
 				</div>
 				<div class="col-md-3"></div>
 			</div>
-			
+
 			<!-- 好友申请展示 -->
-			<div class="col-md-8 fuc-show" id="fuc-newfriend" style="background: #b0b0b0;height: 566px;padding-top: 50px; display: none;">
+			<div class="col-md-8 fuc-show" id="fuc-newfriend"
+				style="background: #b0b0b0; height: 566px; padding-top: 50px; display: none;">
 				<div class="col-md-3"></div>
-				<div class="col-md-6" align="center" style="border: solid 2px gray;background: white;padding: 0px 0px 0px 0px;">
-					<div style="background:#b3d4d4;height:150px;padding-top: 50px">
+				<div class="col-md-6" align="center"
+					style="border: solid 2px gray; background: white; padding: 0px 0px 0px 0px;">
+					<div style="background: #b3d4d4; height: 150px; padding-top: 50px">
 						<img class="circle" src="/img/default.jpg"><br>
 					</div>
-					<div align="left" style="padding-top: 50px;padding-left: 100px">
-						<label style="color: gray">账号&nbsp;</label><label id="newfriend-id"></label><br>
-						<label style="color: gray">昵称&nbsp;</label><label id="newfriend-uname"></label><br>
-						<label style="color: gray">验证消息&nbsp;</label><label id="newfriend-msg"></label><br>
+					<div align="left" style="padding-top: 50px; padding-left: 100px">
+						<label style="color: gray">账号&nbsp;</label><label
+							id="newfriend-id"></label><br> <label style="color: gray">昵称&nbsp;</label><label
+							id="newfriend-uname"></label><br> <label style="color: gray">验证消息&nbsp;</label><label
+							id="newfriend-msg"></label><br>
 					</div>
 					<div style="padding-top: 30px">
-						<button type="submit" id="btn-newfriend-agree" class="btn btn-default">接受</button>
-						<button type="submit" id="btn-newfriend-refuse" class="btn btn-default">拒绝</button>
+						<button type="submit" id="btn-newfriend-agree"
+							class="btn btn-default">接受</button>
+						<button type="submit" id="btn-newfriend-refuse"
+							class="btn btn-default">拒绝</button>
 						<button type="submit" class="btn btn-default btn-add-blist">加入黑名单</button>
-						<div style="padding-top: 30px">
-						</div>
+						<div style="padding-top: 30px"></div>
 					</div>
 				</div>
 				<div class="col-md-3"></div>
 			</div>
-			
+
 			<!-- 黑名单展示 -->
-			<div class="col-md-8 fuc-show" id="fuc-blist" style="background: #b0b0b0;height: 566px;padding-top: 50px; display: none;">
+			<div class="col-md-8 fuc-show" id="fuc-blist"
+				style="background: #b0b0b0; height: 566px; padding-top: 50px; display: none;">
 				<div class="col-md-3"></div>
-				<div class="col-md-6" align="center" style="border: solid 2px gray;background: white;padding: 0px 0px 0px 0px;">
-					<div style="background:#b3d4d4;height:150px;padding-top: 50px">
+				<div class="col-md-6" align="center"
+					style="border: solid 2px gray; background: white; padding: 0px 0px 0px 0px;">
+					<div style="background: #b3d4d4; height: 150px; padding-top: 50px">
 						<img class="circle" src="/img/default.jpg"><br>
 					</div>
-					<div align="left" style="padding-top: 50px;padding-left: 100px">
+					<div align="left" style="padding-top: 50px; padding-left: 100px">
 						<label style="color: gray">账号&nbsp;</label><label id="blist-id"></label><br>
 						<label style="color: gray">昵称&nbsp;</label><label id="blist-uname"></label><br>
 					</div>
 					<div style="padding-top: 30px">
 						<button type="submit" id="btn-del-blist" class="btn btn-default">移除黑名单</button>
-						<div style="padding-top: 30px">
-						</div>
+						<div style="padding-top: 30px"></div>
 					</div>
 				</div>
 				<div class="col-md-3"></div>
@@ -153,8 +160,8 @@
 								style="resize: none; background-color: white; border: none; outline: medium;"></textarea>
 						</div>
 						<div id="btn_send">
-							<button id="send-msg" type="button" class="btn btn-default btn-sm "
-								onclick="send()">发送</button>
+							<button id="send-msg" type="button"
+								class="btn btn-default btn-sm " onclick="send()">发送</button>
 						</div>
 					</div>
 				</form>
@@ -175,31 +182,112 @@
 							aria-hidden="true">&times;</button>
 					</div>
 					<div id="modal-search-body" class="modal-body" align="center"></div>
-					<div id="modal-search-footer" class="modal-footer" align="center" style="text-align: center">
-					</div>
+					<div id="modal-search-footer" class="modal-footer" align="center"
+						style="text-align: center"></div>
 				</div>
 			</div>
 		</div>
-		
+
 		<!-- 匿名聊天 -->
 		<div class="modal fade" id="modal_secret" tabindex="-1" role="dialog"
 			aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog" style="width: 500px;">
+			<div class="modal-dialog" style="width: 700px;">
 				<div class="modal-content">
-					<div class="modal-header" align=center>
+					<div id="modal-screct-header" class="modal-header" align=center>
 						<button type="button" class="close" data-dismiss="modal"
 							aria-hidden="true">&times;</button>
 					</div>
-					<div class="modal-body" align="center">
-						<label id="label-match">开启私密聊天，与陌生人倾诉你的心声</label>
+					<div id="modal-screct-body" class="modal-body" align="center">
 					</div>
-					<div class="modal-footer" align="center" style="text-align: center">
-						<button type="submit" id="btn-match" class="btn btn-default">开始匹配</button>
+					<div id="modal-screct-footer" class="modal-footer" align="center"
+						style="text-align: center"></div>
+				</div>
+			</div>
+		</div>
+		<!-- 		个人信息 -->
+		<div class="modal fade" id="modal_pinfo" tabindex="-1" role="dialog"
+			aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog" style="width: 500px;">
+				<div class="modal-content">
+					<div id="modal-pinfo-header" class="modal-header" align=center>
+					<input id="user-img" value="${user.img!''}" style="display:none"/>
+					<img id="img-userheader" class='circle' src="${user.img!''}" onerror="this.src='/img/default.jpg'"/>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
+					</div>
+					<div id="modal-pinfo-body" class="modal-body" align="left">
+						<form class="form-horizontal" role="form">
+							<div class="form-group">
+								<label class="col-sm-2 control-label">账号</label>
+								<div class="col-sm-10">
+									<label id="user-account" class="form-control-static">${user.uid?c}</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">昵称</label>
+								<div class="col-sm-10">
+									<input id="user-uname" type="text" class="form-control" value="${user.uname!''}">
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-sm-2 control-label">邮箱</label>
+								<div class="col-sm-10">
+									<div class="input-group">
+										<fieldset disabled>
+                    					<input id="user-email" type="text" class="form-control" value="${user.email!''}">
+                    					</fieldset>
+                    					<span class="input-group-btn">
+                        					<button class="btn btn-default" type="button">修改</button>
+                   						</span>
+									</div>
+                				</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-sm-2 control-label">手机</label>
+								<div class="col-sm-10">
+									<input id="user-phone" type="text" class="form-control" value="${user.phone!''}">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">签名</label>
+								<div class="col-sm-10">
+									<input id="user-sign" type="text" class="form-control" value="${user.signature!''}">
+								</div>
+							</div>
+						</form>
+					</div>
+					<div id="modal-pinfo-footer" class="modal-footer" align="center"
+						style="text-align: center">
+						<button id="btn-change-info" type="button"
+								class="btn btn-default" >提交</button>
 					</div>
 				</div>
 			</div>
 		</div>
-		
+
+		<div style="display: none">
+			<form role="form">
+				<div id="secert-convo" data-from="Sonu Joshi">
+					<ul class="secert-chat-thread">
+					</ul>
+				</div>
+
+				<div id="secert-snovo">
+					<div class="form-group">
+						<textarea id="secert-msg" class="form-control input_text_area"
+							rows="4"
+							style="resize: none; background-color: white; border: none; outline: medium;"></textarea>
+					</div>
+					<div id="btn_send">
+						<button id="secert-send-msg" type="button"
+							class="btn btn-default btn-sm ">发送</button>
+					</div>
+				</div>
+			</form>
+		</div>
+
 	</div>
 </body>
 </html>

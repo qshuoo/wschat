@@ -1,5 +1,6 @@
 package com.qshuoo.wschat.controller;
 
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.qshuoo.wschat.pojo.User;
 import com.qshuoo.wschat.service.BlackListService;
 import com.qshuoo.wschat.service.CodeService;
 import com.qshuoo.wschat.service.FriendService;
@@ -233,6 +235,18 @@ public class UserController {
 	@RequestMapping("/sctchat/match")
 	public WSChatResult matchChat(Long account) {
 		WSChatResult result = userService.match(account);
+		return result;
+	}
+	
+	/**
+	 * 修改个人信息
+	 * @return
+	 * @throws Exception 
+	 */
+	@ResponseBody
+	@RequestMapping("/user/update")
+	public WSChatResult updateUserInfo(User user, String[] param, String[] condi) throws Exception {
+		WSChatResult result = userService.updateUserInfo(user, condi, param);
 		return result;
 	}
 
