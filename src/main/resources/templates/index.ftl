@@ -155,7 +155,7 @@
 					</div>
 
 					<div id="snovo">
-						<div class="form-group">
+						<div class="form-group" style="margin-bottom: 0px;">
 							<textarea id="msg" class="form-control input_text_area" rows="4"
 								style="resize: none; background-color: white; border: none; outline: medium;"></textarea>
 						</div>
@@ -275,7 +275,7 @@
 				</div>
 
 				<div id="secert-snovo">
-					<div class="form-group">
+					<div class="form-group" style="margin-bottom: -10px;">
 						<textarea id="secert-msg" class="form-control input_text_area"
 							rows="4"
 							style="resize: none; background-color: white; border: none; outline: medium;"></textarea>

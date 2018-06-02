@@ -53,20 +53,38 @@ public class UserController {
 	}
 	
 	/**
-	 * 发送验证码
+	 * 发送注册验证码
 	 * @param codeReceiver 验证码接收方
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping("/register/code")
-	public WSChatResult sendCode(String codeReceiver, HttpSession session) {
+	public WSChatResult sendCode(String codeReceiver, String codeName, HttpSession session) {
 		WSChatResult result =  codeService.sendCheckCode(codeReceiver);
 		if (result.getCode() == 0) { // 验证失败返回错误信息
 			return result;
 		}
-		session.setAttribute("check_code", result.getData());
+		session.setAttribute(codeName, result.getData());
 		session.setMaxInactiveInterval(200); // 200s过期
 		return WSChatResult.ok();
+	}
+	
+	/**
+	 * 发送找回密码验证码
+	 * @param account 账号
+	 * @param codeReceiver 验证方式
+	 * @param codeName 验证名称
+	 * @param session
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/findpwd/code")
+	public WSChatResult sendFindPwdCode(Long account, String codeReceiver, String codeName, HttpSession session) {
+		WSChatResult result = userService.findPwd(account, codeReceiver);
+		if (result.getCode() == 0) { // 验证失败返回错误信息
+			return result;
+		}
+		return sendCode(codeReceiver, codeName, session);
 	}
 	
 	/**
@@ -81,14 +99,53 @@ public class UserController {
 	 */
 	@ResponseBody
 	@RequestMapping("/user/register")
-	public WSChatResult register(String username, String password, String checkinfo, String inputcode, HttpSession session) throws Exception {
-		if (session.getAttribute("check_code") == null) {
+	public WSChatResult register(String username, String password, String checkinfo, String inputcode, String codeName, HttpSession session) throws Exception {
+		if (session.getAttribute(codeName) == null) {
 			return WSChatResult.notOk("验证码已过期，请重新发送");
 		}
-		if (!session.getAttribute("check_code").equals(inputcode)) {
+		if (!session.getAttribute(codeName).equals(inputcode)) {
 			return WSChatResult.notOk("验证码输入错误");
 		}
-		return userService.registerUser(username, password, checkinfo, "email");
+		WSChatResult result = userService.registerUser(username, password, checkinfo, "email");
+		session.removeAttribute(codeName);
+		return result;
+	}
+	
+	/**
+	 * 验证邮箱验证码
+	 * @param account 账号
+	 * @param inputcode 输入的验证码
+	 * @param codeName 验证码的名称
+	 * @param session
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/user/findpwd")
+	public WSChatResult findPwd(Long account, String inputcode, String codeName, HttpSession session) {
+		if (session.getAttribute(codeName) == null) {
+			return WSChatResult.notOk("验证码已过期，请重新发送");
+		}
+		if (!session.getAttribute(codeName).equals(inputcode)) {
+			return WSChatResult.notOk("验证码输入错误");
+		}
+		session.removeAttribute(codeName);
+		session.setAttribute("RESET_PWD_ACCOUNT", account);
+		session.setMaxInactiveInterval(300);
+		return WSChatResult.ok();
+	}
+	
+	/**
+	 * 更新用户密码
+	 * @param account 账号
+	 * @param password 新密码
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody
+	@RequestMapping("/user/setnewpwd")
+	public WSChatResult setNewPwd(Long account, String password) throws Exception {
+		WSChatResult result = userService.setNewPassword(account, password);
+		return result;
 	}
 	
 	/**

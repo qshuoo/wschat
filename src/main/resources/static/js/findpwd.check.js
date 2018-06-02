@@ -1,15 +1,14 @@
-/**
-* 注册
-*/
 $(document).ready(function() {
 	// 聚焦隐藏错误信息
-	$("#input_username,#input_password,#input_password_confirm,#input_checkinfo,#input_code").focus(function() {
+	$("#input_account, #input_checkinfo, #input_code, #input_password, #input_password_confirm").focus(function() {
 		$($(this).next()).hide();
 		$($(this).parent()).removeClass("has-error");
 	});
 	
 	// 用户名/密码暂定不能为空
-	$("#input_username,#input_password").blur(function() {
+	$("#input_account, #input_checkinfo, #input_password").blur(function() {
+		console.log($(this).attr("id") + " blur");
+		console.log($(this).val());
 		if ($(this).val() == '') {
 			$($(this).next()).show();
 			$($(this).parent()).addClass("has-error");
@@ -24,27 +23,22 @@ $(document).ready(function() {
 		}
 	});
 	
-	// 手机号暂定以1开头的11位数字
-	$("#input_checkinfo").blur(function() {
-		// var pattern = /^1[34578][\d]{9}$/;
-		/*if (!pattern.test($(this).val())) {
-			$($(this).next()).show();
-			$($(this).parent()).addClass("has-error");
-		}*/
-	});
-	
 	// 点击发送验证码 
 	$("#btn_check").click(function() {
 		$("#input_code").focus();
-		$("#input_username,#input_password,#input_password_confirm,#input_checkinfo").blur();
+		$("#input_account, #input_checkinfo").blur();
 		if ($(".has-error").size() == 0) {
 			$("#btn_check").attr("disabled", "disabled");
 			$("#btn_check").text("发送中...");
 			// 1 发送验证码
 			$.ajax({
 				type:"POST",
-				url:"/register/code",
-				data:{codeReceiver:$("#input_checkinfo").val(), codeName: "CODE_REG"},
+				url:"/findpwd/code",
+				data:{
+					account: $("#input_account").val(), 
+					codeReceiver:$("#input_checkinfo").val(), 
+					codeName: "CODE_FINDPWD"
+				},
 				success:function(data) {
 					if (data.code == 1) {
 						calcReSendCode(60); // 2 按钮1分钟内不可点击
@@ -78,9 +72,8 @@ $(document).ready(function() {
 		},1000);
 	}
 	
-	// 点击注册
-	$("#btn_reg").click(function() {
-		$("#input_username,#input_password,#input_password_confirm,#input_checkinfo").blur();
+	$("#btn_find").click(function() {
+		$("#input_account, #input_checkinfo").blur();
 		if ($(".has-error").size() == 0) {
 			if(typeof($("#btn_check").attr("disabled")) == "undefined") {
 				showRegError("请发送验证码");
@@ -92,16 +85,15 @@ $(document).ready(function() {
 			}
 			$.ajax({
 				type:"POST",
-				url:"/user/register",
-				data:{username:$("#input_username").val(),
-					password:$("#input_password").val(),
-					checkinfo:$("#input_checkinfo").val(),
+				url:"/user/findpwd",
+				data:{
+					account:$("#input_account").val(),
 					inputcode:$("#input_code").val(),
-					codeName: "CODE_REG"
-					},
+					codeName: "CODE_FINDPWD"
+				},
 				success:function(data) {
-					if (data.code == 1) { // 注册成功
-						window.location.href = '/wschat/regsucc/' + data.data;
+					if (data.code == 1) { // 验证成功
+						window.location.href = '/wschat/setpwd';
 					} else {
 						showRegError(data.msg);
 					}
@@ -114,9 +106,33 @@ $(document).ready(function() {
 		}
 	});
 	
+	/**
+	 * 重置密码按钮点击
+	 */
+	$("#btn_setpwd").click(function() {
+		$("#input_password, #input_password_confirm").blur();
+		if ($(".has-error").size() != 0) {
+			return;
+		}
+		$.ajax({
+			url: '/user/setnewpwd',
+			type: 'POST',
+			data: {
+				account: $("#label_account").text(),
+				password: $("#input_password").val()
+			},
+			success: function(data) {
+				if (data.code == 1) {
+					$("#modal_tologin").modal();
+				}
+			}
+		
+		});
+	});
+	
 	function showRegError(data){
 		$("#err_code_msg").text(data);
 		$($("#input_code").next()).show();
 		$($("#input_code").parent()).addClass("has-error");
 	}
-});
+});	

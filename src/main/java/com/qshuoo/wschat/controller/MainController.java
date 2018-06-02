@@ -48,6 +48,11 @@ public class MainController {
 		return "register";
 	}
 	
+	@RequestMapping("/findpwd")
+	public String toFindPwd() {
+		return "findpwd";
+	}
+	
 	/**
 	 * 跳转注册成功
 	 * @return
@@ -56,5 +61,23 @@ public class MainController {
 	public String toRegSuccess(@PathVariable("account") String account, ModelMap map) {
 		map.put("account", account);
 		return "regSuccess";
+	}
+	
+	/**
+	 * 跳转重设密码页面
+	 * @param account
+	 * @param map
+	 * @return
+	 */
+	@RequestMapping("/setpwd")
+	public String toFindSuccess(ModelMap map, HttpSession session) {
+		Object object = session.getAttribute("RESET_PWD_ACCOUNT");
+		if (object == null) {
+			map.put("errMsg", "未检测到验证过程，请重新验证");
+			return "set-new-pwd";
+		}
+		session.removeAttribute("RESET_PWD_ACCOUNT");
+		map.put("account", object);
+		return "set-new-pwd";
 	}
 }

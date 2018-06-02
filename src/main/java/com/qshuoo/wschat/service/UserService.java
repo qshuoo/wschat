@@ -56,4 +56,21 @@ public interface UserService {
 	 */
 	public WSChatResult updateUserInfo(User user, String[] elem, String[] condi) throws Exception;
 	
+	/**
+	 * 验证邮箱
+	 * @param account 账号
+	 * @param checkinfo 验证信息
+	 * @return
+	 */
+	public WSChatResult findPwd(Long account, String checkinfo);
+	
+	/**
+	 * 设置新密码
+	 * @param account 用户账号
+	 * @param password 新密码
+	 * @return
+	 * @throws Exception 
+	 */
+	public WSChatResult setNewPassword(Long account, String password) throws Exception;
+	
 }

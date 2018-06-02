@@ -123,4 +123,27 @@ public class UserServiceImpl implements UserService{
 		return WSChatResult.ok();
 	}
 
+	@Override
+	public WSChatResult findPwd(Long account, String checkinfo) {
+		List<Map<String, Object>> user = userDao.getUserById(account);
+		if (CollectionUtils.isEmpty(user)) {
+			return WSChatResult.notOk("用户不存在");
+		}
+		if (!checkinfo.equals(user.get(0).get("email"))) {
+			return WSChatResult.notOk("邮箱输入错误");
+		}
+		return WSChatResult.ok();
+	}
+
+	@Override
+	public WSChatResult setNewPassword(Long account, String password) throws Exception {
+		User user = new User();
+		user.setUid(account);
+		user.setPwd(password);
+		String[] elem = {"pwd"};
+		String[] condi = {"uid"};
+		userDao.updateUser(user, condi, elem);
+		return WSChatResult.ok();
+	}
+
 }
