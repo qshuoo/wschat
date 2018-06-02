@@ -11,6 +11,8 @@
 <script
 	src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="/js/index.operation.js"></script>
+<script src="/js/bootstrap-fileinput.js"></script>
+<link rel="stylesheet" href="/css/bootstrap-fileinput.css">
 <link rel="stylesheet" href="/css/index.style.css">
 </head>
 <body>
@@ -24,7 +26,7 @@
 			style="border-style: solid; border-color: gray">
 			<div id="fucli" class="col-md-4">
 				<div class="info-display">
-					<img id="img-pinfo" class="circle" alt="" src="/img/default.jpg">
+					<img id="img-pinfo" class="circle" src="${user.img!''}">
 					<div class="form-group" style="padding-left: 20px;">
 						<input id="input_search" type="text" class="form-control"
 							placeholder="Search">
@@ -210,13 +212,34 @@
 			<div class="modal-dialog" style="width: 500px;">
 				<div class="modal-content">
 					<div id="modal-pinfo-header" class="modal-header" align=center>
-					<input id="user-img" value="${user.img!''}" style="display:none"/>
-					<img id="img-userheader" class='circle' src="${user.img!''}" onerror="this.src='/img/default.jpg'"/>
+						<input id="user-img" value="${user.img!''}" style="display: none" />
+
 						<button type="button" class="close" data-dismiss="modal"
 							aria-hidden="true">&times;</button>
 					</div>
 					<div id="modal-pinfo-body" class="modal-body" align="left">
 						<form class="form-horizontal" role="form">
+							<div class="form-group">
+								<label class="col-sm-2 control-label">头像</label>
+								<div class="col-md-8">
+									<div class="fileinput fileinput-new" data-provides="fileinput"
+										id="uploadImageDiv">
+										<div class="fileinput-new thumbnail"
+											style="width: 60px; height: 60px;">
+											<img id="img-upload" src="${user.img!''}" alt="" />
+										</div>
+										<div class="fileinput-preview fileinput-exists thumbnail"
+											style="max-width: 200px; max-height: 150px;"></div>
+										<div>
+											<span class="btn default btn-file"> <span
+												class="fileinput-new">上传头像</span> <span
+												class="fileinput-exists">更改</span> <input type="file"
+												name="uploadImage" id="uploadImage" /></span>
+										</div>
+									</div>
+									<div id="titleImageError" style="color: #a94442"></div>
+								</div>
+							</div>
 							<div class="form-group">
 								<label class="col-sm-2 control-label">账号</label>
 								<div class="col-sm-10">
@@ -226,42 +249,45 @@
 							<div class="form-group">
 								<label class="col-sm-2 control-label">昵称</label>
 								<div class="col-sm-10">
-									<input id="user-uname" type="text" class="form-control" value="${user.uname!''}">
+									<input id="user-uname" type="text" class="form-control"
+										value="${user.uname!''}">
 								</div>
 							</div>
-							
+
 							<div class="form-group">
 								<label class="col-sm-2 control-label">邮箱</label>
 								<div class="col-sm-10">
 									<div class="input-group">
 										<fieldset disabled>
-                    					<input id="user-email" type="text" class="form-control" value="${user.email!''}">
-                    					</fieldset>
-                    					<span class="input-group-btn">
-                        					<button class="btn btn-default" type="button">修改</button>
-                   						</span>
+											<input id="user-email" type="text" class="form-control"
+												value="${user.email!''}">
+										</fieldset>
+										<span class="input-group-btn">
+											<button class="btn btn-default" type="button">修改</button>
+										</span>
 									</div>
-                				</div>
+								</div>
 							</div>
-							
+
 							<div class="form-group">
 								<label class="col-sm-2 control-label">手机</label>
 								<div class="col-sm-10">
-									<input id="user-phone" type="text" class="form-control" value="${user.phone!''}">
+									<input id="user-phone" type="text" class="form-control"
+										value="${user.phone!''}">
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-2 control-label">签名</label>
 								<div class="col-sm-10">
-									<input id="user-sign" type="text" class="form-control" value="${user.signature!''}">
+									<input id="user-sign" type="text" class="form-control"
+										value="${user.signature!''}">
 								</div>
 							</div>
 						</form>
 					</div>
 					<div id="modal-pinfo-footer" class="modal-footer" align="center"
 						style="text-align: center">
-						<button id="btn-change-info" type="button"
-								class="btn btn-default" >提交</button>
+						<button id="btn-change-info" type="button" class="btn btn-default">提交</button>
 					</div>
 				</div>
 			</div>

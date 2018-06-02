@@ -8,11 +8,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.qshuoo.wschat.pojo.OssHelper;
 import com.qshuoo.wschat.pojo.User;
 import com.qshuoo.wschat.service.BlackListService;
 import com.qshuoo.wschat.service.CodeService;
 import com.qshuoo.wschat.service.FriendService;
+import com.qshuoo.wschat.service.OssService;
 import com.qshuoo.wschat.service.UserService;
 import com.qshuoo.wschat.utils.WSChatResult;
 
@@ -35,6 +38,9 @@ public class UserController {
 	
 	@Autowired
 	private BlackListService blistService;
+	
+	@Autowired
+	private OssService ossService;
 	
 	/**
 	 * 验证用户名和密码
@@ -302,9 +308,14 @@ public class UserController {
 	 */
 	@ResponseBody
 	@RequestMapping("/user/update")
-	public WSChatResult updateUserInfo(User user, String[] param, String[] condi) throws Exception {
-		WSChatResult result = userService.updateUserInfo(user, condi, param);
-		return result;
+	public WSChatResult updateUserInfo(User user, MultipartFile upload, String[] param, String[] condi) throws Exception {
+		if (upload != null) {
+			OssHelper helper = new OssHelper(upload);
+			String imgurl = ossService.upload(helper);
+			user.setImg(imgurl);
+		}
+		userService.updateUserInfo(user, condi, param);
+		return WSChatResult.ok(user.getImg());
 	}
 
 }

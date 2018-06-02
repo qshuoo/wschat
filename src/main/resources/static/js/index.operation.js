@@ -9,6 +9,7 @@ var userSign = null; // 用户签名
 var userImgUrl = null; // 用户头像路径
 var toUser = null; // 接收消息账号
 var secertUser = null;// 匹配账号
+var chatIcon = null; // 聊天对象头像 
 var tem = null; // 匹配定时器
 $(document).ready(function() {
 	
@@ -65,6 +66,12 @@ $(document).ready(function() {
 	}
 
 	$("#convo").scrollTop($("#convo")[0].scrollHeight);
+	
+	modiSendIcon();
+	
+	$('img').error(function(){
+	    $(this).attr('src',"/img/default.jpg");
+	})
 	
 });
 
@@ -146,8 +153,9 @@ $(document).on('click', '.chat-item', function() {
 	$("#to-username").text($($(this).children("span")[0]).text());
 	$("#fuc-chat").show();
 	
-	// 清空聊天内容  (暂时)
-//	$(".chat-thread").empty();
+	// 修改接收方头像
+	chatIcon = $($(this).children("img")[0]).attr("src");
+	modiRecIcon();
 	
 	// 加载未读消息
 	console.log($.data(msgMap, toUser));
@@ -592,24 +600,39 @@ $(document).on('click', '#btn-change-info', function() {
 	if ($("#user-sign").val() != userSign) {
 		list.push("signature");
 	}
+	var formData = new FormData();
+	var img_file = $("#uploadImage").prop('files');
+	if (img_file.length != 0) {
+		var fileObj = img_file[0]; // 头像文件
+		formData.append('upload', fileObj);
+		list.push("img");
+	}
 	if (list.length == 0) {
 		alert("提交成功");
 		return;
 	}
-	console.log(list);
+	formData.append('uid', userAccount);
+	formData.append('uname', $("#user-uname").val());
+	formData.append('phone', $("#user-phone").val());
+	formData.append('signature', $("#user-sign").val());
+	formData.append('param', list);
+	formData.append('condi', "uid");
 	$.ajax({
 		url: '/user/update',
 		type: 'POST',
-		data: {
-			uid: userAccount,
-			uname: $("#user-uname").val(), 
-			phone: $("#user-phone").val(), 
-			signature: $("#user-sign").val(), 
-			param: list,
-			condi: "uid"},
+		data: formData,
+		async:false,
+		processData : false,
+		contentType : false,
 		traditional: true,
 		success: function(data) {
 			if (data.code == 1) {
+				userName = $("#user-uname").val();
+				userPhone = $("#user-phone").val();
+				userSign = $("#user-sign").val();
+				userImgUrl = data.data;
+				$("#user-img, #img-pinfo, #img-upload").attr("src", data.data);
+				modiSendIcon();
 				alert("更新成功");
 			}
 		}
@@ -1061,7 +1084,7 @@ function drewUserLi(account, imgurl, username, type) { // 一好友显示的模�
 		imgurl = '/img/default.jpg';
 	}
 	var str = "<li id='" + type + "-" + account + "' data-uid='" + account + "' class='list-group-item " +type+ "-item'>"
-			+ "<img src='" + imgurl + "' class='circle' onerror=\"this.src='/img/default.jpg'\"></img>"
+			+ "<img src='" + imgurl + "' class='circle' ></img>"
 			+ "<span class = 'user-name'>" + username + "</span>"
 			+ "<span class='badge'></span>" + "</li>"
 	return str;
@@ -1075,7 +1098,7 @@ function drewUserLi(account, imgurl, username, type) { // 一好友显示的模�
  * @returns
  */
 function drawSearchUser(account, imgurl, username) {
-	var str = "<img class='circle' src='" + imgurl + "' onerror=\"this.src='/img/default.jpg'\"/>"
+	var str = "<img class='circle' src='" + imgurl + "'/>"
 			+ "<h4>账号：" + account + "</h4>"
 			+ "<h4>用户名：" + username + "</h4>"
 			+ "<textarea id='text-add-msg' class='form-control input_text_area'"
@@ -1091,3 +1114,20 @@ function drawSearchUser(account, imgurl, username) {
 function scrollSild() {
 	$(".chat-thread").scrollTop($(".chat-thread")[0].scrollHeight);
 }
+
+/**
+ * 修改发送方头像
+ */
+function modiSendIcon() {
+	$("head").append("<style>.send-msg::before{ background-image: url(" + userImgUrl + ") }</style>");
+}
+
+/**
+ * 修改接收方头像
+ */
+function modiRecIcon() {
+	$("head").append("<style>.rec-msg::before{ background-image: url(" + chatIcon + ") }</style>");
+}
+
+
+
