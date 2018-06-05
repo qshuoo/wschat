@@ -6,14 +6,12 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import lombok.Data;
 
 /**
  * 
  * @author qshuoo
  *
  */
-@Data
 public class OssHelper {
 	private String fileName;
 	private String contentType;

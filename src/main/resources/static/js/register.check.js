@@ -26,11 +26,12 @@ $(document).ready(function() {
 	
 	// 手机号暂定以1开头的11位数字
 	$("#input_checkinfo").blur(function() {
-		// var pattern = /^1[34578][\d]{9}$/;
-		/*if (!pattern.test($(this).val())) {
+		var pattern = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
+		if (!pattern.test($(this).val())) {
 			$($(this).next()).show();
 			$($(this).parent()).addClass("has-error");
-		}*/
+		}
+		
 	});
 	
 	// 点击发送验证码 

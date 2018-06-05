@@ -131,4 +131,10 @@ public class FriendServiceImpl implements FriendService{
 		return !state.isEmpty() && (int) state.get(0).get("state") == 2;
 	}
 
+	@Override
+	public WSChatResult updateFreindRemark(Long account, Long friendId, String remark) {
+		friendDao.updateFriendRemark(account, friendId, remark);
+		return WSChatResult.ok();
+	}
+
 }

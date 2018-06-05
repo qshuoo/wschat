@@ -68,4 +68,13 @@ public interface FriendService {
 	 * @return
 	 */
 	public boolean isNotFriendRelation(Long uid1, Long uid2);
+
+	/**
+	 * 更新好友备注
+	 * @param account 用户账号
+	 * @param friendId 好友账号
+	 * @param remark 备注
+	 * @return
+	 */
+	public WSChatResult updateFreindRemark(Long account, Long friendId, String remark);
 }

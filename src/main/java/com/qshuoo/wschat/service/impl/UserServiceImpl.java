@@ -102,6 +102,9 @@ public class UserServiceImpl implements UserService{
 			synchronized (this) {
 				if (redisCache.existsKey(matchKey)) {
 					String value = redisCache.getValue(matchKey).trim();
+					if (value.equals(account.toString())) {
+						return WSChatResult.ok();
+					}
 					redisCache.delKey(matchKey);
 					logger.info("user {} matching {} is success", account, value);
 					return WSChatResult.ok(value);

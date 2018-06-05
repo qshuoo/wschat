@@ -77,4 +77,13 @@ public interface FriendDao {
 	 * @return
 	 */
 	public List<Map<String, Object>> getFRStateByIds(Long uid1, Long uid2);
+
+	/**
+	 * 修改好友备注
+	 * @param account
+	 * @param friendId
+	 * @param remark
+	 * @return
+	 */
+	public int updateFriendRemark(Long account, Long friendId, String remark);
 }

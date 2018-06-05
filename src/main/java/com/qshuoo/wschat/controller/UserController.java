@@ -317,5 +317,12 @@ public class UserController {
 		userService.updateUserInfo(user, condi, param);
 		return WSChatResult.ok(user.getImg());
 	}
+	
+	@ResponseBody
+	@RequestMapping("/friend/remark")
+	public WSChatResult updateFreindRemark(Long account, Long friendId, String remark) {
+		WSChatResult result = friendService.updateFreindRemark(account, friendId, remark);
+		return result;
+	}
 
 }

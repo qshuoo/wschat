@@ -28,7 +28,7 @@ public class FriendDaoImpl implements FriendDao{
 	
 	@Override
 	public List<Map<String, Object>> listFriends(Long account) {
-		String sql = "SELECT a.uid, a.uname, a.img FROM user a JOIN friendrelation b ON a.uid = b.uid2 WHERE b.uid1 = ? AND b.state = 1;";
+		String sql = "SELECT a.uid, a.uname, a.img, b.remark FROM user a JOIN friendrelation b ON a.uid = b.uid2 WHERE b.uid1 = ? AND b.state = 1;";
 		List<Map<String, Object>> friends = jdbcTemplate.queryForList(sql, new Object[] {account});
 		return friends;
 	}
@@ -80,5 +80,12 @@ public class FriendDaoImpl implements FriendDao{
 		String sql = "SELECT a.state FROM friendrelation a WHERE a.uid1 = ? AND a.uid2 = ?;";
 		List<Map<String, Object>> res = jdbcTemplate.queryForList(sql, uid1, uid2);
 		return res;
+	}
+
+	@Override
+	public int updateFriendRemark(Long account, Long friendId, String remark) {
+		String sql = "UPDATE friendrelation a SET a.remark = ? WHERE a.uid1 = ? AND a.uid2 = ?;";
+		int row = jdbcTemplate.update(sql, remark, account, friendId);
+		return row;
 	}
 }

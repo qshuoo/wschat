@@ -38,7 +38,7 @@ public class BlackListDaoImpl implements BlackListDao{
 
 	@Override
 	public int updateBLStateByUid(Long applyUid, Long aimUid, int i) {
-		String sql = "UPDATE blacklist a SET state = ? WHERE uid1 = ? AND uid2 = ?;";
+		String sql = "UPDATE blacklist a SET state = ? WHERE uid1 = ? AND uid2 = ? AND state = 1;";
 		int row = jdbcTemplate.update(sql, i, applyUid, aimUid);
 		return row;
 	}

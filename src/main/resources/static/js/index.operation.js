@@ -90,12 +90,14 @@ $(document).on('click', '.friend-item', function() {
 	$(".fuc-show").hide();
 	
 	console.log("friend-item click");
-	
+	var remark = $($(this).children(".user-name")[0]).text();
+	console.log(remark);
 	$("#fuc-friend").show();
 	$.ajax({
 		url: '/user/search/' + $(this).attr("data-uid"),
 		type: 'GET',
 		success: function(data){
+			$("#friend-remark").val(remark);
 			$("#friend-id").text(data.data.uid);
 			$("#friend-uname").text(data.data.uname);
 			$("#friend-email").text(data.data.email);
@@ -118,6 +120,7 @@ $(document).on('click', '.newfriend-item', function() {
 	// 展示申请添加用户信息
 	var applyInfo = JSON.parse($.data(applyFriendMsg, $(this).attr("data-uid")));
 	console.log(applyInfo);
+	$("#newfriend-img").attr("src", applyInfo.img);
 	$("#newfriend-id").text(applyInfo.uid);
 	$("#newfriend-uname").text(applyInfo.uname);
 	$("#newfriend-msg").text(applyInfo.msg);
@@ -643,6 +646,23 @@ $(document).on('click', '#btn-change-info', function() {
 	
 });
 
+$(document).on('click', '#btn-change-remark', function() {
+	$.ajax({
+		url: '/friend/remark',
+		type: 'POST',
+		data:{
+			account: userAccount,
+			friendId: $("#friend-id").text(),
+			remark: $("#friend-remark").val()
+		},
+		success: function(data) {
+			if (data.code == 1) {
+				$($("#friend-" + $("#friend-id").text()).children(".user-name")[0]).text($("#friend-remark").val());
+			}
+		}
+	});
+});
+
 /**
  * 绑定事件 END
  */
@@ -817,8 +837,8 @@ function dealSystemMsg(data) {
  */
 function dealEndMatchChat() {
 	alert("对方已结束会话"); 
-	initScrect();
 	secertUser = null;
+	initScrect();
 	$('#modal_secret').modal('hide');
 };
 
@@ -980,6 +1000,7 @@ function initScrect() {
 	$("#modal-screct-body").html(str);
 	str = "<button type='submit' id='btn-match' class='btn btn-default'>开始匹配</button>"
 	$("#modal-screct-footer").html(str);
+	$(".secert-chat-thread").html('');
 }
 
 /**
@@ -987,9 +1008,10 @@ function initScrect() {
  * @returns
  */
 function screctChat(data) {
+	console.log('DO function secertChat');
 	secertUser =data;
-	var cnovo = $("#secert-convo");
-	var snovo = $("#secert-snovo");
+	var cnovo = $("#secert-convo").clone();
+	var snovo = $("#secert-snovo").clone();
 	var str = "<button id='btn-secert-end' type='button' class='btn btn-default btn-sm'>结束会话</button>";
 	$("#modal-screct-header").prepend(str);
 	$("#modal-screct-footer").html(snovo);
@@ -1011,7 +1033,11 @@ function recFriendList() {
 			if (data.code == 1) {
 				var list = data.data;
 				for (let i = 0; i < list.length; i++) {
-					var res = drewUserLi(list[i].uid.toString(), list[i].img, list[i].uname, 'friend');
+					var showName = list[i].uname;
+					if (list[i].remark) {
+						showName = list[i].remark;
+					}
+					var res = drewUserLi(list[i].uid.toString(), list[i].img, showName, 'friend');
 					$("#friend-list").append(res);
 				}
 			}
