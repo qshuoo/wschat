@@ -69,15 +69,18 @@ $(document).ready(function() {
 	
 	modiSendIcon();
 	
-	$('img').error(function(){
-	    $(this).attr('src',"/img/default.jpg");
-	})
-	
 });
 
 /**
  * 绑定事件 BEGIN
  */
+
+document.addEventListener("error", function (e) {
+    var elem = e.target;
+    if (elem.tagName.toLowerCase() === 'img') {
+        elem.src = '/img/default.jpg';
+    }
+}, true); 
 
 /**
  * 好友列表点击
